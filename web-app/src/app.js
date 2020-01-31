@@ -1,11 +1,21 @@
-const express = require('express')
+const express = require('express');
+const expressHandlebars = require('express-handlebars');
+const path = require('path');
 
-const app = express()
+const app = express();
 
-app.get('/', function(request, response){
-  response.send("Hello World")
+app.set('views', path.join(__dirname+"/pl", "views"));
+app.engine("hbs", expressHandlebars({
+  defaultLayout: "main.hbs"
+}))
+
+app.use(express.static('public'));
+
+app.get('/', function (request, res) {
+    res.render("home.hbs")
 })
 
-app.listen(8080, function(){
-  console.log("Web application listening on port 8080.")
+
+app.listen(8080, () => {
+  console.log('Server is up');
 })
