@@ -22,6 +22,10 @@ app.get('/login', function(request,res){
   res.render("login.hbs")
 })
 
+app.get('/signup', function(request,res){
+  res.render("signup.hbs")
+})
+
 app.listen(8080, () => {
   console.log('Server is up');
 })
