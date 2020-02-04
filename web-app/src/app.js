@@ -13,6 +13,8 @@ app.engine("hbs", expressHandlebars({
 }))
 
 app.use(express.static(__dirname + '/pl/public'))
+app.use(express.static(__dirname + '/pl/validation'))
+
 
 app.get('/', function (request, res) {
     res.render("home.hbs")

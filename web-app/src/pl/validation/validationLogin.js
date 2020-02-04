@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", function(){
     function validate(){
 
         if(password.value != rePassword.value){
-            validationErrors.push("Password don't match!")
+            validationErrors.push("Password does not match!")
         }
-        window.alert("Don't match!")
+        window.alert(validationErrors)
         validationErrors = 0
     }
 
