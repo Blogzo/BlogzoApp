@@ -1,3 +1,5 @@
+import { request } from "express"
+
 document.addEventListener("DOMContentLoaded", function(){
 
     const password = document.getElementById('password')
@@ -6,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const validationErrors = []
 
     function validate(){
-
+        
         if(password.value != rePassword.value){
             validationErrors.push("Password does not match!")
         }
