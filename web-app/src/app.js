@@ -1,14 +1,19 @@
-const express = require('express');
-const expressHandlebars = require('express-handlebars');
-const path = require('path');
+const express = require('express')
+const expressHandlebars = require('express-handlebars')
+const path = require('path')
+const bodyParser = require('body-parser')
 
 const app = express();
+const db = require('../src/dal/db')
 
-app.set('views', path.join(__dirname+"/pl", "views"));
-
+app.set('views', path.join(__dirname+"/pl", "views"))
 
 const username = "admin"
-const adminPassword = "abc123"
+const password = "abc123"
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
 
 app.engine("hbs", expressHandlebars({
   defaultLayout: "main.hbs",
@@ -24,6 +29,10 @@ app.get('/', function (request, res) {
     res.render("start.hbs")
 })
 
+app.get('/home', function(request,res){
+  res.render("home.hbs")
+})
+
 app.get('/login', function(request,res){
   res.render("login.hbs")
 })
@@ -32,11 +41,11 @@ app.get('/signup', function(request,res){
   res.render("signup.hbs")
 })
 
-app.post("/login", function(request,res){
-  if(request.body.password == adminPassword && request.body.username == username){
-    res.render("home.hbs")
+app.post("/login", function(request, response){
+  if(request.body.password == password && request.body.username == username){
+    response.render("home.hbs")
   }else{
-    res.render("signup.hbs")
+    response.render("unauthorized.hbs")
   }
 })
 

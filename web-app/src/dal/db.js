@@ -1,5 +1,5 @@
 const mysql = require('mysql')
-var db = mysql.createConnection ({
+var connection = mysql.createConnection ({
     host: '192.168.99.100',
     user: 'root',
     port: '3306',
@@ -7,11 +7,6 @@ var db = mysql.createConnection ({
     database: 'myDB'
 })
 
-exports.createAccount  = function(callback) {
-    const query = "INSERT INTO accounts (id, username, email, userPassword) VALUES (?, ?, ?, ?)"
-    const values = [id, username, email, userPassword]
-    db.r
-    
-}
+module.exports = connection
 
 

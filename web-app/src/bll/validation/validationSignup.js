@@ -1,5 +1,3 @@
-import { request } from "express"
-
 document.addEventListener("DOMContentLoaded", function(){
 
     const password = document.getElementById('password')
