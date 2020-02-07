@@ -41,9 +41,13 @@ app.get('/signup', function(request,res){
   res.render("signup.hbs")
 })
 
+app.get('/createPost', function(request,res){
+  res.render("createPost.hbs")
+})
+
 app.post("/login", function(request, response){
   if(request.body.password == password && request.body.username == username){
-    response.render("home.hbs")
+    response.redirect("/home")
   }else{
     response.render("unauthorized.hbs")
   }
