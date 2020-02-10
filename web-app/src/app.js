@@ -33,6 +33,10 @@ app.get('/home', function(request,res){
   res.render("home.hbs")
 })
 
+app.get('/toDoList', function(request,res){
+  res.render("toDoList.hbs")
+})
+
 app.get('/login', function(request,res){
   res.render("login.hbs")
 })
