@@ -1,6 +1,6 @@
 
 CREATE TABLE accounts (
-    personId int NOT NULL PRIMARY KEY,
+    personId int NOT NULL,
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     userPassword VARCHAR(255) NOT NULL,    
