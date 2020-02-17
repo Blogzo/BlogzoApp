@@ -54,6 +54,14 @@ app.get('/signup', function(request,res){
   res.render("signup.hbs")
 })
 
+app.get('/createPost', function(request, res){
+	res.render("createPost.hbs")
+})
+
+app.get('/readMore', function(request, res){
+	res.render("readMore.hbs")
+})
+
 app.post("/signup", function(request, response){
 
 	const email = request.body.email
