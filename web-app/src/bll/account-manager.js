@@ -15,9 +15,9 @@ exports.getAllAccounts = function(callback){
 }
 
 
-exports.createAccount(function(callback){
+exports.createAccount = function(callback){
 
     accountRepo.createAccount(function(errors, account){
         callback(errors, account)
     })
-})
+}
