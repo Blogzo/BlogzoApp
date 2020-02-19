@@ -54,6 +54,69 @@ app.get('/toDoList', function(request,res){
   res.render("toDoList.hbs")
 })
 
+<<<<<<< HEAD
+=======
+app.get('/login', function(request,res){
+  res.render("login.hbs")
+})
+
+app.get('/signup', function(request,res){
+  res.render("signup.hbs")
+})
+
+app.get('/createPost', function(request, res){
+	res.render("createPost.hbs")
+})
+
+app.get('/readMore', function(request, res){
+	res.render("readMore.hbs")
+})
+
+app.post("/signup", function(request, response){
+
+	const email = request.body.email
+	const username = request.body.username
+	const userPassword = request.body.userPassword
+	if(email && userPassword){
+		account.createAccount(username, email, userPassword, function(error, account){
+			console.log("accountSignIn:", account)
+			if(error){
+				response.send("<h1>Error with database</h1>")
+			}
+			else if(account > 0){
+				response.redirect("/login")
+			}
+		})
+	}
+})
+
+app.post("/login", function(request, response){
+
+  	const username = request.body.username
+	const userPassword = request.body.password
+	const validationErrors = []
+	if (username && userPassword) {
+		account.getAccount(username, userPassword, function(error, result){
+			console.log("resultlogin", result)
+			if(error){
+				response.send("<h1>Error with database</h1>")
+			}
+			else if(result.length > 0){
+				request.session.isLoggedIn = true
+				request.session.username = username
+				response.redirect("/home")
+			}else{
+				validationErrors.push("Wrong username/password!")
+				const model = {
+					validationErrors
+				}
+				response.render("login.hbs", model)
+			}
+		})
+	}	
+})
+
+>>>>>>> 4bca8dc4d7ee14cb05c56b18d15ea7b766c9b6d4
 app.listen(8080, () => {
   console.log('Server is up!');
 })
