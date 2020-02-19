@@ -7,10 +7,11 @@ exports.getAllAccounts = function(callback){
     })
 }
 
-exports.getAllAccounts = function(callback){
+exports.getAccount = function(callback){
 
     accountRepo.getAccount(function(errors, account){
         callback(errors, account)
+        console.log("account", account)
     })
 }
 

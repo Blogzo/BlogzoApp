@@ -1,3 +1,5 @@
+
+
 <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
     <div class="container">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -11,9 +13,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/toDoList">Todo list</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Log out</a>
-                </li>
+                {{#if isLoggedIn}}
+                <form action="logout" method="POST">
+                     <input type="submit" value="logout">
+                </form>  
+                {{/if}}
             </ul>
 
         </div>
