@@ -16,3 +16,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=abc123
       - MYSQL_DATABASE=myDB
+  session.database:
+    build: ./session-database
+    ports:
+      - "6379:6379"

@@ -35,4 +35,3 @@ CREATE TABLE IF NOT EXISTS comments (
     todoDone VARCHAR(255) NOT NULL,
     CONSTRAINT todo_id PRIMARY KEY (todoId)
 );*/
-

@@ -4,6 +4,9 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const expressSession = require('express-session')
 const cookieParser = require('cookie-parser')
+const redis = require('redis')
+let RedisStore = require('connect-redis')(session)
+let redisClient = redis.createClient()
 
 const app = express();
 const accountRouter = require('./pl/routers/createAccount.router')
@@ -17,6 +20,7 @@ app.use(expressSession({
   secret: "ftrhytjjujtfvel345jf",
   saveUninitialized: false,
   resave: false,
+  store: new RedisStore({client: redisClient})
 }))
 
 app.use(function(request, response, next){
@@ -28,6 +32,8 @@ app.use(function(request, response, next){
 app.use(bodyParser.urlencoded({
   extended: false
 }))
+
+
 
 app.engine("hbs", expressHandlebars({
   defaultLayout: "main.hbs",
@@ -54,8 +60,6 @@ app.get('/toDoList', function(request,res){
   res.render("toDoList.hbs")
 })
 
-<<<<<<< HEAD
-=======
 app.get('/login', function(request,res){
   res.render("login.hbs")
 })
@@ -116,7 +120,6 @@ app.post("/login", function(request, response){
 	}	
 })
 
->>>>>>> 4bca8dc4d7ee14cb05c56b18d15ea7b766c9b6d4
 app.listen(8080, () => {
   console.log('Server is up!');
 })
