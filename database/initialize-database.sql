@@ -1,4 +1,4 @@
-use myDB;
+
 
 CREATE TABLE IF NOT EXISTS accounts (
     personId INT NOT NULL AUTO_INCREMENT,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS blogposts (
     title VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
     posted VARCHAR(255) NOT NULL,
-    imgeFile VARCHAR(255) NOT NULL,
+    imageFile VARCHAR(255) NOT NULL,
     userId INT NOT NULL,
     CONSTRAINT blog_id PRIMARY KEY (blogId),
     CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(personId)
@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS comments (
     CONSTRAINT id_fk2 FOREIGN KEY (accountId) REFERENCES accounts(personId)
 );
 
-/*CREATE TABLE IF NOT EXISTS todoList (
+CREATE TABLE IF NOT EXISTS todoList (
     todoId INT NOT NULL AUTO_INCREMENT,
     todo VARCHAR(255) NOT NULL,
     created VARCHAR(255) NOT NULL,
     todoDone VARCHAR(255) NOT NULL,
     CONSTRAINT todo_id PRIMARY KEY (todoId)
-);*/
+);
 

@@ -30,6 +30,19 @@ exports.getAccount = function(username, userPassword, callback){
     })
 }
 
+exports.getAccountById = function(id){
+
+    const query = "SELECT * FROM accounts WHERE id = ?"
+    const value = [id]
+    db.query(query, value, function(error, account){
+        if(error){
+            callback("DatabaseError", null)
+        }else{
+            callback(null, account)
+        }
+    })
+}
+
 exports.getAllAccounts = function(callback){
 
     const query = "SELECT * FROM accounts ORDER BY username"
@@ -38,7 +51,8 @@ exports.getAllAccounts = function(callback){
         if(error){
             callback("DatabaseError", null)
         }else{
-            callback([], accounts)
+            callback(null, accounts)
         }
     })
 }
+

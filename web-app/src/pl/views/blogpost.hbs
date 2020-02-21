@@ -1,0 +1,14 @@
+{{#if blogpost}}
+<div class="container card mb-4 p-1">
+    <img class="card-img-top" src="{{blogpost.imgFile}}" alt="Card image cap">
+    <div class="card-body">
+        <h2 class="card-title">{{blogpost.title}}</h2>
+        <p class="card-text">
+            {{blogpost.content}}
+        </p>
+    </div>
+    <div class="card-footer text-muted">
+        Posted on {{blogpost.posted}}, by {{blogpost.userId}}
+    </div>
+</div>
+{{/if}}

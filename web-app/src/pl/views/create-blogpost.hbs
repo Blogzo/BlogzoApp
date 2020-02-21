@@ -3,14 +3,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                  <li class="nav-item">
-                    <a class="nav-link" href="/home">Back</a>
+                    <a class="nav-link" href="/blogposts">Back</a>
                 </li>
             </ul>
 
         </div>
     </div>
 </nav>
-
+{{#if isloggedIn}}
 <main class="login-form">
     <div class="cotainer">
         <div class="row justify-content-center">
@@ -18,23 +18,30 @@
                 <div class="card">
                     <div class="card-header">Create Post</div>
                     <div class="card-body">
-                        <form action="/" method="POST">
+                        <form action="/blogposts/create/{{blogpost.id}}" method="POST">
                             <div class="form-group row">
-                                <label for="postTitle" class="col-md-4 col-form-label text-md-right">Title</label>
+                                <label for="postTitle" value="{{title}} "class="col-md-4 col-form-label text-md-right">Title</label>
                                 <div class="col-md-6">
                                     <input type="Username" id="username" class="form-control" name="username" required autofocus>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="postContent" class="col-md-4 col-form-label text-md-right">Content</label>
+                                <label for="postContent" value="{{content}} "class="col-md-4 col-form-label text-md-right">Content</label>
                                 <div class="col-md-6">
                                     <textarea name="content" id="content" cols="83" rows="3"></textarea>
                                 </div>
                             </div>
 
+                             <div class="form-group row">
+                                <label for="postTitle" value="{{posted}} "class="col-md-4 col-form-label text-md-right">Title</label>
+                                <div class="col-md-6">
+                                    <input type="date" id="posted" value="{{posted}}" class="form-control" name="posted" required autofocus>
+                                </div>
+                            </div>
+                        
                             <div class="col-md-6 offset-md-4 p-1">
-                                <input type="file" id="file">
+                                <input type="file" value="{{imgFile}} "id="file">
                                 </button>
                             </div>
 

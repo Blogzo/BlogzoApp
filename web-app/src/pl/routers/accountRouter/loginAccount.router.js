@@ -1,5 +1,5 @@
 const express = require('express')
-const accountManager = require('../../dal/account-repository')
+const accountManager = require('../../../dal/account-repository')
 const router = express.Router()
 
 
@@ -17,12 +17,13 @@ router.post("/", function(request, response){
 		accountManager.getAccount(username, userPassword, function(error, result){
 			console.log("resultlogin", result)
 			if(error){
-				response.send("<h1>Error with database</h1>")
+				response.send("<h1><b>Something went wrong</b></h1>")
+				return
 			}
 			else if(result.length > 0){
 				request.session.isLoggedIn = true
 				request.session.username = username
-				response.redirect("/home")
+				response.redirect("/blogposts")
 			}else{
 				validationErrors.push("Wrong username/password!")
 				const model = {
