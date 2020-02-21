@@ -24,17 +24,20 @@ router.get("/create", function(request, response){
     response.render("create-blogpost.hbs")
 })
 
-router.get("/:id", function(request, response){
+router.get("/:blogId", function(request, response){
 
     const blogpostId = request.params.id
-    try {
-        const blogpost = blogManager.getBlogpostId(blogpostId)
-        const model = {blogpost: blogpost}
-        response.render("blogpost.hbs", model) 
-    }catch(error){
-        const model = {error: error}
-        response.render("unauthorized.hbs", model)
-    }
+    blogManager.getBlogpostId(blogpostId, function(error, blogpost){
+
+        if(error){
+            console.log(error)
+        }else{
+            const model = {
+                blogpost
+            }
+            response.render("blogpost.hbs", model)
+        }
+    })
 })
 
 router.post("/create", function(request, response){
@@ -42,10 +45,15 @@ router.post("/create", function(request, response){
     const title = request.body.title
     const content = request.body.content
     const posted = request.body.posted
-    const imgeFile = request.body.imgeFile
-    const userId = request.session.userId
+    const imageFile = request.body.imageFile
+    const userId = 1
+    console.log("userId:", userId)
+    console.log("title:", title)
+    console.log("content:", content)
+    console.log("posted:", posted)
+    console.log("image:", imageFile)
 
-    blogManager.createBlogpost(title, content, posted, imgeFile, userId, function(error, blogpost){
+    blogManager.createBlogpost(title, content, posted, imageFile, userId, function(error, blogpost){
 
         if(error){
             response.send(

@@ -1,6 +1,5 @@
 const accountRepo = require('../dal/account-repository')
-const express = require('express')
-const app = express()
+
 
 exports.getAllAccounts = function(callback){
 
@@ -18,13 +17,12 @@ exports.getAccountById = function(id){
     } 
 }
 
-exports.getAccount = function(account){
+exports.getAccount = function(callback){
 
-    if(isLoggedIn){
-
-    }else{
-        Response.send("<h1>Unauthorized</h1>")
-    }
+    accountRepo.getAccount(function(errors,accounts){
+        callback(errors, accounts)
+    })
+    
 }
 
 

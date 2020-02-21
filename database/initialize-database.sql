@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS blogposts (
     title VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
     posted VARCHAR(255) NOT NULL,
-    imageFile VARCHAR(255) NOT NULL,
+    imageFile IMAGE NOT NULL,
     userId INT NOT NULL,
     CONSTRAINT blog_id PRIMARY KEY (blogId),
     CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(personId)

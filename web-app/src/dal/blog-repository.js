@@ -20,15 +20,21 @@ exports.getBlogpostId = function(id ,callback){
         if(error){
             callback("DatabaseError", null)
         }else{
-            return blogpost
+            callback(null, blogpost)
         }
     })
 }
 
-exports.createBlogpost = function(title, content, posted, imgeFile, userId, callback){
+exports.getUserNameById = function(id, callback){
 
-    const query = "INSERT INTO blogposts (title, content, posted, imgeFile, userId) VALUES (?, ?, ?, ?, ?)"
-    const values = [title, content, posted, imgeFile, userId]
+    const query = "SELECT userName FROM accounts WHERE userId = personId"
+    const values = [id]
+}
+
+exports.createBlogpost = function(title, content, posted, imageFile, userId, callback){
+
+    const query = "INSERT INTO blogposts (title, content, posted, imageFile, userId) VALUES (?, ?, ?, ?, ?)"
+    const values = [title, content, posted, imageFile, userId]
     console.log("blogValues:", values)
     db.query(query, values, function(error, blogpost){
         console.log("blogpost:", blogpost)

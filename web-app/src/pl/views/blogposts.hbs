@@ -27,13 +27,13 @@
 {{#if blogposts.length}}
 <div class="container card mb-4 p-1">
     {{#each blogposts}}
-    <img class="card-img-top" src="{{imgeFile}}" alt="Card image cap">
+    <img class="card-img-top" src="{{imageFile}}" alt="Card image cap">
     <div class="card-body">
         <h2 class="card-title">{{title}}</h2>
         <p class="card-text">
             {{content}}
         </p>
-        <a href="/blogposts/{{id}}" class="btn btn-primary">Read More &rarr;</a>
+        <a href="/blogposts/{{blogId}}" class="btn btn-primary">Read More &rarr;</a>
     </div>
     <div class="card-footer text-muted">
         Posted on {{posted}}, by {{userId}}
@@ -42,5 +42,6 @@
     {{/each}}
 </div>
 {{/if}}
+
 
 
