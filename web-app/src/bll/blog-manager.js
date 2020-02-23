@@ -1,12 +1,12 @@
 const blogRepo = require('../dal/blog-repository')
-const express = require('express')
-const app = express()
 
-app.use(function(request, response, next){
-   
-    response.locals.isLoggedIn = request.session.isLoggedIn
-    next()
-})
+
+exports.getAllBlogposts = function(callback){
+    blogRepo.getBlogposts(function(errors, blogposts){
+        callback(errors, blogposts)
+    })
+}
+
 
 exports.getBlogpostId = function(id){
 
