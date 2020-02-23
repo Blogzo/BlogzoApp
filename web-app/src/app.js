@@ -14,6 +14,7 @@ const accountRouter = require('./pl/routers/accountRouter/createAccount.router')
 const loginRouter = require('./pl/routers/accountRouter/loginAccount.router')
 const logoutRouter = require('./pl/routers/accountRouter/logout.router')
 const blogRouter = require('./pl/routers/blogRouter/blogRouter.router')
+const toDoRouter = require('./pl/routers/toDoRouter/toDo.router')
 
 app.set('views', path.join(__dirname+"/pl", "views"))
 
@@ -63,14 +64,14 @@ app.use("/create-account", accountRouter)
 app.use("/login", loginRouter)
 app.use("/logout", logoutRouter)
 app.use("/blogposts", blogRouter)
+app.use("/toDoLists", toDoRouter)
 
-
-app.get('/', function (request, res) {
-    res.render("start.hbs")
+app.get('/', function (request, response) {
+    response.render("start.hbs")
 })
 
-app.get('/toDoList', function(request,res){
-  res.render("toDoList.hbs")
+app.get('/create-toDoList', function(request,response){
+  response.render("create-toDoList.hbs")
 })
 
 app.listen(8080, () => {

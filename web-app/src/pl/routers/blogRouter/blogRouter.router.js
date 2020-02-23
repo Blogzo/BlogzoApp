@@ -1,21 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const blogManager = require('../../../dal/blog-repository')
+const blogManager = require('../../../bll/blog-manager')
+const blogRepo = require('../../../dal/blog-repository')
 
 
 router.get("/", function(request, response){
 
-    blogManager.getBlogposts(function(error, blogposts){
-
-        if(error){
-            response.send("<h1><b>Something went wrong</b></h1>")
-            return
-        }else{
-            const model = {
-                blogposts
-            }
-            response.render("blogposts.hbs", model)
+    blogManager.getAllBlogposts(function(errors, blogposts){
+        const model = {
+            errors: errors,
+            blogposts: blogposts
         }
+        response.render("blogposts.hbs", model)
     })
 })
 
@@ -26,8 +22,8 @@ router.get("/create", function(request, response){
 
 router.get("/:blogId", function(request, response){
 
-    const blogpostId = request.params.id
-    blogManager.getBlogpostId(blogpostId, function(error, blogpost){
+    const blogId = request.params.blogId
+    blogRepo.getBlogpostId(blogId, function(error, blogpost){
 
         if(error){
             console.log(error)
@@ -35,6 +31,7 @@ router.get("/:blogId", function(request, response){
             const model = {
                 blogpost
             }
+            console.log("model:", model)
             response.render("blogpost.hbs", model)
         }
     })
@@ -53,14 +50,14 @@ router.post("/create", function(request, response){
     console.log("posted:", posted)
     console.log("image:", imageFile)
 
-    blogManager.createBlogpost(title, content, posted, imageFile, userId, function(error, blogpost){
+    blogRepo.createBlogpost(title, content, posted, imageFile, userId, function(error, blogId){
 
         if(error){
             response.send(
                 '<h1><b>Something went wrong</b></h1>'
             )
         }else{
-            response.redirect("/blogposts/"+blogpost)
+            response.redirect("/blogposts/"+blogId)
         }
     })
 })

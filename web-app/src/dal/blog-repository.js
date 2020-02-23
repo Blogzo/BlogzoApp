@@ -12,10 +12,10 @@ exports.getBlogposts = function(callback){
     })
 }
 
-exports.getBlogpostId = function(id ,callback){
+exports.getBlogpostId = function(blogId ,callback){
 
     const query = "SELECT * FROM blogposts WHERE blogId = ?"
-    const value = [id]
+    const value = [blogId]
     db.query(query, value, function(error, blogpost){
         if(error){
             callback("DatabaseError", null)
