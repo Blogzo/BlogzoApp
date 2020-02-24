@@ -19,7 +19,7 @@ exports.getAccountById = function(id){
 
 exports.getAccount = function(callback){
 
-    accountRepo.getAccount(function(errors,accounts){
+    accountRepo.getAccount(function(errors, accounts){
         callback(errors, accounts)
     })
     

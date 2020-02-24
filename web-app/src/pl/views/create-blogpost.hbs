@@ -17,7 +17,11 @@
                 <div class="card">
                     <div class="card-header">Create Post</div>
                     <div class="card-body">
+<<<<<<< HEAD
                         <form action="/blogposts/create/{{blogpost.id}}" method="POST" enctype="multipart/form-data"> 
+=======
+                        <form action="/blogposts/create/{{blogpost.blogId}}" method="POST" enctype="multipart/form-data">
+>>>>>>> e763de3a140a4c57c1e3f07bfae30a3b9a964890
                             <div class="form-group row">
                                 <label for="postTitle" value="{{title}} "class="col-md-4 col-form-label text-md-right">Title</label>
                                 <div class="col-md-6">
@@ -33,7 +37,7 @@
                             </div>
 
                              <div class="form-group row">
-                                <label for="posted" value="{{posted}} "class="col-md-4 col-form-label text-md-right">Title</label>
+                                <label for="posted" value="{{posted}} "class="col-md-4 col-form-label text-md-right">Posted</label>
                                 <div class="col-md-6">
                                     <input type="date" id="posted" value="{{posted}}" class="form-control" name="posted" required autofocus>
                                 </div>

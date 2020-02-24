@@ -6,6 +6,7 @@ const blogRepo = require('../../../dal/blog-repository')
 var upload = multer({ dest: './pl/public/blogpost-img' })
 
 
+
 router.get("/", function(request, response){
 
     blogManager.getAllBlogposts(function(errors, blogposts){
@@ -36,19 +37,26 @@ router.post('/create', upload.single('imageFile'), function(request, response, n
 router.get("/:blogId", function(request, response){
 
     const blogId = request.params.blogId
-    blogRepo.getBlogpostId(blogId, function(error, blogpost){
-
-        if(error){
-            console.log(error)
-        }else{
-            const model = {
-                blogpost
-            }
-            console.log("model:", model)
-            response.render("blogpost.hbs", model)
+    blogManager.getBlogpostId(blogId, function(errors, blogpost){
+        console.log("blogpost", blogpost)
+        const model = {
+            errors: errors,
+            blogpost: blogpost
         }
+        response.render("blogpost.hbs", model)
     })
 })
+
+/*router.post('/public', upload.single('imageFile'), function(request, response, next){
+    const file = request.body.file
+
+    if(!file){
+        const error = new Error("please upload a file")
+        error.httpStatusCode = 400
+        return next(error)
+    }
+    response.send(file)
+})*/
 
 router.post("/create", function(request, response){
 
@@ -63,7 +71,7 @@ router.post("/create", function(request, response){
     console.log("posted:", posted)
     console.log("image:", imageFile)
 
-    blogRepo.createBlogpost(title, content, posted, imageFile, userId, function(error, blogId){
+    blogManager.createBlogpost(title, content, posted, imageFile, userId, function(error, blogId){
 
         if(error){
             response.send(
