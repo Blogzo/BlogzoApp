@@ -5,18 +5,16 @@ document.addEventListener("DOMContentLoaded", function(){
     const form = document.getElementById("signUpForm")
     const validationErrors = []
 
-    function validate(){
-        
-        if(password.value != rePassword.value){
-            validationErrors.push("Password does not match!")
-            window.alert(validationErrors)
-        }
-        validationErrors = 0
-    }
+    
 
     form.addEventListener("submit", function(event){
 
-        validate()
-
+        if(password.value != rePassword.value){
+            validationErrors.push("Password does not match!")
+            window.alert(validationErrors)
+            validationErrors = 0
+            event.preventDefault()
+        }
+    
     })
 })

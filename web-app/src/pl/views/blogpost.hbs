@@ -10,10 +10,11 @@
         </div>
     </div>
 </nav>
-
 {{#if blogpost}}
+    <h1 style="text-align: center;"><b>Blogpost</b></h1>
     <div class="container card mb-4 p-1">
-        <img class="card-img-top" src="{{blogpost.imageFile}}" alt="Card image cap">
+
+        <img class="card-img-top" src="/blogpost-img/{{blogpost.imageFile}}" alt="Card image cap">
         <div class="card-body">
             <h2 class="card-title">{{blogpost.title}}</h2>
             <p class="card-text">
@@ -24,6 +25,6 @@
             Posted on {{blogpost.posted}}, by {{blogpost.userId}}
         </div>
     </div>
-    {{else}}
-     <p>No blogpost with that id.</p>
+{{else}}
+<p>No blogpost with that id!</p>
 {{/if}}

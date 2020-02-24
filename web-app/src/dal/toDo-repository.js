@@ -5,9 +5,9 @@ exports.getAllToDos = function(callback) {
     const query = "SELECT * FROM todoList"
     db.query(query, function(error, toDoList){
         if(error){
-            callback(["DatabaseError"], null)
+            callback("DatabaseError", null)
         }else{
-            callback([], toDoList)
+            callback(null, toDoList)
         }
     })
 }

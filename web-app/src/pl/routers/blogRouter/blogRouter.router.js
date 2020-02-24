@@ -3,7 +3,17 @@ const router = express.Router()
 const blogManager = require('../../../bll/blog-manager')
 const blogRepo = require('../../../dal/blog-repository')
 
-
+const multer = require('multer')
+var storage = multer.diskStorage({
+    destination: function (request, file, cb) {
+        cb(null, __dirname + '../../../public/blogpost-img')
+    },
+    filename: function(request, file, cb) {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, fileName)
+    }
+})
+var upload = multer({ storage: storage}).single('imageFile')
 
 router.get("/", function(request, response){
 
@@ -24,41 +34,39 @@ router.get("/create", function(request, response){
 router.get("/:blogId", function(request, response){
 
     const blogId = request.params.blogId
-    blogManager.getBlogpostId(blogId, function(errors, blogpost){
-        console.log("blogpost", blogpost)
+    blogRepo.getBlogpostId(blogId, function(errors, blogpost){
+        const values = blogpost[0]
+        const title = blogpost[0]
+        const content = blogpost[2]
+        const posted = blogpost[3]
+        const imageFile = blogpost[4]
+        const userId = blogpost[5]
+
         const model = {
             errors: errors,
-            blogpost: blogpost
+            blogpost: blogpost[0]
         }
+        console.log("model:", model)
         response.render("blogpost.hbs", model)
     })
 })
 
-/*router.post('/public', upload.single('imageFile'), function(request, response, next){
-    const file = request.body.file
+
+router.post("/create", upload, function(request, response, next){
+
+    const title = request.body.title
+    const content = request.body.content
+    const posted = request.body.posted
+    const userId = 1
+    const file = request.file.originalname
 
     if(!file){
         const error = new Error("please upload a file")
         error.httpStatusCode = 400
         return next(error)
     }
-    response.send(file)
-})*/
-
-router.post("/create", function(request, response){
-
-    const title = request.body.title
-    const content = request.body.content
-    const posted = request.body.posted
-    const imageFile = request.body.imageFile
-    const userId = 1
-    console.log("userId:", userId)
-    console.log("title:", title)
-    console.log("content:", content)
-    console.log("posted:", posted)
-    console.log("image:", imageFile)
-
-    blogManager.createBlogpost(title, content, posted, imageFile, userId, function(error, blogId){
+   
+    blogRepo.createBlogpost(title, content, posted, file, userId, function(error, blogId){
 
         if(error){
             response.send(
