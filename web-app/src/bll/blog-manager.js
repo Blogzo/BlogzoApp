@@ -8,11 +8,9 @@ exports.getAllBlogposts = function(callback){
 }
 
 
-exports.getBlogpostId = function(id){
-
-    if(request.session.isLoggedIn){
-        return blogRepo.getBlogpostId(id)
-    }else{
-        throw "Unauthorized!"
-    }
+exports.getBlogpostId = function(callback){
+    blogRepo.getBlogpostId(function(errors, blogId){
+        callback(errors, blogId)
+    })
 }
+

@@ -5,9 +5,9 @@ exports.getBlogposts = function(callback){
     const query = "SELECT * FROM blogposts"
     db.query(query, function(error, blogposts){
         if(error){
-            callback("DatabaseError", null)
+            callback(["DatabaseError"], null)
         }else{
-            callback(null, blogposts)
+            callback([], blogposts)
         }
     })
 }
@@ -18,18 +18,13 @@ exports.getBlogpostId = function(blogId ,callback){
     const value = [blogId]
     db.query(query, value, function(error, blogpost){
         if(error){
-            callback("DatabaseError", null)
+            callback(["DatabaseError"], null)
         }else{
-            callback(null, blogpost)
+            callback([], blogpost)
         }
     })
 }
 
-exports.getUserNameById = function(id, callback){
-
-    const query = "SELECT userName FROM accounts WHERE userId = personId"
-    const values = [id]
-}
 
 exports.createBlogpost = function(title, content, posted, imageFile, userId, callback){
 
