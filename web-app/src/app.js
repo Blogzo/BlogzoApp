@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 const redis = require('redis')
 const redisClient = redis.createClient({host: 'session-database'})
 const redisStore = require('connect-redis')(expressSession)
+const awilix = require('awilix')
 
 const app = express()
 
@@ -28,6 +29,10 @@ redisClient.on("error", function(error){
 redisClient.on("end", function(){
 
   console.log("Redis connection closed")
+})
+
+const container = awilix.createContainer({
+  injectionMode: awilix.InjectionMode.PROXY
 })
 
 app.use(expressSession({
