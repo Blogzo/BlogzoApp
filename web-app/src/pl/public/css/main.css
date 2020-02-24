@@ -1,5 +1,5 @@
 body{
     background-image: url(/Background-Blogzo.png);
     background-size: 100%;
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
 }

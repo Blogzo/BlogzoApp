@@ -12,7 +12,6 @@
 
 <h1 id="blogzo">Todo list</h1>
 
-
 <div class="page-content page-container" id="page-content">
     <div class="row justify-content-center">
         <div class="col-lg-7">
@@ -20,26 +19,42 @@
                 <div class="card-body">
                     <h4 class="card-title">Your Todo list</h4>
                     <form action="/toDoLists" method="POST">
-                        <div class="add-items d-flex"> <input type="text" class="form-control todo-list-input" name="todo" placeholder="What do you need to do today?">
+                        <div class="add-items d-flex"> <input type="text" class="form-control todo-list-input"
+                                name="todo" placeholder="What do you need to do today?">
                             <button class="add btn btn-primary font-weight-bold todo-list-add-btn">Add</button>
                         </div>
                     </form>
                     {{#if toDos.length}}
                         {{#each toDos}}
-                        <div class="list-wrapper">
-                            <ul class="d-flex flex-column-reverse todo-list">
-                                <li>
-                                    <div class="form-check"> <label class="form-check-label"> <input class="checkbox"
-                                                type="checkbox"> <b>{{todo}}</b> <i
-                                                class="input-helper"></i></label> </div> <i
-                                        class="remove mdi mdi-close-circle-outline"></i>
-                                </li>
-                            </ul>
-                        </div>
+                            <div class="list-wrapper">
+                                <ul class="d-flex flex-column-reverse todo-list">
+                                    <li>
+                                        <div class="form-check"> <label class="form-check-label"> <input class="checkbox"
+                                                    type="checkbox"> <b>{{todo}}</b> <i class="input-helper"></i></label> </div>
+                                        <i class="remove mdi mdi-close-circle-outline"></i>
+                                    </li>
+                                </ul>
+                            </div>
                         {{/each}}
                     {{/if}}
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Completed</h4>
+                        <div class="list-wrapper">
+                            <ul class="d-flex flex-column-reverse todo-list">
+                                {{#if toDos.length}}
+                                    {{#each toDos.Completed}}
+                                        <li>
+                                            <div class="form-check"> <label class="form-check-label"> <input class="checkbox"type="checkbox"> <b>{{Completed}}</b> 
+                                                <i class="input-helper"></i></label> 
+                                            </div>
+                                            <i class="remove mdi mdi-close-circle-outline"></i>
+                                        </li>
+                                    {{/each}}
+                                {{/if}}
+                            </ul>
+                        </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

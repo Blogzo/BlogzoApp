@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const multer = require('multer')
 const blogManager = require('../../../bll/blog-manager')
 const blogRepo = require('../../../dal/blog-repository')
+var upload = multer({ dest: './pl/public/blogpost-img' })
 
 
 router.get("/", function(request, response){
@@ -18,6 +20,17 @@ router.get("/", function(request, response){
 router.get("/create", function(request, response){
 
     response.render("create-blogpost.hbs")
+})
+
+router.post('/create', upload.single('imageFile'), function(request, response, next){
+    const file = request.body.file
+
+    if(!file){
+        const error = new Error("please upload a file")
+        error.httpStatusCode = 400
+        return next(error)
+    }
+    response.send(file)
 })
 
 router.get("/:blogId", function(request, response){

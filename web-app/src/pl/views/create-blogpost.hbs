@@ -17,7 +17,7 @@
                 <div class="card">
                     <div class="card-header">Create Post</div>
                     <div class="card-body">
-                        <form action="/blogposts/create/{{blogpost.id}}" method="POST">
+                        <form action="/blogposts/create/{{blogpost.id}}" method="POST" enctype="multipart/form-data"> 
                             <div class="form-group row">
                                 <label for="postTitle" value="{{title}} "class="col-md-4 col-form-label text-md-right">Title</label>
                                 <div class="col-md-6">
@@ -42,7 +42,7 @@
                             <div class="form-group row">
                                 <div class="col-9 col-sm-12">
                                     <label for="posted" value="{{imageFile}}" class="col-md-4 col-form-label text-md-right">Image</label>
-                                    <input type="text" class="form-input" name="imageFile" id="input-image" placeholder="Image">
+                                    <input type="file" class="form-input" name="imageFile" id="input-image" placeholder="Image" accept=".png, .jpg">
                                 </div>
                            </div>
 
