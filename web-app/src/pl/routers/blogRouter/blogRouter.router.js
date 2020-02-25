@@ -5,7 +5,6 @@ const blogManager = require('../../../bll/blog-manager')
 const blogRepo = require('../../../dal/blog-repository')
 var upload = multer({ dest: './pl/public/blogpost-img' })
 
-const multer = require('multer')
 var storage = multer.diskStorage({
     destination: function (request, file, cb) {
         cb(null, __dirname + '../../../public/blogpost-img')
@@ -33,27 +32,11 @@ router.get("/create", function(request, response){
     response.render("create-blogpost.hbs")
 })
 
-router.post('/create', upload.single('imageFile'), function(request, response, next){
-    const file = request.body.file
-
-    if(!file){
-        const error = new Error("please upload a file")
-        error.httpStatusCode = 400
-        return next(error)
-    }
-    response.send(file)
-})
 
 router.get("/:blogId", function(request, response){
 
     const blogId = request.params.blogId
     blogRepo.getBlogpostId(blogId, function(errors, blogpost){
-        const values = blogpost[0]
-        const title = blogpost[0]
-        const content = blogpost[2]
-        const posted = blogpost[3]
-        const imageFile = blogpost[4]
-        const userId = blogpost[5]
 
         const model = {
             errors: errors,
