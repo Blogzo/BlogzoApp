@@ -1,5 +1,5 @@
 const express = require('express')
-const accountManager = require('../../../dal/account-repository')
+const accountManager = require('../../../bll/account-manager')
 const router = express.Router()
 
 router.get("/", function(request, response){
@@ -13,13 +13,12 @@ router.post("/", function(request, response){
     const username = request.body.username
     const userPassword = request.body.userPassword
     if(email && userPassword){
-        accountManager.createAccount(username, email, userPassword, function(error, account){
-            console.log("accountSignIn:", account)
-            if(error){
+        accountManager.createAccount(username, email, userPassword, function(errors, account){
+            if(errors != ""){
                 response.send("<h1><b>Something went wrong</b></h1>")
                 return
             }
-            else if(account > 0){
+            else if(account.lenght != ""){
                 request.session.userId = account
                 response.redirect("/login")
             }

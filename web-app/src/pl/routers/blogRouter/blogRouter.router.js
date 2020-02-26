@@ -21,8 +21,9 @@ router.get("/", function(request, response){
     blogManager.getAllBlogposts(function(errors, blogposts){
         const model = {
             errors: errors,
-            blogposts: blogposts
+            blogposts: blogposts,
         }
+        console.log("all blogpost model:", model)
         response.render("blogposts.hbs", model)
     })
 })
@@ -36,11 +37,13 @@ router.get("/create", function(request, response){
 router.get("/:blogId", function(request, response){
 
     const blogId = request.params.blogId
-    blogRepo.getBlogpostId(blogId, function(errors, blogpost){
+    const username = request.session.username
 
+    blogManager.getBlogpostId(blogId, function(errors, blogpost){
         const model = {
             errors: errors,
-            blogpost: blogpost[0]
+            blogpost: blogpost[0],
+            username
         }
         console.log("model:", model)
         response.render("blogpost.hbs", model)
@@ -53,8 +56,9 @@ router.post("/create", upload, function(request, response, next){
     const title = request.body.title
     const content = request.body.content
     const posted = request.body.posted
-    const userId = 1
+    const userId = request.session.userId
     const file = request.file.originalname
+    console.log("userId", userId)
 
     if(!file){
         const error = new Error("please upload a file")
@@ -62,9 +66,9 @@ router.post("/create", upload, function(request, response, next){
         return next(error)
     }
    
-    blogRepo.createBlogpost(title, content, posted, file, userId, function(error, blogId){
-
-        if(error){
+    blogManager.createBlogpost(title, content, posted, file, userId, function(errors, blogId){
+        console.log("error:", errors)
+        if(errors.length != ""){
             response.send(
                 '<h1><b>Something went wrong</b></h1>'
             )

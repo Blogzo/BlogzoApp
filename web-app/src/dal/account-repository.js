@@ -5,12 +5,11 @@ exports.createAccount = function(username, email, userPassword, callback){
     const query = "INSERT INTO accounts (username, email, userPassword) VALUES (?, ?, ?)"
     const values = [username, email, userPassword]
     console.log("values:", values)
-    db.query(query, values, function(error, results){
-        console.log("results:", results)
-        if(error){
-            callback("DatabaseError", null)
+    db.query(query, values, function(errors, results){
+        if(errors){
+            callback(["DatabaseError"], null)
         }else{
-            callback(null, results.insertId)
+            callback([], results.insertId)
         }
     })
 }
@@ -20,38 +19,40 @@ exports.getAccount = function(username, userPassword, callback){
     const query = "SELECT * FROM accounts WHERE username = ? AND userPassword = ?"
     const values = [username, userPassword]
 
-    db.query(query, values, function(error, account){
+    db.query(query, values, function(errors, account){
 
-        if(error){
-            callback("DatabaseError", null)
+        if(errors){
+            callback(["DatabaseError"], null)
         }else{
-            callback(null, account)
+            callback([], account)
         }
     })
 }
 
-exports.getAccountById = function(id){
+exports.getAccountById = function(id, callback){
 
     const query = "SELECT * FROM accounts WHERE id = ?"
     const value = [id]
-    db.query(query, value, function(error, account){
-        if(error){
-            callback("DatabaseError", null)
+    db.query(query, value, function(errors, account){
+        if(errors){
+            callback(["DatabaseError"], null)
         }else{
-            callback(null, account)
+            callback([], account)
         }
     })
 }
+
+
 
 exports.getAllAccounts = function(callback){
 
     const query = "SELECT * FROM accounts ORDER BY username"
-    db.query(query, function(error, accounts){
+    db.query(query, function(errors, accounts){
 
-        if(error){
-            callback("DatabaseError", null)
+        if(errors){
+            callback(["DatabaseError"], null)
         }else{
-            callback(null, accounts)
+            callback([], accounts)
         }
     })
 }

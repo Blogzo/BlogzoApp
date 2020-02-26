@@ -1,5 +1,13 @@
 const accountRepo = require('../dal/account-repository')
 
+function isLoggedIn(ifIsLoggedIn){
+
+    if(!ifIsLoggedIn){
+
+    }
+    return errors
+}
+
 
 exports.getAllAccounts = function(callback){
 
@@ -8,27 +16,25 @@ exports.getAllAccounts = function(callback){
     })
 }
 
-exports.getAccountById = function(id){
+exports.getAccountById = function(personId, callback){
    
-    if(isLoggedIn){
-        return accountRepo.getAccountById(id)
-    }else{
-        throw "Unauthorized!"
-    } 
-}
-
-exports.getAccount = function(callback){
-
-    accountRepo.getAccount(function(errors, accounts){
-        callback(errors, accounts)
+    accountRepo.getAccountById(personId, function(errors, account){
+        callback(errors, account)
     })
-    
+}
+
+exports.getAccount = function(username, userPassword, callback){
+
+    accountRepo.getAccount(username, userPassword, function(errors, account){
+        console.log("account", account)
+        callback(errors, account)
+    })
 }
 
 
-exports.createAccount = function(callback){
+exports.createAccount = function(username, email, userPassword, callback){
 
-    accountRepo.createAccount(function(errors, account){
+    accountRepo.createAccount(username, email, userPassword, function(errors, account){
         callback(errors, account)
     })
 }
