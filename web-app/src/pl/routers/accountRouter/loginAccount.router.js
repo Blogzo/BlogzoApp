@@ -16,8 +16,6 @@ router.post("/", function(request, response){
 	const validationErrors = []
 	if (username && userPassword) {
 		accountManager.getAccount(username, userPassword, function(errors, account){
-			console.log("resultlogin", account)
-			console.log("errors:", errors)
 			if(errors != ""){
 				response.send("<h1><b>Something went wrong</b></h1>")
 				return

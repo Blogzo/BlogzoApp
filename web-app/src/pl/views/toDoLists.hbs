@@ -10,6 +10,8 @@
     </div>
 </nav>
 
+
+
 <h1 id="blogzo">Todo list</h1>
 
 <div class="page-content page-container" id="page-content">
@@ -20,7 +22,7 @@
                     <h4 class="card-title">Your Todo list</h4>
                     <form action="/toDoLists" method="POST">
                         <div class="add-items d-flex"> <input type="text" class="form-control todo-list-input"
-                                name="todo" placeholder="What do you need to do today?">
+                                name="todo" placeholder="What do you need to do today? (5-20)">
                             <button class="add btn btn-primary font-weight-bold todo-list-add-btn">Add</button>
                         </div>
                     </form>
@@ -39,7 +41,13 @@
                     {{/if}}
                 </div>
                 <div class="card-body">
-                    <h4 class="card-title">Completed</h4>
+                    <h5 class="card-title">
+                        {{#if errors.length}}
+                            {{#each errors}}
+                                <li>{{this}}</li>
+                            {{/each}}
+                        {{/if}}
+                    </h5>
                         <div class="list-wrapper">
                             <ul class="d-flex flex-column-reverse todo-list">
                                 {{#if toDos.length}}

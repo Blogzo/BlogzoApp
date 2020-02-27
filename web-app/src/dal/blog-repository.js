@@ -32,7 +32,6 @@ exports.createBlogpost = function(title, content, posted, imageFile, userId, cal
 
     const query = "INSERT INTO blogposts (title, content, posted, imageFile, userId) VALUES (?, ?, ?, ?, ?)"
     const values = [title, content, posted, imageFile, userId]
-    console.log("blogValues:", values)
     db.query(query, values, function(errors, blogpost){
         console.log("blogpost:", blogpost)
         if(errors){

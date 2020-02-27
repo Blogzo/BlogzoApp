@@ -18,17 +18,25 @@
                     <div class="card-header">Create Post</div>
                     <div class="card-body">
                         <form action="/blogposts/create/{{blogpost.blogId}}" method="POST" enctype="multipart/form-data"> 
+                            {{#if errors}}
+                                {{#each errors}}
+                                <div class="form-group row">
+                                    <label for="errors "class="col-md-4 col-form-label text-md-right"></label>
+                                    <li id="errors">{{this}}</li>
+                                </div>
+                                {{/each}}
+                            {{/if}}
                             <div class="form-group row">
-                                <label for="postTitle" value="{{title}} "class="col-md-4 col-form-label text-md-right">Title</label>
+                                <label for="postTitle" value="{{title}}" class="col-md-4 col-form-label text-md-right">Title</label>
                                 <div class="col-md-6">
-                                    <input type="text" id="title" class="form-control" name="title" required autofocus>
+                                    <input type="text" id="title" placeholder="Between 5-50 characters" class="form-control" name="title" required autofocus>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="postContent" value="{{content}} "class="col-md-4 col-form-label text-md-right">Content</label>
+                                <label for="postContent" value="{{content}}" class="col-md-4 col-form-label text-md-right">Content</label>
                                 <div class="col-md-6">
-                                    <textarea name="content" id="content" cols="83" rows="3"></textarea>
+                                    <textarea name="content" id="content" placeholder="Between 5-100 characters" cols="70" rows="3" required autofocus></textarea>
                                 </div>
                             </div>
 
@@ -42,7 +50,7 @@
                             <div class="form-group row">
                                 <div class="col-9 col-sm-12">
                                     <label for="image" value="{{imageFile}}" class="col-md-4 col-form-label text-md-right">Image (png, jpg)</label>
-                                    <input type="file" accept=".png, .jpg" class="form-input" name="imageFile" id="input-image" placeholder="Image">
+                                    <input type="file" accept=".png, .jpg" class="form-input" name="imageFile" id="input-image" placeholder="Image" required autofocus>
                                 </div>
                            </div>
 

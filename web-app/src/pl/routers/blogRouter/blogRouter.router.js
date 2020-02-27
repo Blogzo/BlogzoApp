@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const blogManager = require('../../../bll/blog-manager')
-const blogRepo = require('../../../dal/blog-repository')
 var upload = multer({ dest: './pl/public/blogpost-img' })
 
 var storage = multer.diskStorage({
@@ -17,13 +16,13 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage}).single('imageFile')
 
 router.get("/", function(request, response){
-
+   
     blogManager.getAllBlogposts(function(errors, blogposts){
         const model = {
             errors: errors,
             blogposts: blogposts,
         }
-        console.log("all blogpost model:", model)
+        console.log("model:", model)
         response.render("blogposts.hbs", model)
     })
 })
@@ -38,8 +37,8 @@ router.get("/:blogId", function(request, response){
 
     const blogId = request.params.blogId
     const username = request.session.username
-
-    blogManager.getBlogpostId(blogId, function(errors, blogpost){
+    const isLoggedIn = request.session.isLoggedIn
+    blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
         const model = {
             errors: errors,
             blogpost: blogpost[0],
@@ -58,20 +57,20 @@ router.post("/create", upload, function(request, response, next){
     const posted = request.body.posted
     const userId = request.session.userId
     const file = request.file.originalname
-    console.log("userId", userId)
-
+    const isLoggedIn = request.session.isLoggedIn
     if(!file){
         const error = new Error("please upload a file")
         error.httpStatusCode = 400
         return next(error)
     }
    
-    blogManager.createBlogpost(title, content, posted, file, userId, function(errors, blogId){
+    blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
         console.log("error:", errors)
         if(errors.length != ""){
-            response.send(
-                '<h1><b>Something went wrong</b></h1>'
-            )
+            const model = {
+                errors: errors
+            }
+            response.render("create-blogpost.hbs", model)
         }else{
             response.redirect("/blogposts/"+blogId)
         }

@@ -27,9 +27,18 @@
                         <div class="card-header">Sign up</div>
                         <div class="card-body">
                             <form id="signUpForm" action="/create-account" method="POST">
+                               
+                                {{#if errors}}
+                                <div class="form-group row">
+                                    <label for="errors" class="col-md-4 col-form-label text-md-right"></label>
+                                    {{#each errors}}
+                                        <li>{{this}}</li>
+                                    {{/each}}
+                                </div>
+                                {{/if}}
 
                                 <div class="form-group row">
-                                    <label for="email_address" class="col-md-4 col-form-label text-md-right">Username</label>
+                                    <label for="email_address" class="col-md-4 col-form-label text-md-right">Username (5-20)</label>
                                     <div class="col-md-6">
                                         <input type="text" id="username" placeholder="Username" class="form-control" name="username" required autofocus>
                                     </div>

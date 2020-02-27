@@ -1,22 +1,19 @@
 const accountRepo = require('../dal/account-repository')
 
-function isLoggedIn(ifIsLoggedIn){
+function getValidationErrors(username){
 
-    if(!ifIsLoggedIn){
+    const errors = []
 
+    if(username.length <= 5){
+        errors.push("Username to short!")
+    }
+    if(username.length >= 20){
+        errors.push("Username to long!")
     }
     return errors
 }
 
-
-exports.getAllAccounts = function(callback){
-
-    accountRepo.getAllAccounts(function(errors, accounts){
-        callback(errors, accounts)
-    })
-}
-
-exports.getAccountById = function(personId, callback){
+exports.getAccountById = function(personId){
    
     accountRepo.getAccountById(personId, function(errors, account){
         callback(errors, account)
@@ -26,7 +23,6 @@ exports.getAccountById = function(personId, callback){
 exports.getAccount = function(username, userPassword, callback){
 
     accountRepo.getAccount(username, userPassword, function(errors, account){
-        console.log("account", account)
         callback(errors, account)
     })
 }
@@ -34,6 +30,11 @@ exports.getAccount = function(username, userPassword, callback){
 
 exports.createAccount = function(username, email, userPassword, callback){
 
+    const errors = getValidationErrors(username)
+    if(errors.length > 0){
+        callback(errors)
+        return
+    }
     accountRepo.createAccount(username, email, userPassword, function(errors, account){
         callback(errors, account)
     })

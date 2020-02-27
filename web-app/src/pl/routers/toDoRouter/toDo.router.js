@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const toDoManager = require('../../../bll/toDo-manager')
-const toDoRepo = require('../../../dal/toDo-repository')
 
 router.get("/", function(request, response){
-
-    toDoManager.getAllToDos(function(errors, toDos){
+    
+    const isLoggedIn = request.session.isLoggedIn   
+    toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
         const model = {
             errors: errors,
             toDos: toDos
@@ -17,11 +17,14 @@ router.get("/", function(request, response){
 router.post("/", function(request, response){
    
     const todo = request.body.todo
-
-    toDoRepo.createTodo(todo, function(error, newTodo){
+    const isLoggedIn = request.session.isLoggedIn
+    toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
         console.log("todo in router:", newTodo)
-        if(error){
-            response.send("<h1><b>Something went wrong</b></h1>")
+        if(errors){
+            const model = {
+                errors: errors
+            }
+            response.render("toDoLists.hbs", model)
         }else{
             response.redirect("/toDoLists")
         }
