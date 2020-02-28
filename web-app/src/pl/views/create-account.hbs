@@ -1,6 +1,4 @@
-<head>
-	<script src="validationSignUp.js"></script>
-</head>
+
     <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -30,9 +28,10 @@
                                
                                 {{#if errors}}
                                 <div class="form-group row">
-                                    <label for="errors" class="col-md-4 col-form-label text-md-right"></label>
                                     {{#each errors}}
-                                        <li>{{this}}</li>
+                                        <pre>
+                                            <b>{{this}}</b>
+                                        </pre>
                                     {{/each}}
                                 </div>
                                 {{/if}}
@@ -61,7 +60,7 @@
                                 <div class="form-group row">
                                     <label for="password" class="col-md-4 col-form-label text-md-right">Re-enter password</label>
                                     <div class="col-md-6">
-                                        <input type="password" id="rePassword" placeholder="Password" class="form-control" pattern=".{5,15}" name="password" required>
+                                        <input type="password" id="rePassword" placeholder="Password" class="form-control" pattern=".{5,15}" name="userPassword2" required>
                                     </div>
                                 </div>
 

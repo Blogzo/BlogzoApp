@@ -5,9 +5,10 @@ const bodyParser = require('body-parser')
 const expressSession = require('express-session')
 const cookieParser = require('cookie-parser')
 const redis = require('redis')
+const awilix = require('awilix')  
+
 const redisClient = redis.createClient({host: 'session-database'})
 const redisStore = require('connect-redis')(expressSession)
-const awilix = require('awilix')  
 
 const app = express()
 
@@ -96,10 +97,6 @@ app.use("/toDoLists", theToDoRouter)
 
 app.get('/', function (request, response) {
     response.render("start.hbs")
-})
-
-app.get('/create-toDoList', function(request,response){
-  response.render("create-toDoList.hbs")
 })
 
 app.listen(8080, () => {

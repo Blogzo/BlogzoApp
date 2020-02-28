@@ -33,6 +33,22 @@ module.exports = function({}){
             })
         },
 
+
+        getUserPassword: function(username, callback){
+
+            const query = "SELECT userPassword FROM accounts WHERE username = ?"
+            const value = [username]
+
+            db.query(query, value, function(errors, userPassword){
+
+                if(errors){
+                    callback(["DatabaseError"], null)
+                }else{
+                    callback([], userPassword)
+                }
+            })
+        },
+
         getAccountById: function(id){
 
             const query = "SELECT * FROM accounts WHERE id = ?"

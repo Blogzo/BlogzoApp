@@ -6,16 +6,16 @@ module.exports = function({blogRepository}){
         getValidationErrors: function(title, content){
             const errors = []
 
-            if(title.length <= 5){
+            if(title.length < 5){
                 errors.push("Title to short!")
             }
-            if(content.length <= 10){
+            if(content.length < 10){
                 errors.push("Content to short!")
             }
-            if(title.length >= 50){
+            if(title.length >  50){
                 errors.push("Title to long!")
             }
-            if(content.length >= 100){
+            if(content.length > 100){
                 errors.push("Title to long!")
             }
             

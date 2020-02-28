@@ -10,10 +10,10 @@ module.exports = function({toDoRepository}){
             if(name.length == 0){
                 errors.push("Need to write something!")
             }
-            else if(name.length <= 5){
+            else if(name.length < 5){
                 errors.push("Name to short!")
             }
-            else if(name.length >= 20){
+            else if(name.length > 20){
                 errors.push("Name to long!")
             }
             return errors

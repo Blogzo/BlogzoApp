@@ -3,6 +3,8 @@ module.exports = function({accountManager}){
     
     const express = require('express')
     const router = express.Router()
+    const bcrypt = require('bcrypt')
+    const saltRounds = 10
 
     router.get("/", function(request, response){
 
@@ -14,7 +16,9 @@ module.exports = function({accountManager}){
         const email = request.body.email
         const username = request.body.username
         const userPassword = request.body.userPassword
-        accountManager.createAccount(username, email, userPassword, function(errors, account){
+        const userPassword2 = request.body.userPassword2
+           
+        accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, account){
             if(errors != ""){
                 const model = {
                     errors: errors
