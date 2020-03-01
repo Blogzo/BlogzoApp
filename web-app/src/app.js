@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const expressSession = require('express-session')
 const cookieParser = require('cookie-parser')
 const redis = require('redis')
+const csrf = require('csurf')
 const awilix = require('awilix')  
 
 const redisClient = redis.createClient({host: 'session-database'})
@@ -46,9 +47,19 @@ const theToDoRouter = container.resolve('toDoRouter')
 const theCreateAccountRouter = container.resolve('createAccountRouter')
 const theLoginRouter = container.resolve('loginRouter')
 
-app.set('views', path.join(__dirname+"/pl", "views"))
+const multer = require('multer')
 
-app.use(cookieParser())
+var storage = multer.diskStorage({
+  destination: function (request, file, cb) {
+    cb(null, __dirname + '/pl/public/blogpost-img')
+  },
+  filename: function(request, file, cb) {
+    const fileName = file.originalname.toLowerCase().split(' ').join('-')
+    cb(null, fileName)
+  }
+})
+
+app.set('views', path.join(__dirname+"/pl", "views"))
 
 redisClient.on("error", function(error){
 
@@ -60,7 +71,11 @@ redisClient.on("end", function(){
   console.log("Redis connection closed")
 })
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
 
+app.use(cookieParser())
 app.use(expressSession({
   secret: "ftrhytjjujtfvel345jf",
   saveUninitialized: false,
@@ -68,18 +83,22 @@ app.use(expressSession({
   store: new redisStore({ client: redisClient})
 }))
 
-
+app.use(multer({ storage: storage}).single('imageFile'))
+app.use(csrf({ cookie: true}))
 app.use(function(request, response, next){
-   
-    response.locals.isLoggedIn = request.session.isLoggedIn
-    next()
+  var token = request.csrfToken()
+  console.log("token:", token)
+  response.locals.isLoggedIn = request.session.isLoggedIn
+  response.locals.csrfToken = token
+  next()
 })
 
-
-app.use(bodyParser.urlencoded({
-  extended: false
-}))
-
+app.use(function(error, request, response, next){
+  
+  if(error !== 'EBADCSRFTOKEN') return next(error)
+  response.send(403)
+  response.send('Form tampered with!')
+})
 
 app.engine("hbs", expressHandlebars({
   defaultLayout: "main.hbs",

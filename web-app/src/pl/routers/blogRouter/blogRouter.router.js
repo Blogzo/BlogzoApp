@@ -3,19 +3,7 @@ module.exports = function({blogManager}){
 
     const express = require('express')
     const router = express.Router()
-    const multer = require('multer')
-    var upload = multer({ dest: './pl/public/blogpost-img' })
-
-    var storage = multer.diskStorage({
-        destination: function (request, file, cb) {
-            cb(null, __dirname + '../../../public/blogpost-img')
-        },
-        filename: function(request, file, cb) {
-            const fileName = file.originalname.toLowerCase().split(' ').join('-');
-            cb(null, fileName)
-        }
-    })
-    var upload = multer({ storage: storage}).single('imageFile')
+    
     
 
     router.get("/", function(request, response){
@@ -43,18 +31,22 @@ module.exports = function({blogManager}){
         const username = request.session.username
         const isLoggedIn = request.session.isLoggedIn
         blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
-            const model = {
-                errors: errors,
-                blogpost: blogpost[0],
-                username
+            if(errors.includes("Need to be logged in!")){
+                response.render("unauthorized.hbs")
+            }else{
+                const model = {
+                    errors: errors,
+                    blogpost: blogpost[0],
+                    username
+                }
+                console.log("model:", model)
+                response.render("blogpost.hbs", model)
             }
-            console.log("model:", model)
-            response.render("blogpost.hbs", model)
         })
     })
     
     
-    router.post("/create", upload, function(request, response, next){
+    router.post("/create", function(request, response, next){
     
         const title = request.body.title
         const content = request.body.content
@@ -70,11 +62,15 @@ module.exports = function({blogManager}){
        
         blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
             console.log("error:", errors)
-            if(errors.length != ""){
-                const model = {
-                    errors: errors
+            if(errors != ""){
+                if(errors.includes("Need to be logged in!")){
+                    response.render("unauthorized.hbs")
+                }else{
+                    const model = {
+                        errors: errors
+                    }
+                    response.render("create-blogpost.hbs", model)
                 }
-                response.render("create-blogpost.hbs", model)
             }else{
                 response.redirect("/blogposts/"+blogId)
             }

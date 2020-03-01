@@ -31,20 +31,22 @@ module.exports = function({accountRepository}){
         getUserPassword: function(username, password, callback){
 
             accountRepository.getUserPassword(username, function(errors, userPassword){
+                
                 if(userPassword.length != ""){
-                    console.log("password:", password)
-                    console.log("hashedpassword:", userPassword[0].userPassword)
                     if(bcrypt.compareSync(password, userPassword[0].userPassword)){
                         console.log("password match")
                         callback(errors, userPassword)
                     }else{
                         console.log("password dont match")
-                        userPassword = ""
-                        callback(errors, userPassword)
+                        const errors = []
+                        errors.push("Wrong password!")
+                        callback(errors)
+                        return
                     }
                 }else{
-                    userPassword = ""
-                    callback(errors, userPassword)
+                    const errors = []
+                    errors.push("Username do not exists!")
+                    callback(errors)
                 }
             })
         },
@@ -64,9 +66,7 @@ module.exports = function({accountRepository}){
                 return
             }
             const saltrounds = 10
-            console.log("passwordBeforeHash:", userPassword)
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
-            console.log("hashedPassword:", hashedPassword)
             accountRepository.createAccount(username, email, hashedPassword, function(errors, account){
                 callback(errors, account)
             })

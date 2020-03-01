@@ -23,9 +23,9 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Login
-                        {{#if validationErrors.length}}
+                        {{#if errors.length}}
                              <ul id="list">
-                             {{#each validationErrors}}
+                             {{#each errors}}
                                   <b>{{this}}</b>
                              {{/each}}
                             </ul>
@@ -33,6 +33,7 @@
                     </div>
                     <div class="card-body">
                         <form action="/login" method="POST">
+                            <input type="hidden" name="_csrf" value="{{csrfToken}}">
                             <div class="form-group row">
                                 <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
                                 <div class="col-md-6">

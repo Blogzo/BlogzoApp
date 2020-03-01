@@ -8,11 +8,14 @@ module.exports = function({toDoManager}){
         
         const isLoggedIn = request.session.isLoggedIn   
         toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
-            const model = {
-                errors: errors,
-                toDos: toDos
+            if(errors.includes("Need to be logged in!")){
+                response.render("unauthorized.hbs")
+            }else{
+                const model = {
+                    toDos: toDos
+                }
+                response.render("toDoLists.hbs", model)
             }
-            response.render("toDoLists.hbs", model)
         })
     })
 
@@ -22,12 +25,15 @@ module.exports = function({toDoManager}){
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
         toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
-            console.log("todo in router:", newTodo)
-            if(errors){
-                const model = {
-                    errors: errors
+            if(errors != ""){
+                if(errors.includes("Need to be logged in!")){
+                    response.render("unauthorized.hbs")
+                }else{
+                    const model = {
+                        errors: errors
+                    }
+                    response.render("toDoLists.hbs", model)
                 }
-                response.render("toDoLists.hbs", model)
             }else{
                 response.redirect("/toDoLists")
             }

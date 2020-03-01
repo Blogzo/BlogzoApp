@@ -3,7 +3,7 @@ module.exports = function({blogRepository}){
 
     return {
 
-        getValidationErrors: function(title, content){
+        getValidationErrors: function(title, content, isLoggedIn){
             const errors = []
 
             if(title.length < 5){
@@ -18,6 +18,9 @@ module.exports = function({blogRepository}){
             if(content.length > 100){
                 errors.push("Title to long!")
             }
+            if(isLoggedIn == false){
+                errors.push("Need to be logged in!")
+            }
             
             return errors
 
@@ -31,30 +34,29 @@ module.exports = function({blogRepository}){
         },
 
         getBlogpostId: function(blogId, isLoggedIn, callback){
-
-            if(isLoggedIn){
+            
+            const errors = this.getValidationErrors(0, 0, isLoggedIn)
+            if(errors.length > 0){
+                callback(errors)
+                return
+            }else{
                 blogRepository.getBlogpostId(blogId, function(errors, blogpost){
                     callback(errors, blogpost)
                 })
-            }else{
-                throw "Unauthorized!"
-            }
+            }    
         },
 
         createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, callback){
 
-            const errors = this.getValidationErrors(title, content)
+            const errors = this.getValidationErrors(title, content, isLoggedIn)
             if(errors.length > 0){
                 callback(errors)
                 return
-            }
-            if(isLoggedIn){
+            }else{
                 blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
                     callback(errors, blogpost)
                 })
-            }else{
-                throw "Unauthorized!"
-            }
+            }    
         }
     }
 }

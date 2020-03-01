@@ -19,12 +19,10 @@ module.exports = function({}){
 
             const query = "SELECT * FROM blogposts WHERE blogId = ?"
             const value = [blogId]
-            console.log("value", value)
             db.query(query, value, function(errors, blogpost){
                 if(errors){
                     callback(["DatabaseError"], null)
                 }else{
-                    console.log("blogpost in dal:", blogpost)
                     callback([], blogpost)
                 }
             })

@@ -16,49 +16,51 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Create Post</div>
-                    <div class="card-body">
-                        <form action="/blogposts/create/{{blogpost.blogId}}" method="POST" enctype="multipart/form-data"> 
-                            {{#if errors}}
-                                {{#each errors}}
+                        <div class="card-body">
+                            <form action="/blogposts/create/{{blogpost.blogId}}" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                                {{#if errors}}
+                                    {{#each errors}}
+                                    <div class="form-group row">
+                                        <label for="errors "class="col-md-4 col-form-label text-md-right"></label>
+                                        <li id="errors"><b>{{this}}</b></li>
+                                    </div>
+                                    {{/each}}
+                                {{/if}}
                                 <div class="form-group row">
-                                    <label for="errors "class="col-md-4 col-form-label text-md-right"></label>
-                                    <li id="errors">{{this}}</li>
+                                    <label for="postTitle" value="{{title}}" class="col-md-4 col-form-label text-md-right">Title</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="title" placeholder="5-50 characters" class="form-control" name="title" required autofocus>
+                                    </div>
                                 </div>
-                                {{/each}}
-                            {{/if}}
-                            <div class="form-group row">
-                                <label for="postTitle" value="{{title}}" class="col-md-4 col-form-label text-md-right">Title</label>
-                                <div class="col-md-6">
-                                    <input type="text" id="title" placeholder="Between 5-50 characters" class="form-control" name="title" required autofocus>
-                                </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label for="postContent" value="{{content}}" class="col-md-4 col-form-label text-md-right">Content</label>
-                                <div class="col-md-6">
-                                    <textarea name="content" id="content" placeholder="Between 5-100 characters" cols="70" rows="3" required autofocus></textarea>
+                                <div class="form-group row">
+                                    <label for="postContent" value="{{content}}" class="col-md-4 col-form-label text-md-right">Content</label>
+                                    <div class="col-md-6">
+                                        <textarea name="content" id="content" placeholder="10-100 characters" cols="70" rows="3" required autofocus></textarea>
+                                    </div>
                                 </div>
-                            </div>
 
-                             <div class="form-group row">
-                                <label for="posted" value="{{posted}} "class="col-md-4 col-form-label text-md-right">Posted</label>
-                                <div class="col-md-6">
-                                    <input type="date" id="posted" class="form-control" name="posted" required autofocus>
+                                <div class="form-group row">
+                                    <label for="posted" value="{{posted}} "class="col-md-4 col-form-label text-md-right">Posted</label>
+                                    <div class="col-md-6">
+                                        <input type="date" id="posted" class="form-control" name="posted" required autofocus>
+                                    </div>
                                 </div>
-                            </div>
-                        
-                            <div class="form-group row">
-                                <div class="col-9 col-sm-12">
-                                    <label for="image" value="{{imageFile}}" class="col-md-4 col-form-label text-md-right">Image (png, jpg)</label>
-                                    <input type="file" accept=".png, .jpg" class="form-input" name="imageFile" id="input-image" placeholder="Image" required autofocus>
+                            
+                                <div class="form-group row">
+                                    <div class="col-9 col-sm-12">
+                                        <label for="image" value="{{imageFile}}" class="col-md-4 col-form-label text-md-right">Image (png, jpg)</label>
+                                        <input type="file" accept=".png, .jpg" class="form-input" name="imageFile" id="input-image" placeholder="Image" required autofocus>
+                                    </div>
                                 </div>
-                           </div>
 
-                            <div class="col-md-6 offset-md-4">
-                                <input type="submit" id="submit" value="Create" class="btn btn-primary">
-                                </button>
-                            </div>
-                        </form>
+                                <div class="col-md-6 offset-md-4">
+                                    <input type="submit" id="submit" value="Create" class="btn btn-primary">
+                                    </button>
+                                </div>
+                            </form>   
+                        </div>
                     </div>    
                 </div>
             </div>

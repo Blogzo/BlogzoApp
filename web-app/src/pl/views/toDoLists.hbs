@@ -21,6 +21,7 @@
                 <div class="card-body">
                     <h4 class="card-title">Your Todo list</h4>
                     <form action="/toDoLists" method="POST">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <div class="add-items d-flex"> <input type="text" class="form-control todo-list-input"
                                 name="todo" placeholder="What do you need to do today? (5-20)">
                             <button class="add btn btn-primary font-weight-bold todo-list-add-btn">Add</button>

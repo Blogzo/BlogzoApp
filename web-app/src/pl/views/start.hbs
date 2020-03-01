@@ -1,8 +1,13 @@
 <h1 id="blogzo" class="p-1"><b>BLOGZO</b></h1>
 
 <div class="container-lg col-md-3">
-    <a href="/login" class="m-3 btn btn-light btn-lg col align-self-center">Login</a>
-    <a href="/create-account" class="m-3 btn btn-light btn-lg col align-self-center">Sign up</a>
-    <a href="/blogposts" class="m-3 btn btn-light btn-lg col align-self-center">Continue as guest</a>
+    {{#if isLoggedIn}}
+        <a href="/create-account" class="m-3 btn btn-light btn-lg col align-self-center">Sign up</a>
+        <a href="/blogposts" class="m-3 btn btn-light btn-lg col align-self-center">Blogposts</a>
+        {{else}}
+            <a href="/login" class="m-3 btn btn-light btn-lg col align-self-center">Login</a>
+            <a href="/create-account" class="m-3 btn btn-light btn-lg col align-self-center">Sign up</a>
+            <a href="/blogposts" class="m-3 btn btn-light btn-lg col align-self-center">Continue as guest</a>
+    {{/if}}  
 </div><br>
 

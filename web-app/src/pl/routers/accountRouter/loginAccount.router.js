@@ -13,19 +13,23 @@ module.exports = function({accountManager}){
 
 		const username = request.body.username
 		const userPassword = request.body.password
-		const validationErrors = []
 		if (username && userPassword) {
 			accountManager.getUserPassword(username, userPassword, function(errors, account){
+				console.log("loginError:", errors)
 				if(errors != ""){
-					response.send("<h1>Something went wrong!</h1>")
-				} 
-				else if(account.length == ""){
-					validationErrors.push("Wrong username/password!")
-					const model = {
-						validationErrors
+					if(errors.includes("Username do not exists!")){
+						const model = {
+							errors: errors
+						}
+						response.render("login.hbs", model)	
 					}
-					response.render("login.hbs", model)	
-				}else{
+					else if(errors.includes("Wrong password!")){
+						const model = {
+							errors: errors
+						}
+						response.render("login.hbs", model)	
+					}
+				}else if(account){
 					request.session.isLoggedIn = true
 					request.session.username = username
 					response.redirect("/blogposts")

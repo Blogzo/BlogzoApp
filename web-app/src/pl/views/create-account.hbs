@@ -25,7 +25,7 @@
                         <div class="card-header">Sign up</div>
                         <div class="card-body">
                             <form id="signUpForm" action="/create-account" method="POST">
-                               
+                               <input type="hidden" name="_csrf" value="{{csrfToken}}">
                                 {{#if errors}}
                                 <div class="form-group row">
                                     {{#each errors}}
