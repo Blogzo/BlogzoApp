@@ -28,6 +28,21 @@ module.exports = function({}){
             })
         },
 
+        getUsernameById: function(userId, callback){
+
+            const query = "SELECT username FROM accounts INNER JOIN blogposts ON accounts.personId = blogposts.userId WHERE userId = ?"
+            const value = [userId]
+            console.log("userIdInDAL:", userId)
+            db.query(query, value, function(errors, username){
+                console.log("usernameInDAL:", username)
+                if(errors){
+                    callback(["DataBaseError"], null)
+                }else{
+                    callback([], username)
+                }
+            })
+        },
+
         createBlogpost: function(title, content, posted, imageFile, userId, callback){
 
             const query = "INSERT INTO blogposts (title, content, posted, imageFile, userId) VALUES (?, ?, ?, ?, ?)"

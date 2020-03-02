@@ -46,8 +46,16 @@ module.exports = function({blogRepository}){
             }    
         },
 
-        createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, callback){
+        getUsernameById: function(userId, callback){
+            blogRepository.getUsernameById(userId, function(errors, username){
+                console.log("usernameInBLL:", username)
+                console.log("errorInBLL:", errors)
+                callback(errors, username)
+            })
+        },
 
+        createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, callback){
+            
             const errors = this.getValidationErrors(title, content, isLoggedIn)
             if(errors.length > 0){
                 callback(errors)

@@ -5,6 +5,16 @@ module.exports = function({}){
     return {
 
         getBlogposts: function(callback){
+
+            blogposts.Blogpost.findAll().then(function(allBlogposts){
+                console.log(allBlogposts)
+                callback(allBlogposts)
+
+            }).catch(function(errors){
+                console.log(errors)
+                callback(errors)
+
+            })
             
         },
 

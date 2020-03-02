@@ -87,7 +87,6 @@ app.use(multer({ storage: storage}).single('imageFile'))
 app.use(csrf({ cookie: true}))
 app.use(function(request, response, next){
   var token = request.csrfToken()
-  console.log("token:", token)
   response.locals.isLoggedIn = request.session.isLoggedIn
   response.locals.csrfToken = token
   next()
