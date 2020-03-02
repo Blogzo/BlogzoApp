@@ -54,6 +54,14 @@ module.exports = function({blogRepository}){
             })
         },
 
+        getusernamesById: function(userId, callback){
+            blogRepository.getusernamesById(userId, function(errors, username){
+                console.log("usernamesInBLL:", username)
+                console.log("error2InBLL", errors)
+                callback(errors, username)
+            })
+        },
+
         createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(title, content, isLoggedIn)

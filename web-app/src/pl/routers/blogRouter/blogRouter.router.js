@@ -10,22 +10,24 @@ module.exports = function({blogManager}){
             if(errors.length != ""){
                 console.log(errors)
             }else{
-                blogManager.getUsernameById(blogposts[0].userId, function(errors, username){
-                    if(errors.length != ""){
-                        console.log(errors)
-                    }else{
-                        for(i in blogposts){
-                            console.log("userids:", blogposts[i].userId)
+                for(i in blogposts){
+                    blogManager.getUsernameById(blogposts[i].userId, function(errors, username){
+                        if(errors.length != ""){
+                            console.log(errors)
+                        }else{
+                        //for(i in blogposts){
+                        //    console.log("userids:", blogposts[i].userId)
+                        //}
+                            const model = {
+                                errors: errors,
+                                blogposts: blogposts,
+                                username: username[i]
+                            }
+                            console.log("blogpostsModel:", model)
+                            response.render("blogposts.hbs", model)
                         }
-                        const model = {
-                            errors: errors,
-                            blogposts: blogposts,
-                            username: username[0]
-                        }
-                        console.log("blogpostsModel:", model)
-                        response.render("blogposts.hbs", model)
-                    }
-                })
+                    })
+                }
             }
         })
     })
