@@ -20,8 +20,10 @@ module.exports = function({}){
             return errors
         },
 
-        getUserPassword: function(Username, Password, callback){
-            accounts.Account.findAll({username: Username, password: Password}).then(function(getUserPassword){
+        getUserPassword: function(username, password, callback){
+            accounts.Account.findOne({
+                where: {username = password}
+            }).then(function(getUserPassword){
                 console.log(getUserPassword)
                 callback(getUserPassword)
             }).catch(function(errors){
