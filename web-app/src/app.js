@@ -13,7 +13,7 @@ const redisStore = require('connect-redis')(expressSession)
 
 const app = express()
 
-const blogRepository = require('./dal/blog-repository')
+const blogRepository = require('./dal-sequelize/blog-repository')
 const blogManager = require('./bll/blog-manager')
 const blogRouter = require('./pl/routers/blogRouter/blogRouter.router')
 
@@ -82,8 +82,8 @@ app.use(expressSession({
   resave: false,
   store: new redisStore({ client: redisClient})
 }))
-
-app.use(multer({ storage: storage}).single('imageFile'))
+const maxSize = 700 * 300
+app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
 app.use(csrf({ cookie: true}))
 app.use(function(request, response, next){
   var token = request.csrfToken()

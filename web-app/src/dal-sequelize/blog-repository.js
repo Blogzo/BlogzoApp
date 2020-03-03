@@ -7,15 +7,14 @@ module.exports = function({}){
         getBlogposts: function(callback){
 
             blogposts.Blogpost.findAll().then(function(allBlogposts){
-                console.log(allBlogposts)
+                console.log("allblogpostSEQ:", allBlogposts)
                 callback(allBlogposts)
 
             }).catch(function(errors){
                 console.log(errors)
                 callback(errors)
 
-            })
-            
+            })  
         },
 
         getBlogpostId: function(blogId, callback){

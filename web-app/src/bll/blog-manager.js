@@ -29,6 +29,7 @@ module.exports = function({blogRepository}){
         getAllBlogposts: function(callback){
 
             blogRepository.getBlogposts(function(errors, blogposts){
+                console.log("blogpostsinBLL:", blogposts)
                 callback(errors, blogposts)
             })
         },
@@ -49,7 +50,6 @@ module.exports = function({blogRepository}){
         getUsernameById: function(userId, callback){
             blogRepository.getUsernameById(userId, function(errors, username){
                 console.log("usernameInBLL:", username)
-                console.log("errorInBLL:", errors)
                 callback(errors, username)
             })
         },

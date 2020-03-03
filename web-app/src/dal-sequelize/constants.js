@@ -12,5 +12,5 @@ module.exports = {
     PORT:PORT,
     PASSWORD:PASSWORD,
     HOST:HOST,
-    DIALECT:DIALECT
+    DIALECT:DIALECT,
 }

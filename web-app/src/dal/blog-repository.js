@@ -34,7 +34,6 @@ module.exports = function({}){
             const value = [userId]
             console.log("userIdInDAL:", userId)
             db.query(query, value, function(errors, username){
-                console.log("usernameInDAL:", username)
                 if(errors){
                     callback(["DataBaseError"], null)
                 }else{
@@ -43,12 +42,12 @@ module.exports = function({}){
             })
         },
 
+        
         createBlogpost: function(title, content, posted, imageFile, userId, callback){
 
             const query = "INSERT INTO blogposts (title, content, posted, imageFile, userId) VALUES (?, ?, ?, ?, ?)"
             const values = [title, content, posted, imageFile, userId]
             db.query(query, values, function(errors, blogpost){
-                console.log("blogpost:", blogpost)
                 if(errors){
                     callback(["DatabaseError"], null)
                 }else{

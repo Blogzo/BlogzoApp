@@ -14,9 +14,6 @@ module.exports = function({blogManager}){
                     if(errors.length != ""){
                         console.log(errors)
                     }else{
-                        for(i in blogposts){
-                            console.log("userids:", blogposts[i].userId)
-                        }
                         const model = {
                             errors: errors,
                             blogposts: blogposts,
@@ -78,11 +75,8 @@ module.exports = function({blogManager}){
             return next(error)
         }
        
-        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, username, blogId){
+        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
             console.log("error:", errors)
-            if(username.length != ""){
-                usernameById = request.session.usernameById
-            }
             if(errors.length != ""){
                 if(errors.includes("Need to be logged in!")){
                     response.render("unauthorized.hbs")
