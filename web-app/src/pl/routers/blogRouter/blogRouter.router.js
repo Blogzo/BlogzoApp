@@ -10,6 +10,7 @@ module.exports = function({blogManager}){
             if(errors.length != ""){
                 console.log(errors)
             }else{
+<<<<<<< HEAD
                 blogManager.getUsernameById(blogposts[0].userId, function(errors, username){
                     if(errors.length != ""){
                         console.log(errors)
@@ -18,11 +19,26 @@ module.exports = function({blogManager}){
                             errors: errors,
                             blogposts: blogposts,
                             username: username[0]
+=======
+                for(i in blogposts){
+                    blogManager.getUsernameById(blogposts[i].userId, function(errors, username){
+                        if(errors.length != ""){
+                            console.log(errors)
+                        }else{
+                        //for(i in blogposts){
+                        //    console.log("userids:", blogposts[i].userId)
+                        //}
+                            const model = {
+                                errors: errors,
+                                blogposts: blogposts,
+                                username: username[i]
+                            }
+                            console.log("blogpostsModel:", model)
+                            response.render("blogposts.hbs", model)
+>>>>>>> c7a927ceff5dde8676e27ed3e24d16ac5721eb96
                         }
-                        console.log("blogpostsModel:", model)
-                        response.render("blogposts.hbs", model)
-                    }
-                })
+                    })
+                }
             }
         })
     })
