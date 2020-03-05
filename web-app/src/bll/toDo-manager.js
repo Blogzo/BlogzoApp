@@ -26,11 +26,12 @@ module.exports = function({toDoRepository}){
         getAllToDos: function(isLoggedIn, callback){
             const errors = this.getValidationErrors(0, isLoggedIn)
             if(errors.length > 0){
-                callback(errors)
+                console.log("errortodoBLL:", errors)
+                callback(0, errors)
                 return
             }else{
-                toDoRepository.getAllToDos(function(errors, toDos){
-                    callback(errors, toDos)
+                toDoRepository.getAllToDos(function(toDos, errors){
+                    callback(toDos, errors)
                 })
             }
         },
@@ -39,12 +40,12 @@ module.exports = function({toDoRepository}){
 
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
             if(errors.length > 0){
-                callback(errors)
+                callback(0, errors)
                 return
             }
             if(isLoggedIn){
-                toDoRepository.createTodo(newTodo, function(errors, todo){
-                    callback(errors, todo)
+                toDoRepository.createTodo(newTodo, function(todo, errors){
+                    callback(todo, errors)
                 })
             }
         }

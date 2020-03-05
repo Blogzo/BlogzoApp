@@ -6,21 +6,21 @@ module.exports = function({}){
 
         getAllToDos: function(callback){
             toDos.toDo.findAll().then(function(getAllToDos){
-                console.log(getAllToDos)
-                callback(getAllToDos)
+                console.log("allTodosSEQ:", getAllToDos)
+                callback(getAllToDos, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(errors)
+                callback(null, errors)
             })
         },
 
-        createTodo: function(Todo, callback){
-            toDos.toDo.create({todo: Todo}).then(function(createTodo){
-                console.log(createTodo)
-                callback(createTodo)
+        createTodo: function(todo, callback){
+            toDos.toDo.create({toDo: todo}).then(function(newTodo){
+                console.log("newTodoSEQ:", newTodo)
+                callback(newTodo, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(errors)
+                callback(null, errors)
             })
         }
 

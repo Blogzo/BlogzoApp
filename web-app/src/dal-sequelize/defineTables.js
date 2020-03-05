@@ -21,9 +21,22 @@ Blogpost.sync().then(() => {
 })
 
 const Account = sequelize.define('accounts', {
-
-    username: Sequelize.TEXT,
-    email: Sequelize.TEXT,
+    personId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    username: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+        unique: true
+    },
+    email: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+        unique: true
+    },
     userPassword: Sequelize.TEXT
 }, {
     timestamps: false
@@ -34,7 +47,12 @@ Account.sync().then(() => {
 })
 
 const toDo = sequelize.define('toDoLists', {
-
+    todoId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
     toDo: Sequelize.TEXT
 }, {
     timestamps: false

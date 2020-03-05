@@ -6,40 +6,14 @@ module.exports = function({blogManager}){
     
     router.get("/", function(request, response){
         
-        blogManager.getAllBlogposts(function(errors, blogposts){
-            if(errors.length != ""){
-                console.log(errors)
-            }else{
-<<<<<<< HEAD
-                blogManager.getUsernameById(blogposts[0].userId, function(errors, username){
-                    if(errors.length != ""){
-                        console.log(errors)
-                    }else{
-                        const model = {
-                            errors: errors,
-                            blogposts: blogposts,
-                            username: username[0]
-=======
-                for(i in blogposts){
-                    blogManager.getUsernameById(blogposts[i].userId, function(errors, username){
-                        if(errors.length != ""){
-                            console.log(errors)
-                        }else{
-                        //for(i in blogposts){
-                        //    console.log("userids:", blogposts[i].userId)
-                        //}
-                            const model = {
-                                errors: errors,
-                                blogposts: blogposts,
-                                username: username[i]
-                            }
-                            console.log("blogpostsModel:", model)
-                            response.render("blogposts.hbs", model)
->>>>>>> c7a927ceff5dde8676e27ed3e24d16ac5721eb96
-                        }
-                    })
-                }
+        blogManager.getAllBlogposts(function(blogposts, errors){
+            
+            const model = {
+                errors,
+                blogposts
             }
+            console.log("blogpostsModel:", { model })
+            response.render("blogposts.hbs", { model })
         })
     })
     
@@ -54,23 +28,33 @@ module.exports = function({blogManager}){
     
         const blogId = request.params.blogId
         const isLoggedIn = request.session.isLoggedIn
-        blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
+        blogManager.getBlogpostId(blogId, isLoggedIn, function(blogpost, errors){
             if(errors.length != ""){
                 if(errors.includes("Need to be logged in!")){
                     response.render("unauthorized.hbs")
+                }else{
+                    const model = {
+                        errors
+                    }
+                    response.render("blogpost.hbs",{ model })
                 }
             }else{
-                blogManager.getUsernameById(blogpost[0].userId, function(errors, username){
-                    if(errors.length != ""){
-                        console.log("error:", errors)
-                    }else{
-                        const model = {
-                            errors: errors,
-                            blogpost: blogpost[0],
-                            username: username[0]
-                        }
-                        response.render("blogpost.hbs", model)
+                blogManager.getUsernameById(blogpost.dataValues.userId, function(username, errors){
+                    //Without sequelize
+                    /*const model = {
+                        errors: errors,
+                        blogpost: blogpost[0],
+                        username: username[0]
                     }
+                    response.render("blogpost.hbs", model)*/
+                    
+                    //With sequelize
+                    const model = {
+                        blogpost,
+                        errors
+                    }
+                    console.log("blogpostModel:",{ model })
+                    response.render("blogpost.hbs", { model })
                 })    
             }
         })
@@ -91,20 +75,18 @@ module.exports = function({blogManager}){
             return next(error)
         }
        
-        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
-            console.log("error:", errors)
+        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(blogId, errors){
             if(errors.length != ""){
                 if(errors.includes("Need to be logged in!")){
                     response.render("unauthorized.hbs")
                 }else{
                     const model = {
-                        errors: errors
+                        errors
                     }
-                    response.render("create-blogpost.hbs", model)
+                    response.render("create-blogpost.hbs",{model})
                 }
             }else{
-                console.log("blogIdInPL:", blogId)
-                response.redirect("/blogposts/"+blogId)
+                response.redirect("/blogposts/"+blogId.dataValues.blogId)
             }
         })
     })

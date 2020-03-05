@@ -17,7 +17,7 @@ const blogRepository = require('./dal-sequelize/blog-repository')
 const blogManager = require('./bll/blog-manager')
 const blogRouter = require('./pl/routers/blogRouter/blogRouter.router')
 
-const toDoRepository = require('./dal/toDo-repository')
+const toDoRepository = require('./dal-sequelize/todo-repository')
 const toDoManager = require('./bll/toDo-manager')
 const toDoRouter = require('./pl/routers/toDoRouter/toDo.router')
 

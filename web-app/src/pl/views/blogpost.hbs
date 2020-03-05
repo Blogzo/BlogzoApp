@@ -10,19 +10,24 @@
         </div>
     </div>
 </nav>
-{{#if blogpost}}
+
+{{#if model.errors}}
+    <p>{{this}}</p>
+{{/if}}
+
+{{#if model.blogpost}}
     <h1 style="text-align: center;"><b>Blogpost</b></h1>
     <div class="container card mb-4 p-1">
 
-        <img class="card-img-top" src="/blogpost-img/{{blogpost.imageFile}}" alt="Card image cap">
+        <img class="card-img-top" src="/blogpost-img/{{model.blogpost.dataValues.imageFile}}" alt="Card image cap">
         <div class="card-body">
-            <h2 class="card-title">{{blogpost.title}}</h2>
-            <p class="card-text">
-                {{blogpost.content}}
+            <h2 class="card-title">{{model.blogpost.dataValues.title}}</h2>
+            <p class="card-text">                
+                {{model.blogpost.dataValues.content}}
             </p>
         </div>
         <div class="card-footer text-muted">
-            Posted on {{blogpost.posted}}, by {{username.username}}
+            Posted on {{model.blogpost.dataValues.posted}}, by 
         </div>
     </div>
 {{else}}

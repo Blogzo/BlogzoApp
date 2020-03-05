@@ -19,8 +19,8 @@
                         <div class="card-body">
                             <form action="/blogposts/create/{{blogpost.blogId}}" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                                {{#if errors}}
-                                    {{#each errors}}
+                                {{#if model.errors}}
+                                    {{#each model.errors}}
                                     <div class="form-group row">
                                         <label for="errors "class="col-md-4 col-form-label text-md-right"></label>
                                         <li id="errors"><b>{{this}}</b></li>

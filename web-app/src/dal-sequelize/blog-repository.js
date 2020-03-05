@@ -8,43 +8,43 @@ module.exports = function({}){
 
             blogposts.Blogpost.findAll().then(function(allBlogposts){
                 console.log("allblogpostSEQ:", allBlogposts)
-                callback(allBlogposts)
+                callback(allBlogposts, [])
 
             }).catch(function(errors){
                 console.log(errors)
-                callback(errors)
-
+                callback(null, errors)
             })  
         },
 
         getBlogpostId: function(blogId, callback){
-            blogposts.Blogpost.findById(blogId).then(function(Blogpost){
-                console.log(Blogpost)
-                callback(Blogpost)
+            blogposts.Blogpost.findByPk(blogId).then(function(Blogpost){
+                console.log("BlogpostSEQ:", Blogpost)
+                callback(Blogpost, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(errors)
+                callback(null, errors)
             })
         },
 
         createBlogpost: function(Title, Content, Posted, ImageFile, UserId, callback){
-            blogposts.Blogpost.create({title: Title, content: Content, imageFile: ImageFile, posted: Posted, userId: UserId }).then(function(createBlogpost){
-                console.log(createBlogpost)
-                callback(createBlogpost)
+            blogposts.Blogpost.create({title: Title, content: Content, imageFile: ImageFile, posted: Posted, userId: UserId }).then(function(newBlogpost){
+                console.log("newBlogpostSEQ:", newBlogpost)
+                callback(newBlogpost, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(errors)
+                callback(null, errors)
             })
-          
         },
 
         getUsernameById: function(userId, callback){
-            blogposts.Blogpost.find(username).findById(userId).then(function(getUsernameById){
-                console.log(getUsernameById)
-                callback(getUsernameById)
+            blogposts.Blogpost.findOne({
+               
+            }).then(function(username){
+                console.log("usernameSQE:", username)
+                callback(username, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(errors)
+                callback(null, errors)
             })
         }
     }

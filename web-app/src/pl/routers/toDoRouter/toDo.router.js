@@ -7,14 +7,17 @@ module.exports = function({toDoManager}){
     router.get("/", function(request, response){
         
         const isLoggedIn = request.session.isLoggedIn   
-        toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
+        toDoManager.getAllToDos(isLoggedIn, function(toDos, errors){
             if(errors.includes("Need to be logged in!")){
                 response.render("unauthorized.hbs")
             }else{
+                console.log("toDOsInPL:", toDos)
                 const model = {
-                    toDos: toDos
+                    toDos,
+                    errors
                 }
-                response.render("toDoLists.hbs", model)
+                console.log("modelTodo:", {model})
+                response.render("toDoLists.hbs", { model })
             }
         })
     })
@@ -24,16 +27,15 @@ module.exports = function({toDoManager}){
     
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
-        toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
-            if(errors != ""){
-                if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
-                }else{
-                    const model = {
-                        errors: errors
-                    }
-                    response.render("toDoLists.hbs", model)
+        toDoManager.createTodo(todo, isLoggedIn, function(newTodo, errors){
+            if(errors.includes("Need to be logged in!")){
+                response.render("unauthorized.hbs")
+            }
+            else if(!errors.includes("Need to be logged in!")){
+                const model = {
+                    errors
                 }
+                response.render("toDoLists.hbs", { model })
             }else{
                 response.redirect("/toDoLists")
             }

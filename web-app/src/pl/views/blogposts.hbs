@@ -9,7 +9,7 @@
                 </li>
                 {{#if isLoggedIn}}
                 <li class="nav-item">
-                    <a class="nav-link" href="/blogposts/create">Create Post</a>
+                    <a class="nav-link" href="/blogposts/create">Create blogpost</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/toDoLists">Todo list</a>
@@ -26,19 +26,23 @@
     </div>
 </nav>
 
-{{#if blogposts.length}}
-    {{#each blogposts}}
+{{#if model.errors.length}}
+<p>{{this}}</p>
+{{/if}}
+
+{{#if model.blogposts.length}}
+    {{#each model.blogposts}}
     <div class="container card mb-4 border">
-    <img class="card-img-top" src="/blogpost-img/{{imageFile}}" width="750" height="300" alt="Image not found">
+    <img class="card-img-top" src="/blogpost-img/{{dataValues.imageFile}}" width="750" height="300" alt="Image not found">
     <div class="card-body">
-        <h2 class="card-title">{{title}}</h2>
+        <h2 class="card-title">{{dataValues.title}}</h2>
         <p class="card-text">
             {{content}}
         </p>
-        <a href="/blogposts/{{blogId}}" class="btn btn-primary">Read more &rarr;</a>
+        <a href="/blogposts/{{dataValues.blogId}}" class="btn btn-primary">Read more &rarr;</a>
     </div>
     <div class="card-footer text-muted">
-        Posted on {{posted}}, by {{username}} 
+        Posted on {{dataValues.posted}}, by {{dataValues.userId}} 
     </div>
     </div>
     {{/each}}

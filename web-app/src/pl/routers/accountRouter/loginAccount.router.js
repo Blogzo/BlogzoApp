@@ -16,7 +16,7 @@ module.exports = function({accountManager}){
 		if (username && userPassword) {
 			accountManager.getUserPassword(username, userPassword, function(errors, account){
 				console.log("loginError:", errors)
-				if(errors != ""){
+				if(errors.length != ""){
 					if(errors.includes("Username do not exists!")){
 						const model = {
 							errors: errors

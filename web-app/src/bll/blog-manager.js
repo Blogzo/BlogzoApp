@@ -28,9 +28,9 @@ module.exports = function({blogRepository}){
 
         getAllBlogposts: function(callback){
 
-            blogRepository.getBlogposts(function(errors, blogposts){
+            blogRepository.getBlogposts(function(blogposts, errors){
                 console.log("blogpostsinBLL:", blogposts)
-                callback(errors, blogposts)
+                callback(blogposts, errors)
             })
         },
 
@@ -38,27 +38,19 @@ module.exports = function({blogRepository}){
             
             const errors = this.getValidationErrors(0, 0, isLoggedIn)
             if(errors.length > 0){
-                callback(errors)
+                callback(0, errors)
                 return
             }else{
-                blogRepository.getBlogpostId(blogId, function(errors, blogpost){
-                    callback(errors, blogpost)
+                blogRepository.getBlogpostId(blogId, function(blogpost, errors){
+                    callback(blogpost, errors)
                 })
             }    
         },
 
         getUsernameById: function(userId, callback){
-            blogRepository.getUsernameById(userId, function(errors, username){
+            blogRepository.getUsernameById(userId, function(username, errors){
                 console.log("usernameInBLL:", username)
-                callback(errors, username)
-            })
-        },
-
-        getusernamesById: function(userId, callback){
-            blogRepository.getusernamesById(userId, function(errors, username){
-                console.log("usernamesInBLL:", username)
-                console.log("error2InBLL", errors)
-                callback(errors, username)
+                callback(username, errors)
             })
         },
 
@@ -66,11 +58,11 @@ module.exports = function({blogRepository}){
             
             const errors = this.getValidationErrors(title, content, isLoggedIn)
             if(errors.length > 0){
-                callback(errors)
+                callback(0, errors)
                 return
             }else{
-                blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
-                    callback(errors, blogpost)
+                blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(blogpost, errors){
+                    callback(blogpost, errors)
                 })
             }    
         }
