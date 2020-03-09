@@ -8,7 +8,7 @@ module.exports = function({}){
             const query = "SELECT * FROM blogposts"
             db.query(query, function(errors, blogposts){
                 if(errors){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], blogposts)
                 }
@@ -21,7 +21,7 @@ module.exports = function({}){
             const value = [blogId]
             db.query(query, value, function(errors, blogpost){
                 if(errors){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], blogpost)
                 }
@@ -35,7 +35,7 @@ module.exports = function({}){
             console.log("userIdInDAL:", userId)
             db.query(query, value, function(errors, username){
                 if(errors){
-                    callback(["DataBaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], username)
                 }
@@ -49,7 +49,7 @@ module.exports = function({}){
             const values = [title, content, posted, imageFile, userId]
             db.query(query, values, function(errors, blogpost){
                 if(errors){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], blogpost.insertId)
                 }
@@ -63,7 +63,7 @@ module.exports = function({}){
                 db.query(query, values, function(errors, username){
                     console.log("usernamesInDal", username)
                     if(errors){
-                        callback(["DatabaseError:"], null)
+                        callback(["databaseError:"], null)
                     }else{
                         callback([], username)
                     }

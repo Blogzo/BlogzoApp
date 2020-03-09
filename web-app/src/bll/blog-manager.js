@@ -37,6 +37,7 @@ module.exports = function({blogRepository}){
         getBlogpostId: function(blogId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(0, 0, isLoggedIn)
+            console.log("errrosInBLL:", errors)
             if(errors.length > 0){
                 callback(0, errors)
                 return

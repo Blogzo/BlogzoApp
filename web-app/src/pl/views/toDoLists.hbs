@@ -42,7 +42,7 @@
                     <form action="/toDoLists" method="POST">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <div class="add-items d-flex"> <input type="text" class="form-control todo-list-input"
-                                name="todo" placeholder="What do you need to do today? (5-20)">
+                                name="todo" placeholder="What do you need to do today? (5-20)" required autofocus>
                             <button class="add btn btn-primary font-weight-bold todo-list-add-btn">Add</button>
                         </div>
                     </form>
@@ -63,7 +63,7 @@
                 <div class="card-body">
                     <h5 class="card-title">
                         {{#if model.errors.length}}
-                            {{#each errors}}
+                            {{#each model.errors}}
                                 <li>{{this}}</li>
                             {{/each}}
                         {{/if}}

@@ -8,15 +8,23 @@ module.exports = function({toDoManager}){
         
         const isLoggedIn = request.session.isLoggedIn   
         toDoManager.getAllToDos(isLoggedIn, function(toDos, errors){
-            if(errors.includes("Need to be logged in!")){
+            if(errors.includes("databaseError")){
+                response.send("<h1>Something went wrong!</h1>")
+            }
+            else if(errors.includes("Need to be logged in!")){
                 response.render("unauthorized.hbs")
-            }else{
+            }
+            else if(errors.length > 0){
                 console.log("toDOsInPL:", toDos)
                 const model = {
-                    toDos,
                     errors
                 }
-                console.log("modelTodo:", {model})
+                console.log("modelTodo:", { model })
+                response.render("toDoLists.hbs", { model })
+            }else{
+                const model = {
+                    toDos
+                }
                 response.render("toDoLists.hbs", { model })
             }
         })
@@ -28,17 +36,22 @@ module.exports = function({toDoManager}){
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
         toDoManager.createTodo(todo, isLoggedIn, function(newTodo, errors){
-            if(errors.includes("Need to be logged in!")){
+            if(errors.includes("databaseError")){
+                response.send("<h1>Something went wrong!</h1>")
+            }
+            else if(errors.includes("Need to be logged in!")){
                 response.render("unauthorized.hbs")
             }
-            else if(!errors.includes("Need to be logged in!")){
+            else if(errors.length > 0){
                 const model = {
                     errors
                 }
+                console.log("todoErrorPL:", {model})
                 response.render("toDoLists.hbs", { model })
-            }else{
+            }else {
                 response.redirect("/toDoLists")
             }
+            
         })
     })
     return router

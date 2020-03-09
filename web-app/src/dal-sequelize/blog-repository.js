@@ -12,7 +12,7 @@ module.exports = function({}){
 
             }).catch(function(errors){
                 console.log(errors)
-                callback(null, errors)
+                callback([], errors)
             })  
         },
 
@@ -22,7 +22,7 @@ module.exports = function({}){
                 callback(Blogpost, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(null, errors)
+                callback([], errors)
             })
         },
 
@@ -32,19 +32,23 @@ module.exports = function({}){
                 callback(newBlogpost, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(null, errors)
+                callback([], errors)
             })
         },
 
-        getUsernameById: function(userId, callback){
+        getUsernameById: function(UserId, callback){
             blogposts.Blogpost.findOne({
+                where: {
+                    userId: UserId
+                },
+                include: [{ model: blogposts.Account, attributes: ['username'] }],
                
             }).then(function(username){
                 console.log("usernameSQE:", username)
                 callback(username, [])
             }).catch(function(errors){
                 console.log(errors)
-                callback(null, errors)
+                callback([], errors)
             })
         }
     }

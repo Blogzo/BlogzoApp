@@ -4,45 +4,25 @@ module.exports = function({}){
 
     return {
 
-        getValidationErrors: function(username, password1, password2){
-            
-            const errors = []
-
-            if(username.length < 5){
-                errors.push("Username to short!")
-            }
-            if(username.length > 20){
-                errors.push("Username to long!")
-            }
-            if(password1 != password2){
-                errors.push("Password do not match!")
-            }
-            return errors
-        },
-
-        getUserPassword: function(username, password, callback){
+        getUserPassword: function(Username, callback){
             accounts.Account.findOne({
-                where: {username = password}
+                where: { username: Username }
             }).then(function(getUserPassword){
-                console.log(getUserPassword)
-                callback(getUserPassword)
+                console.log("userPasswordSEQ:", getUserPassword)
+                callback(getUserPassword, [])
             }).catch(function(errors){
-                console.log(errors)
-                callback(errors)
+                console.log("errorsInSEQ:", errors)
+                callback([], errors)
             })
         },
 
-        getAccount: function(username, userPassword, callback){
-            
-        },
-
-        createAccount: function(Username, Email, UserPassword, UserPassword2, callback){
-            accounts.Account.create({username: Username, email: Email, userPassword: UserPassword, userPassword2: UserPassword2}).then(function(createAccount){
-                console.log(createAccount)
-                callback(createAccount)
+        createAccount: function(Username, Email, UserPassword, callback){
+            accounts.Account.create({username: Username, email: Email, userPassword: UserPassword}).then(function(createAccount){
+                console.log("accountInDAL:", createAccount)
+                callback(createAccount, [])
             }).catch(function(errors){
-                console.log(errors)
-                callback(errors)
+                console.log("errorsInSEQ:", errors)
+                callback([], errors)
             })
         }
 

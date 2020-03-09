@@ -13,29 +13,24 @@ module.exports = function({accountManager}){
 
 		const username = request.body.username
 		const userPassword = request.body.password
-		if (username && userPassword) {
-			accountManager.getUserPassword(username, userPassword, function(errors, account){
-				console.log("loginError:", errors)
-				if(errors.length != ""){
-					if(errors.includes("Username do not exists!")){
-						const model = {
-							errors: errors
-						}
-						response.render("login.hbs", model)	
-					}
-					else if(errors.includes("Wrong password!")){
-						const model = {
-							errors: errors
-						}
-						response.render("login.hbs", model)	
-					}
-				}else if(account){
-					request.session.isLoggedIn = true
-					request.session.username = username
-					response.redirect("/blogposts")
+		
+		accountManager.getUserPassword(username, userPassword, function(account, errors){
+			console.log("loginError:", errors)
+			if(errors.includes("databaseError")){
+				response.send("<h1>Something went wrong!</h1>")
+			}
+			else if(errors.length > 0){
+				const model = {
+					errors: errors
 				}
-			})
-		}	
+				response.render("login.hbs", model)	
+			}else{
+				request.session.isLoggedIn = true
+				request.session.username = username
+				response.redirect("/blogposts")
+			}
+		})
+		
 	})
 	return router 
 }

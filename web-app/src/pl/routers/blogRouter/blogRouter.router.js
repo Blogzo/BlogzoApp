@@ -7,13 +7,21 @@ module.exports = function({blogManager}){
     router.get("/", function(request, response){
         
         blogManager.getAllBlogposts(function(blogposts, errors){
-            
-            const model = {
-                errors,
-                blogposts
+            if(errors.includes("databaseError")){
+                response.send("<h1>Something went wrong!</h1>")
             }
-            console.log("blogpostsModel:", { model })
-            response.render("blogposts.hbs", { model })
+            else if(errors.length > 0){
+                const model = {
+                    errors
+                }
+                console.log("blogpostsModel:", { model })
+                response.render("blogposts.hbs", { model })
+            }else{
+                const model = {
+                    blogposts
+                }
+                response.render("blogposts.hbs", { model })
+            }
         })
     })
     
@@ -28,16 +36,22 @@ module.exports = function({blogManager}){
     
         const blogId = request.params.blogId
         const isLoggedIn = request.session.isLoggedIn
+        console.log("loggedin", isLoggedIn)
         blogManager.getBlogpostId(blogId, isLoggedIn, function(blogpost, errors){
-            if(errors.length != ""){
-                if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
-                }else{
-                    const model = {
-                        errors
-                    }
-                    response.render("blogpost.hbs",{ model })
+            console.log("errorsInPL", errors)
+            if(errors.includes("databaseError")){
+                response.send("<h1>Something went wrong!</h1>")
+            }
+            else if(errors.includes("Need to be logged in!")){
+                response.render("unauthorized.hbs")
+            }
+            else if(errors.length > 0){
+               
+                const model = {
+                    errors
                 }
+                response.render("blogpost.hbs",{ model })
+                
             }else{
                 blogManager.getUsernameById(blogpost.dataValues.userId, function(username, errors){
                     //Without sequelize
@@ -51,7 +65,8 @@ module.exports = function({blogManager}){
                     //With sequelize
                     const model = {
                         blogpost,
-                        errors
+                        errors,
+                        username
                     }
                     console.log("blogpostModel:",{ model })
                     response.render("blogpost.hbs", { model })
@@ -76,15 +91,20 @@ module.exports = function({blogManager}){
         }
        
         blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(blogId, errors){
-            if(errors.length != ""){
-                if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
-                }else{
-                    const model = {
-                        errors
-                    }
-                    response.render("create-blogpost.hbs",{model})
+            
+            if(errors.includes("databaseError")){
+                response.send("<h1>Something went wrong!</h1>")
+            }
+            else if(errors.includes("Need to be logged in!")){
+                response.render("unauthorized.hbs")
+            }
+            else if(errors.length > 0){
+                 
+                const model = {
+                    errors
                 }
+                response.render("create-blogpost.hbs", { model })
+                
             }else{
                 response.redirect("/blogposts/"+blogId.dataValues.blogId)
             }

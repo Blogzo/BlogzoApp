@@ -11,7 +11,7 @@ module.exports = function({}){
             console.log("values:", values)
             db.query(query, values, function(errors, results){
                 if(errors){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], results.insertId)
                 }
@@ -26,7 +26,7 @@ module.exports = function({}){
             db.query(query, values, function(errors, account){
         
                 if(errors){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], account)
                 }
@@ -42,7 +42,7 @@ module.exports = function({}){
             db.query(query, value, function(errors, userPassword){
 
                 if(errors){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], userPassword)
                 }
@@ -55,7 +55,7 @@ module.exports = function({}){
             const value = [id]
             db.query(query, value, function(errors, account){
                 if(errors){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], account)
                 }

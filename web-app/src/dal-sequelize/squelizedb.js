@@ -16,7 +16,6 @@ const sequelize = new Sequelize({
         idle: 10000
     }
 })
-console.log("sequelize:", sequelize)
 
 sequelize.authenticate().then(() => {
     console.log('Connection established successfully.')

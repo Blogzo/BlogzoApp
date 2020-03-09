@@ -9,7 +9,7 @@ module.exports = function({}){
             const query = "SELECT * FROM todoList"
             db.query(query, function(error, toDoList){
                 if(error){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], toDoList)
                 }
@@ -22,7 +22,7 @@ module.exports = function({}){
             const values = [todo]
             db.query(query, values, function(error, newTodo){
                 if(error){
-                    callback(["DatabaseError"], null)
+                    callback(["databaseError"], null)
                 }else{
                     callback([], newTodo)
                 }

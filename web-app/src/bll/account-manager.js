@@ -30,23 +30,24 @@ module.exports = function({accountRepository}){
 
         getUserPassword: function(username, password, callback){
 
-            accountRepository.getUserPassword(username, function(errors, userPassword){
-                
+            accountRepository.getUserPassword(username, function(userPassword, errors){
+                console.log("userpasswordBLL:", userPassword)
+                console.log("errorsInBLL:", errors)
                 if(userPassword.length != ""){
-                    if(bcrypt.compareSync(password, userPassword[0].userPassword)){
+                    if(bcrypt.compareSync(password, userPassword.dataValues.userPassword)){
                         console.log("password match")
-                        callback(errors, userPassword)
+                        callback(userPassword, errors)
                     }else{
                         console.log("password dont match")
                         const errors = []
                         errors.push("Wrong password!")
-                        callback(errors)
+                        callback(0, errors)
                         return
                     }
                 }else{
                     const errors = []
                     errors.push("Username do not exists!")
-                    callback(errors)
+                    callback(0, errors)
                 }
             })
         },
@@ -62,13 +63,27 @@ module.exports = function({accountRepository}){
 
             const errors = this.getValidationErrors(username, userPassword, userPassword2)
             if(errors.length > 0){
-                callback(errors)
+                callback(0, errors)
                 return
             }
             const saltrounds = 10
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
-            accountRepository.createAccount(username, email, hashedPassword, function(errors, account){
-                callback(errors, account)
+            accountRepository.createAccount(username, email, hashedPassword, function(account, errors){
+                console.log("errorsInBLL:", errors)
+                if(errors.errors[0].message.includes("username must be unique")){
+                    const uniqueUsernameError = []
+                    uniqueUsernameError.push("Username already exists!")
+                    callback(0, uniqueUsernameError)
+                    return
+                }
+                if(errors.errors[0].message.includes("email must be unique")){
+                    const uniqueEmailError = []
+                    uniqueEmailError.push("Email already exists!")
+                    callback(0, uniqueEmailError)
+                    return
+                }else{
+                    callback(account, errors)
+                }
             })
         }
     }
