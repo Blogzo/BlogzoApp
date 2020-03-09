@@ -55,11 +55,11 @@ app.post("/login", function(request, response){
         response.status(400).json({error: "unsupported_grant_type", error_description: "The authorization grant type is not supported by the authorization server."})
         return
     }
-    if(blogposts.id != invalidRequest){
+    if(username != correctUsername || password != correctPassword){
 		response.status(400).json({error: "invalid_request", error_description: "The request is malformed, a required parameter is missing or a parameter has an invalid value."})
 	}
 
-	if(/*invalid client*/){
+	if(/*invalid client*/){ //ändra om detta till invalid grant
 		response.status(401).json({error: "invalid_client", error_description: "Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method)."})
 	}
 	if(!isLoggedIn){
