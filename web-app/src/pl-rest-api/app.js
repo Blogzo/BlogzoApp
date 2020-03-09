@@ -49,12 +49,13 @@ app.post("/login", function(request, response){
     const invalidRequest = request.body.invalid_request
     const username = request.body.username
     const password = request.body.password
+    
 
     if(grantType != "password"){
         response.status(400).json({error: "unsupported_grant_type", error_description: "The authorization grant type is not supported by the authorization server."})
         return
     }
-    if(/*invalid request*/){
+    if(blogposts.id != invalidRequest){
 		response.status(400).json({error: "invalid_request", error_description: "The request is malformed, a required parameter is missing or a parameter has an invalid value."})
 	}
 

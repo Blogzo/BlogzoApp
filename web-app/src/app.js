@@ -51,7 +51,7 @@ const multer = require('multer')
 
 var storage = multer.diskStorage({
   destination: function (request, file, cb) {
-    cb(null, __dirname + '/pl/public/blogpost-img')
+    cb(null, __dirname + '/uploaded-img')
   },
   filename: function(request, file, cb) {
     const fileName = file.originalname.toLowerCase().split(' ').join('-')
