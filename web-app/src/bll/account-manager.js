@@ -30,24 +30,24 @@ module.exports = function({accountRepository}){
 
         getUserPassword: function(username, password, callback){
 
-            accountRepository.getUserPassword(username, function(userPassword, errors){
+            accountRepository.getUserPassword(username, function(errors, userPassword){
                 console.log("userpasswordBLL:", userPassword)
                 console.log("errorsInBLL:", errors)
                 if(userPassword.length != ""){
                     if(bcrypt.compareSync(password, userPassword.dataValues.userPassword)){
                         console.log("password match")
-                        callback(userPassword, errors)
+                        callback(errors, userPassword)
                     }else{
                         console.log("password dont match")
                         const errors = []
                         errors.push("Wrong password!")
-                        callback(0, errors)
+                        callback(errors, [])
                         return
                     }
                 }else{
                     const errors = []
                     errors.push("Username do not exists!")
-                    callback(0, errors)
+                    callback(errors, [])
                 }
             })
         },
@@ -63,26 +63,29 @@ module.exports = function({accountRepository}){
 
             const errors = this.getValidationErrors(username, userPassword, userPassword2)
             if(errors.length > 0){
-                callback(0, errors)
+                callback(errors, [])
                 return
             }
             const saltrounds = 10
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
-            accountRepository.createAccount(username, email, hashedPassword, function(account, errors){
+            accountRepository.createAccount(username, email, hashedPassword, function(errors, account){
                 console.log("errorsInBLL:", errors)
-                if(errors.errors[0].message.includes("username must be unique")){
-                    const uniqueUsernameError = []
-                    uniqueUsernameError.push("Username already exists!")
-                    callback(0, uniqueUsernameError)
-                    return
+                if(errors.length > 0){
+                    if(errors.errors[0].message.includes("username must be unique")){
+                        const uniqueUsernameError = []
+                        uniqueUsernameError.push("Username already exists!")
+                        callback(uniqueUsernameError, [])
+                        return
+                    }
+                    if(errors.errors[0].message.includes("email must be unique")){
+                        const uniqueEmailError = []
+                        uniqueEmailError.push("Email already exists!")
+                        callback(uniqueEmailError, [])
+                        return
+                    }
                 }
-                if(errors.errors[0].message.includes("email must be unique")){
-                    const uniqueEmailError = []
-                    uniqueEmailError.push("Email already exists!")
-                    callback(0, uniqueEmailError)
-                    return
-                }else{
-                    callback(account, errors)
+                else{
+                    callback(errors, account)
                 }
             })
         }

@@ -17,7 +17,7 @@ module.exports = function({accountManager}){
         const userPassword = request.body.userPassword
         const userPassword2 = request.body.userPassword2
            
-        accountManager.createAccount(username, email, userPassword, userPassword2, function(account, errors){
+        accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, account){
             console.log("errorPL:", errors)
             if(errors.includes("databaseError")){
                 response.send("<h1>Something went wrong!</h1>")
@@ -38,7 +38,7 @@ module.exports = function({accountManager}){
                 console.log("modelcreateAccount:", { model })
                 response.render("create-account.hbs", { model })
             }else{
-                request.session.userId = account
+                request.session.userId = account.dataValues.personId
                 response.redirect("/login")
             }
         })

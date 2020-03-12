@@ -28,9 +28,9 @@ module.exports = function({blogRepository}){
 
         getAllBlogposts: function(callback){
 
-            blogRepository.getBlogposts(function(blogposts, errors){
+            blogRepository.getBlogposts(function(errors, blogposts){
                 console.log("blogpostsinBLL:", blogposts)
-                callback(blogposts, errors)
+                callback(errors, blogposts)
             })
         },
 
@@ -39,19 +39,19 @@ module.exports = function({blogRepository}){
             const errors = this.getValidationErrors(0, 0, isLoggedIn)
             console.log("errrosInBLL:", errors)
             if(errors.length > 0){
-                callback(0, errors)
+                callback(errors, [])
                 return
             }else{
-                blogRepository.getBlogpostId(blogId, function(blogpost, errors){
-                    callback(blogpost, errors)
+                blogRepository.getBlogpostId(blogId, function(errors, blogpost){
+                    callback(errors, blogpost)
                 })
             }    
         },
 
         getUsernameById: function(userId, callback){
-            blogRepository.getUsernameById(userId, function(username, errors){
+            blogRepository.getUsernameById(userId, function(errors, username){
                 console.log("usernameInBLL:", username)
-                callback(username, errors)
+                callback(errors, username)
             })
         },
 
@@ -59,11 +59,11 @@ module.exports = function({blogRepository}){
             
             const errors = this.getValidationErrors(title, content, isLoggedIn)
             if(errors.length > 0){
-                callback(0, errors)
+                callback(errors, [])
                 return
             }else{
-                blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(blogpost, errors){
-                    callback(blogpost, errors)
+                blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
+                    callback(errors, blogpost)
                 })
             }    
         }
