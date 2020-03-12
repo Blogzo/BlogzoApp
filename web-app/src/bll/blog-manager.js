@@ -63,6 +63,7 @@ module.exports = function({blogRepository}){
                 return
             }else{
                 blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
+                    console.log("errorsBLL", errors)
                     callback(errors, blogpost)
                 })
             }    

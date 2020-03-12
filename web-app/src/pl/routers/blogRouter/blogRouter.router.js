@@ -75,6 +75,7 @@ module.exports = function({blogManager}){
         const content = request.body.content
         const posted = request.body.posted
         const userId = request.session.userId
+        console.log("userid", userId)
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
         if(!file){
@@ -84,7 +85,6 @@ module.exports = function({blogManager}){
         }
        
         blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
-            
             console.log("errorInPl:", errors)
             if(errors.includes("databaseError")){
                 response.send("<h1>Something went wrong!</h1>")

@@ -19,6 +19,7 @@ module.exports = function({accountManager}){
            
         accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, account){
             console.log("errorPL:", errors)
+            console.log("newAccountPL", account)
             if(errors.includes("databaseError")){
                 response.send("<h1>Something went wrong!</h1>")
             }

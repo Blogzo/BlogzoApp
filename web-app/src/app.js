@@ -106,7 +106,7 @@ app.engine("hbs", expressHandlebars({
 }))
 
 app.use(express.static(__dirname + '/pl/public'))
-app.use(express.static(__dirname + '/uploaded-img/blogpost-img'))
+app.use(express.static(__dirname + '/uploaded-img'))
 app.use("/create-account", theCreateAccountRouter)
 app.use("/login", theLoginRouter)
 app.use("/logout", logoutRouter)

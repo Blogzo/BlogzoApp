@@ -5,24 +5,8 @@
             <span class="navbar-brand" >BLOGZO</span>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Start</a>
+                    <a class="nav-link" href="/blogposts">Back</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/blogposts">Blogposts</a>
-                </li>
-                {{#if isLoggedIn}}
-                <li class="nav-item">
-                    <a class="nav-link" href="/blogposts/create">Create blogpost</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/toDoLists">Todo list</a>
-                </li>
-                <form action="/logout" method="POST">
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                    
-                    <input class="btn btn-link" type="submit" value="Logout">
-                </form>  
-                {{/if}}
             </ul>
 
         </div>

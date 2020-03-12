@@ -23,14 +23,13 @@ function connection(sqlizeObj, isConnected){
         sqlizeObj.authenticate().then(()=>{
           sqlizeObj.sync()
           console.log('Connection has been established successfully.')
-          isConnected = true
           return
         })
         .catch(error =>{
           connection(sqlizeObj,false)
-          console.error('Unable to connect to the database:', error)
+          //console.error('Unable to connect to the database:', error)
         })
-      }, 1000) 
+      }) 
     }
 }
    
