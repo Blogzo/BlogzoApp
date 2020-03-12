@@ -14,7 +14,7 @@ module.exports = function({accountManager}){
 		const username = request.body.username
 		const userPassword = request.body.password
 		
-		accountManager.getUserPassword(username, userPassword, function(account, errors){
+		accountManager.getUserPassword(username, userPassword, function(errors, account){
 			console.log("loginError:", errors)
 			if(errors.includes("databaseError")){
 				response.send("<h1>Something went wrong!</h1>")

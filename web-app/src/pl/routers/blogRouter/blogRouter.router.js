@@ -6,7 +6,7 @@ module.exports = function({blogManager}){
     
     router.get("/", function(request, response){
         
-        blogManager.getAllBlogposts(function(blogposts, errors){
+        blogManager.getAllBlogposts(function(errors, blogposts){
             if(errors.includes("databaseError")){
                 response.send("<h1>Something went wrong!</h1>")
             }
@@ -37,7 +37,7 @@ module.exports = function({blogManager}){
         const blogId = request.params.blogId
         const isLoggedIn = request.session.isLoggedIn
         console.log("loggedin", isLoggedIn)
-        blogManager.getBlogpostId(blogId, isLoggedIn, function(blogpost, errors){
+        blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
             console.log("errorsInPL", errors)
             if(errors.includes("databaseError")){
                 response.send("<h1>Something went wrong!</h1>")
@@ -53,7 +53,7 @@ module.exports = function({blogManager}){
                 response.render("blogpost.hbs",{ model })
                 
             }else{
-                blogManager.getUsernameById(blogpost.dataValues.userId, function(username, errors){
+                blogManager.getUsernameById(blogpost.dataValues.userId, function(errors, username){
                     //Without sequelize
                     /*const model = {
                         errors: errors,
@@ -82,6 +82,7 @@ module.exports = function({blogManager}){
         const content = request.body.content
         const posted = request.body.posted
         const userId = request.session.userId
+        console.log("userid", userId)
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
         if(!file){
@@ -90,8 +91,8 @@ module.exports = function({blogManager}){
             return next(error)
         }
        
-        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(blogId, errors){
-            
+        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
+            console.log("errorsPL", errors)
             if(errors.includes("databaseError")){
                 response.send("<h1>Something went wrong!</h1>")
             }

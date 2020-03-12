@@ -51,7 +51,7 @@ const multer = require('multer')
 
 var storage = multer.diskStorage({
   destination: function (request, file, cb) {
-    cb(null, __dirname + '/uploaded-img')
+    cb(null, __dirname + '/uploaded-img/blogpost-img')
   },
   filename: function(request, file, cb) {
     const fileName = file.originalname.toLowerCase().split(' ').join('-')
@@ -82,7 +82,7 @@ app.use(expressSession({
   resave: false,
   store: new redisStore({ client: redisClient})
 }))
-const maxSize = 700 * 300
+const maxSize = 700 * 500
 app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
 app.use(csrf({ cookie: true}))
 app.use(function(request, response, next){
@@ -106,7 +106,7 @@ app.engine("hbs", expressHandlebars({
 }))
 
 app.use(express.static(__dirname + '/pl/public'))
-app.use(express.static(__dirname + '/bll/validation'))
+app.use(express.static(__dirname + '/uploaded-img/blogpost-img'))
 app.use("/create-account", theCreateAccountRouter)
 app.use("/login", theLoginRouter)
 app.use("/logout", logoutRouter)
