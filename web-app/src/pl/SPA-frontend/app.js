@@ -8,7 +8,7 @@ app.use(express.static("static-files"))
 // send back the index.html file, and let client-side JS show the
 // correct page.
 app.use(function(request, response, next){
-	response.sendFile(__dirname+"/static-files/index.html")
+  response.sendFile(__dirname+"/static-files/index.html")
 })
 
 app.listen(3000, () => {

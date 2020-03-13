@@ -1,6 +1,6 @@
 const backend = require('./communicationBackend')
 document.addEventListener("DOMContentLoaded", function(){
-
+    console.log("inside DOM")
     changeToPage(location.pathname)
 	
 	if(localStorage.accessToken){
@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	}
 	
 	document.body.addEventListener("click", function(event){
+        console.log("inside click event")
 		if(event.target.tagName == "A"){
 			event.preventDefault()
 			const url = event.target.getAttribute("href")
@@ -24,14 +25,14 @@ window.addEventListener("popstate", function(event){
 })
 
 function goToPage(url){
-	
+	console.log("inside goToPage")
 	changeToPage(url)
 	history.pushState({}, "", url)
 	
 }
 
 function changeToPage(url){
-
+    console.log("inside changeToPage")
     const currentPageDiv = document.getElementsByClassName("current-page")[0]
     if(currentPageDiv){
         currentPageDiv.classList.remove("current-page")
@@ -41,10 +42,12 @@ function changeToPage(url){
 
         case "/":
             document.getElementById("home-page").classList.add("current-page")
+            console.log("inside /")
         case "/sign-up":
             document.getElementById("signUp-page").classList.add("current-page")
         case "/login":
             document.getElementById("login-page").classList.add("current-page")
+            console.log("inside /login")
         case "/blogposts":
             document.getElementById("blogposts-page").classList.add("current-page")
             backend.fetchAllBlogposts()
@@ -53,7 +56,7 @@ function changeToPage(url){
 		    const blogId = url.split("/")[2]
 		    backend.fetchBlogpost(blogId)
         case "/create-blogpost":
-            document.getElementById("create-blogposts-page").classList.add("current-page")
+            document.getElementById("create-blogpost-page").classList.add("current-page")
         case "/toDoLists":
             document.getElementById("toDoLists-page").classList.add("current-page")
             backend.fetchAllToDoLists()
