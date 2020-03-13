@@ -6,7 +6,9 @@ module.exports = function({}){
 
         getBlogposts: function(callback){
 
-            blogposts.Blogpost.findAll().then(function(allBlogposts){
+            blogposts.Blogpost.findAll({
+                include: [{ model: blogposts.Account, attributes: ['username']}],
+            }).then(function(allBlogposts){
                 console.log("allblogpostSEQ:", allBlogposts)
                 callback([], allBlogposts)
 

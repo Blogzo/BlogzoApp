@@ -73,20 +73,21 @@ module.exports = function({accountRepository}){
                 console.log("errorsInBLL:", errors)
                 if(errors.length > 0){
                     if(errors.errors[0].message.includes("username must be unique")){
+                        console.log("Inside username must be unique!")
                         const uniqueUsernameError = []
                         uniqueUsernameError.push("Username already exists!")
                         callback(uniqueUsernameError, [])
                         return
                     }
                     if(errors.errors[0].message.includes("email must be unique")){
+                        console.log("Inside email must be unique!")
                         const uniqueEmailError = []
                         uniqueEmailError.push("Email already exists!")
                         callback(uniqueEmailError, [])
                         return
                     }
-                }
-                else{
-                    callback(errors, account)
+                }else{
+                    callback([], account)
                 }
             })
         }

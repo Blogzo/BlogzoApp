@@ -30,19 +30,17 @@
     <p>{{this}}</p>
 {{/if}}
 
+
 {{#if model.blogposts.length}}
     {{#each model.blogposts}}
     <div class="container card mb-4 border">
     <img class="card-img-top" src="/blogpost-img/{{dataValues.imageFile}}" width="750" height="600" alt="Image not found">
     <div class="card-body">
         <h2 class="card-title">{{dataValues.title}}</h2>
-        <p class="card-text">
-            {{content}}
-        </p>
         <a href="/blogposts/{{dataValues.blogId}}" class="btn btn-primary">Read more &rarr;</a>
     </div>
     <div class="card-footer text-muted">
-        Posted on {{dataValues.posted}}, by {{dataValues.userId}} 
+        Posted on {{dataValues.posted}}, by {{account.dataValues.username}} 
     </div>
     </div>
     {{/each}}

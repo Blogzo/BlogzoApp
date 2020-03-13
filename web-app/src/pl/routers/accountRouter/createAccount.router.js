@@ -20,24 +20,34 @@ module.exports = function({accountManager}){
         accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, account){
             console.log("errorPL:", errors)
             console.log("newAccountPL", account)
-            if(errors.includes("databaseError")){
-                response.send("<h1>Something went wrong!</h1>")
-            }
-            //check SequelizeUniqueConstraintError
-            else if(errors.includes("SequelizeUniqueConstraintError")){
-                uniqueError.push("Username already exists!")
-                errors = uniqueError
-                const model = {
-                    errors
+
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.send("<h1>Something went wrong!</h1>")
                 }
-                response.render("create-account.hbs", { model })
-            }
-            else if(errors.length > 0){
-                const model = {
-                    errors
+                //check SequelizeUniqueConstraintError
+                else if(errors.includes("Username already exists!")){
+                    uniqueError.push("Username already exists!")
+                    errors = uniqueError
+                    const model = {
+                        errors
+                    }
+                    response.render("create-account.hbs", { model })
                 }
-                console.log("modelcreateAccount:", { model })
-                response.render("create-account.hbs", { model })
+                else if(errors.includes("email must be unique!")){
+                    uniqueError.push("email must be unique!")
+                    errors = uniqueError
+                    const model = {
+                        errors
+                    }
+                    response.render("create-account.hbs", { model })
+                }else{
+                    const model = {
+                        errors
+                    }
+                    console.log("modelcreateAccount:", { model })
+                    response.render("create-account.hbs", { model })
+                }
             }else{
                 request.session.userId = account.dataValues.personId
                 response.redirect("/login")

@@ -15,15 +15,16 @@ module.exports = function({accountManager}){
 		const userPassword = request.body.password
 		
 		accountManager.getUserPassword(username, userPassword, function(errors, account){
-			console.log("loginError:", errors)
-			if(errors.includes("databaseError")){
-				response.send("<h1>Something went wrong!</h1>")
-			}
-			else if(errors.length > 0){
-				const model = {
-					errors: errors
+
+			if(errors.length > 0){
+				if(errors.includes("databaseError")){
+					response.send("<h1>Something went wrong!</h1>")
+				}else{
+					const model = {
+						errors: errors
+					}
+					response.render("login.hbs", model)	
 				}
-				response.render("login.hbs", model)	
 			}else{
 				request.session.isLoggedIn = true
 				request.session.username = username

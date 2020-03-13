@@ -8,19 +8,20 @@ module.exports = function({toDoManager}){
         
         const isLoggedIn = request.session.isLoggedIn   
         toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
-            if(errors.includes("databaseError")){
-                response.send("<h1>Something went wrong!</h1>")
-            }
-            else if(errors.includes("Need to be logged in!")){
-                response.render("unauthorized.hbs")
-            }
-            else if(errors.length > 0){
-                console.log("toDOsInPL:", toDos)
-                const model = {
-                    errors
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.send("<h1>Something went wrong!</h1>")
                 }
-                console.log("modelTodo:", { model })
-                response.render("toDoLists.hbs", { model })
+                else if(errors.includes("Need to be logged in!")){
+                    response.render("unauthorized.hbs")
+                }else{
+                    console.log("toDOsInPL:", toDos)
+                    const model = {
+                        errors
+                    }
+                    console.log("modelTodo:", { model })
+                    response.render("toDoLists.hbs", { model })
+                }
             }else{
                 const model = {
                     toDos
@@ -36,19 +37,20 @@ module.exports = function({toDoManager}){
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
         toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
-            if(errors.includes("databaseError")){
-                response.send("<h1>Something went wrong!</h1>")
-            }
-            else if(errors.includes("Need to be logged in!")){
-                response.render("unauthorized.hbs")
-            }
-            else if(errors.length > 0){
-                const model = {
-                    errors
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.send("<h1>Something went wrong!</h1>")
                 }
-                console.log("todoErrorPL:", {model})
-                response.render("toDoLists.hbs", { model })
-            }else {
+                else if(errors.includes("Need to be logged in!")){
+                    response.render("unauthorized.hbs")
+                }else{
+                    const model = {
+                        errors
+                    }
+                    console.log("todoErrorPL:", {model})
+                    response.render("toDoLists.hbs", { model })
+                }
+            }else{
                 response.redirect("/toDoLists")
             }
             
