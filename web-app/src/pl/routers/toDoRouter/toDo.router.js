@@ -70,7 +70,7 @@ module.exports = function({toDoManager}){
                     response.render("unauthorized.hbs")
                 }else{
                     const model = {
-                        todo
+                        errors
                     }
                     console.log("todoErrorPL:", {model})
                     response.render("toDoLists.hbs", { model })
