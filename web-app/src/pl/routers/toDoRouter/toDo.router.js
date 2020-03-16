@@ -56,6 +56,30 @@ module.exports = function({toDoManager}){
             
         })
     })
+
+    router.post("/deletePost", function(request, response){
+        const todo = request.body.todo
+        const isLoggedIn = request.session.isLoggedIn
+
+        toDoManager.deleteToDo(todo, isLoggedIn, function(errors, deletedToDo){
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.send("<h1>Something went wrong!</h1>")
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.render("unauthorized.hbs")
+                }else{
+                    const model = {
+                        todo
+                    }
+                    console.log("todoErrorPL:", {model})
+                    response.render("toDoLists.hbs", { model })
+                }
+            }else{
+                response.redirect("/toDoLists")
+            }
+        })
+    })
     return router
 }
 

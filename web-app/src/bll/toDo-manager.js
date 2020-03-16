@@ -51,7 +51,7 @@ module.exports = function({toDoRepository}){
         },
         deleteToDo: function(deletedToDo, isLoggedIn, callback){
 
-            const errors = this.getValidationErrors(0, isLoggedIn)
+            const errors = this.getValidationErrors(deletedToDo, isLoggedIn)
             if(errors.length > 0){
                 console.log("errorsDeleteBLL:", errors)
                 callback([], errors)

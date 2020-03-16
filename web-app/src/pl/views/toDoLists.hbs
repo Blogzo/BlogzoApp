@@ -43,7 +43,10 @@
                             </div>
                         {{/each}}
                     {{/if}}
-                    <button class="btn btn-danger col-md-2 mr-auto">Delete</button>
+                    <form action="deleteToDo" method="POST">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <button class="btn btn-danger col-md-1">Delete</button>
+                    </form>
                 </div>
                 {{!-- <div class="card-body">
                     <h5 class="card-title">

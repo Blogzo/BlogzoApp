@@ -30,6 +30,76 @@ module.exports = function({blogManager}){
         response.render("create.hbs")
     })
 
+    router.get("/:blogId", function(request, response){
+        const blogId = request.params.blogId
+        const isLoggedIn = request.session.isLoggedIn
+        console.log("loggedin", isLoggedIn)
+        blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
+            console.log("errorsInPL:", errors)
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errrors.includes("Need to be logged in!")){
+                    response.status(401).end()
+                }else{
+
+                    const model = {
+                        errors
+                    }
+                    response.render("blogpost.hbs", { model })
+                }
+            }else{
+                blogManager.getUsernameById(blogpost.userId, function(errors, username){
+                    console.log("errorsWithThisFuckingShit:", errors)
+                    const model = {
+                        blogpost,
+                        errors,
+                        username
+                    }
+                    console.log("blogpostmodel:", { model })
+                    console.log("usernameBlogpost", model.username.account.dataValues.username)
+                    response.render("blogpost.hbs", { model })
+                })
+            }
+        })
+    })
+
+    router.post("/create", function(request, response, next){
+        const title = request.body.title
+        const content = request.body.content
+        const posted = request.body.posted
+        const userId = request.session.userId
+        console.log("userid", userId)
+        const file = request.file.originalname
+        const isLoggedIn = request.session.isLoggedIn
+
+        if(!file){
+            const error = new Error("please upload a file")
+            error.httpStatusCode = 400
+            return next(error)
+        }
+
+        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
+            console.log("errorInPL:", errors)
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.status(401).end()
+                }
+                else{
+                    const model = {
+                        errors
+                    }
+                    response.render("create-blogpost.hbs", {model})
+                }
+            }else{
+                response.redirect("/blogposts/"+blogId.dataValues.blogId)
+            }
+        })
+    })
     return router
 }
 
