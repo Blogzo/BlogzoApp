@@ -37,14 +37,14 @@ module.exports = function({accountManager}){
                     const model = {
                         errors
                     }
-                    response.render("create-account.bhs", { model })
+                    response.render("create-account.bhs", model)
                 }
                 else{
                     const model = {
                         errors
                     }
-                    console.log("modelcreateAccount:", { model })
-                    response.render("create-account.bhs", { model })
+                    console.log("modelcreateAccount:", model)
+                    response.render("create-account.bhs", model)
                 }
             }else{
                 response.status(201).end()
@@ -53,10 +53,5 @@ module.exports = function({accountManager}){
             }
         })  
     })
-
-
-    
-
-
     return router
 }

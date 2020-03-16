@@ -99,7 +99,7 @@ module.exports = function({blogManager}){
                     const model = {
                         errors
                     }
-                    response.render("create-blogpost.hbs", { model })
+                    response.render("create-blogpost.hbs", model)
                 }     
             }else{
                 response.redirect("/blogposts/"+blogId.dataValues.blogId)

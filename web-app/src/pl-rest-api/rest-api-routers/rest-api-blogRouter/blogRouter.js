@@ -13,13 +13,13 @@ module.exports = function({blogManager}){
                 const model = {
                     errors
                 }
-                response.render("blogposts.hbs", { model })
+                response.render("blogposts.hbs", model)
             }
             else{
                 const model = {
                     blogposts
                 }
-                response.render("toDoLists.hbs", { model })
+                response.render("toDoLists.hbs", model)
                 response.status(200).end(blogposts)
             }
         })  
@@ -47,7 +47,7 @@ module.exports = function({blogManager}){
                     const model = {
                         errors
                     }
-                    response.render("blogpost.hbs", { model })
+                    response.render("blogpost.hbs", model)
                 }
             }else{
                 blogManager.getUsernameById(blogpost.userId, function(errors, username){
@@ -57,9 +57,9 @@ module.exports = function({blogManager}){
                         errors,
                         username
                     }
-                    console.log("blogpostmodel:", { model })
+                    console.log("blogpostmodel:", model)
                     console.log("usernameBlogpost", model.username.account.dataValues.username)
-                    response.render("blogpost.hbs", { model })
+                    response.render("blogpost.hbs", model)
                 })
             }
         })
@@ -93,7 +93,7 @@ module.exports = function({blogManager}){
                     const model = {
                         errors
                     }
-                    response.render("create-blogpost.hbs", {model})
+                    response.render("create-blogpost.hbs", model)
                 }
             }else{
                 response.redirect("/blogposts/"+blogId.dataValues.blogId)
