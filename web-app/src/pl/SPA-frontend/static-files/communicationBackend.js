@@ -117,7 +117,11 @@ module.exports = {
             "http://localhost:3000/blogposts/"+blogId
         ).then(function(response){
             const statuscode = response.status
-            return response.json()
+            if(statuscode == 200){
+                return response.json()
+            }else{
+                //error
+            }
         }).then(function(blogpost){
             const nameSpan = document.querySelector("#blogpost-page .name")
             const idSpan = document.querySelector("#blogpost-page .blogId")
