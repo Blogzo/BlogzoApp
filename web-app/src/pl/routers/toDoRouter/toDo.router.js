@@ -19,14 +19,14 @@ module.exports = function({toDoManager}){
                     const model = {
                         errors
                     }
-                    console.log("modelTodo:", { model })
-                    response.render("toDoLists.hbs", { model })
+                    console.log("modelTodo:", model)
+                    response.render("toDoLists.hbs", model)
                 }
             }else{
                 const model = {
                     toDos
                 }
-                response.render("toDoLists.hbs", { model })
+                response.render("toDoLists.hbs", model)
             }
         })
     })
@@ -47,8 +47,8 @@ module.exports = function({toDoManager}){
                     const model = {
                         errors
                     }
-                    console.log("todoErrorPL:", {model})
-                    response.render("toDoLists.hbs", { model })
+                    console.log("todoErrorPL:", model)
+                    response.render("toDoLists.hbs", model)
                 }
             }else{
                 response.redirect("/toDoLists")
@@ -72,8 +72,8 @@ module.exports = function({toDoManager}){
                     const model = {
                         errors
                     }
-                    console.log("todoErrorPL:", {model})
-                    response.render("toDoLists.hbs", { model })
+                    console.log("todoErrorPL:", model)
+                    response.render("toDoLists.hbs", model)
                 }
             }else{
                 response.redirect("/toDoLists")

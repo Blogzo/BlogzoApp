@@ -32,7 +32,7 @@ module.exports = function({accountManager}){
                     const model = {
                         errors
                     }
-                    response.render("create-account.hbs", { model })
+                    response.render("create-account.hbs", model)
                 }
                 else if(errors.includes("email must be unique!")){
                     uniqueError.push("email must be unique!")
@@ -40,13 +40,13 @@ module.exports = function({accountManager}){
                     const model = {
                         errors
                     }
-                    response.render("create-account.hbs", { model })
+                    response.render("create-account.hbs", model)
                 }else{
                     const model = {
                         errors
                     }
-                    console.log("modelcreateAccount:", { model })
-                    response.render("create-account.hbs", { model })
+                    console.log("modelcreateAccount:", model)
+                    response.render("create-account.hbs", model)
                 }
             }else{
                 request.session.userId = account.dataValues.personId

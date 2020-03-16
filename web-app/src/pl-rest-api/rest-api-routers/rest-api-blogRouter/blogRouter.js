@@ -20,7 +20,7 @@ module.exports = function({blogManager}){
                     blogposts
                 }
                 response.render("toDoLists.hbs", { model })
-                response.status(200).end()
+                response.status(200).end(blogposts)
             }
         })  
     })

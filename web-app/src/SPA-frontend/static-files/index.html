@@ -5,7 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>BLOGZO</title>
 	<link rel="stylesheet" href="/styles.css">
-	<script src="/navigation-handler.js"></script>
+	<script type="module" src="/navigation-handler.js"></script>
+	<script type="module" src="/communicationBackend.js"></script>
 </head>
 <body>
 	
@@ -17,7 +18,8 @@
 		<ul>
 			<li><a href="/">Home</a></li>
 			<li><a href="/blogposts">View blogposts</a></li>
-			<li class="showIfLoggedIn"><a href="/create-blogpost">Create blogpost</a></li>
+			<li><a href="/create-account">Create account</a></li>
+			<li class="showIfLoggedOut"><a href="/create-blogpost">Create blogpost</a></li>
 			<li class="showIfLoggedOut"><a href="/login">Login</a></li>
 		</ul>
 	</nav>
@@ -51,8 +53,33 @@
 			<h1>Create blogpost</h1>
 			<form action="">
 				<div>
-					 Name: <input type="text" class="name">
+					Title: <input type="text" class="name">
 				</div>
+				<div>
+					Content: <input type="text" class="name">
+			    </div>
+			    <div>
+					Posted: <input type="text" class="name">
+				</div>
+				<div>
+					Image: <input type="file" accept=".png, .jpg">
+		    	</div>
+				<input type="submit" value="Create">
+			</form>
+		</div>
+
+		<div id="create-account-page">
+			<h1>Create account</h1>
+			<form action="">
+				<div>
+					Username: <input type="text" class="username">
+				</div>
+				<div>
+					Email: <input type="text" class="email">
+			    </div>
+			    <div>
+					Password: <input type="password" class="password">
+		  		</div>
 				<input type="submit" value="Create">
 			</form>
 		</div>
@@ -64,7 +91,7 @@
 					 Username: <input type="text" class="username">
 				</div>
 				<div>
-					 Password: <input type="text" class="password">
+					 Password: <input type="password" class="userPassword">
 				</div>
 				<input type="submit" value="Login">
 			</form>

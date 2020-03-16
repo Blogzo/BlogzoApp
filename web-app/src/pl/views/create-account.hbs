@@ -23,9 +23,9 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">Sign up
-                            {{#if model.errors.length}}
+                            {{#if errors.length}}
                                     <ul id="list" style="text-align: center;">
-                                    {{#each model.errors}}
+                                    {{#each errors}}
                                         <b>{{this}}</b>
                                     {{/each}}
                                     </ul>

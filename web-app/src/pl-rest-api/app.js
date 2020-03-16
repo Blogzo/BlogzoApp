@@ -14,7 +14,16 @@ const correctUsername = "Admin"
 const correctPassword = "abc123"
 const serverSecret = "sdfkjdslkfjslkfd"
 
-app.get("blogposts", function(request, response){
+app.use(function(request, response, next){
+
+    response.setHeader("Access-Control-Allow-Origin", "*")
+    response.setHeader("Access-Control-Allow-Methods", "*")
+    response.setHeader("Access-Control-Allow-Headers", "*")
+    response.setHeader("Access-Control-Expose-Headers", "*")
+    next()
+})
+
+app.get("/blogposts", function(request, response){
     // TODO: Extracting the payload is better put in a function
 	// (preferably a middleware function).
     const authorixationHeader = request.get('authorization')
@@ -39,8 +48,6 @@ app.get("blogposts", function(request, response){
             response.status(200).json(blogposts)
         }
     })
-
-    
 })
 
 

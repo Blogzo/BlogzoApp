@@ -18,11 +18,10 @@ module.exports = function({blogManager}){
                 }
             }else{
                 const model = {
-                    blogposts
-                    
+                    blogposts  
                 }
                 console.log("blogpostsModel:", model)
-                response.render("blogposts.hbs", { model })
+                response.render("blogposts.hbs", model) 
             }
         })
     })
@@ -52,7 +51,7 @@ module.exports = function({blogManager}){
                     const model = {
                         errors
                     }
-                    response.render("blogpost.hbs",{ model })   
+                    response.render("blogpost.hbs", model)   
                 }
             }else{
                 console.log("errorsWithTheFuckingShit:", errors)
@@ -63,9 +62,9 @@ module.exports = function({blogManager}){
                         errors,
                         username
                     }
-                    console.log("blogpostModel:",{ model })
+                    console.log("blogpostModel:", model)
                     console.log("UsernameBlogpost",  model.username.account.dataValues.username)
-                    response.render("blogpost.hbs", { model })
+                    response.render("blogpost.hbs", model)
                 })    
             }
         })

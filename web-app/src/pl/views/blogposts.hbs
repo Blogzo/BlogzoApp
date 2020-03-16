@@ -26,13 +26,13 @@
     </div>
 </nav>
 
-{{#if model.errors.length}}
+{{#if errors.length}}
     <p>{{this}}</p>
 {{/if}}
 
 
-{{#if model.blogposts.length}}
-    {{#each model.blogposts}}
+{{#if blogposts.length}}
+    {{#each blogposts}}
     <div class="container card mb-4 border">
     <img class="card-img-top" src="/blogpost-img/{{dataValues.imageFile}}" width="750" height="600" alt="Image not found">
     <div class="card-body">
