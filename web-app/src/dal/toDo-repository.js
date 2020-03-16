@@ -27,6 +27,18 @@ module.exports = function({}){
                     callback([], newTodo)
                 }
             })
+        },
+
+        deleteTodo: function(todo, callback){
+            const query = "DELETE FROM todoList (todo) VALUES (?)"
+            const values = [todo]
+            db.query(query, values, function(error, deletedToDo){
+                if(error){
+                    callback(["databaseError"], null)
+                }else{
+                    callback([], deletedToDo)
+                }
+            })
         }
     }
 }

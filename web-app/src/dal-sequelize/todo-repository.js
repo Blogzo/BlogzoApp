@@ -22,7 +22,16 @@ module.exports = function({}){
                 console.log(errors)
                 callback(errors, [])
             })
-        }
+        },
 
+        deleteTodo: function(todo, callback){
+            toDos.toDo.destroy({toDo: todo}).then(function(deletedToDo){
+                console.log("deleteToDoSEQ:", deletedToDo)
+                callback([], deletedToDo)
+            }).catch(function(errors){
+                console.log(errors)
+                callback(errors, [])
+            })
+        }
     }
 }
