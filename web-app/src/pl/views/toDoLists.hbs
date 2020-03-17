@@ -25,8 +25,8 @@
                     <h4 class="card-title">Your Todo list</h4>
                     <form action="/toDoLists" method="POST">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                        <div class="add-items d-flex"> <input type="text" class="form-control todo-list-input"
-                                name="todo" placeholder="What do you need to do today? (5-20)" required autofocus>
+                        <div class="add-items d-flex"> 
+                            <input type="text" class="form-control todo-list-input" name="todo" placeholder="What do you need to do today? (5-20)" required autofocus>
                             <button class="add btn btn-primary font-weight-bold todo-list-add-btn">Add</button>
                         </div>
                     </form>
@@ -43,34 +43,7 @@
                             </div>
                         {{/each}}
                     {{/if}}
-                    <form action="deleteToDo" method="POST">
-                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                        <button class="btn btn-danger col-md-1">Delete</button>
-                    </form>
                 </div>
-                {{!-- <div class="card-body">
-                    <h5 class="card-title">
-                        {{#if model.errors.length}}
-                            {{#each model.errors}}
-                                <li>{{this}}</li>
-                            {{/each}}
-                        {{/if}}
-                    </h5>
-                        <div class="list-wrapper">
-                            <ul class="d-flex flex-column-reverse todo-list">
-                                {{#if toDos.length}}
-                                    {{#each toDos.Completed}}
-                                        <li>
-                                            <div class="form-check"> <label class="form-check-label"> <input class="checkbox"type="checkbox"> <b>{{Completed}}</b> 
-                                                <i class="input-helper"></i></label> 
-                                            </div>
-                                            <i class="remove mdi mdi-close-circle-outline"></i>
-                                        </li>
-                                    {{/each}}
-                                {{/if}}
-                            </ul>
-                        </div>
-                </div> --}}
             </div>
         </div>
 </div>

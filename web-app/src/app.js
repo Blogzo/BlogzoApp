@@ -26,6 +26,7 @@ const accountManager = require('./bll/account-manager')
 const createAccountRouter = require('./pl/routers/accountRouter/createAccount.router')
 const loginRouter = require('./pl/routers/accountRouter/loginAccount.router')
 const logoutRouter = require('./pl/routers/accountRouter/logout.router')
+const restAPI = require('./pl-rest-api/rest-api')
 
 const container = awilix.createContainer()
 
@@ -41,11 +42,13 @@ container.register('accountRepository', awilix.asFunction(accountRepository))
 container.register('accountManager', awilix.asFunction(accountManager))
 container.register('createAccountRouter', awilix.asFunction(createAccountRouter))
 container.register('loginRouter', awilix.asFunction(loginRouter))
+container.register('restAPI', awilix.asFunction(restAPI))
 
 const theBlogRouter = container.resolve('blogRouter')
 const theToDoRouter = container.resolve('toDoRouter')
 const theCreateAccountRouter = container.resolve('createAccountRouter')
 const theLoginRouter = container.resolve('loginRouter')
+const theRestAPI = container.resolve('restAPI')
 
 const multer = require('multer')
 
@@ -71,6 +74,7 @@ redisClient.on("end", function(){
   console.log("Redis connection closed")
 })
 
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: false
 }))
@@ -112,6 +116,7 @@ app.use("/login", theLoginRouter)
 app.use("/logout", logoutRouter)
 app.use("/blogposts", theBlogRouter)
 app.use("/toDoLists", theToDoRouter)
+app.use("/restAPI", theRestAPI)
 
 app.get('/', function (request, response) {
     response.render("start.hbs")

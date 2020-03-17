@@ -57,7 +57,6 @@ module.exports = function({blogManager}){
 
     router.get("/create", function(request, response){
         response.status(200).end()
-        response.render("create.hbs")
     })
 
     router.get("/:blogId", function(request, response){
@@ -73,11 +72,7 @@ module.exports = function({blogManager}){
                 else if(errrors.includes("Need to be logged in!")){
                     response.status(401).end()
                 }else{
-
-                    const model = {
-                        errors
-                    }
-                    response.render("blogpost.hbs", model)
+                    response.status(200).end()
                 }
             }else{
                 blogManager.getUsernameById(blogpost.userId, function(errors, username){

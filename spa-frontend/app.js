@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('./node_modules/express')
 
 const app = express()
 
@@ -11,6 +11,6 @@ app.use(function(request, response, next){
   response.sendFile(__dirname+"/static-files/index.html")
 })
 
-app.listen(8080, () => {
+app.listen(3000, () => {
     console.log('Server is up!');
-  })
+})
