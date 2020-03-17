@@ -1,5 +1,5 @@
 module.exports = function({accountManager}){
-    const express = require('express')
+     const express = require('express')
     const router = express.Router()
 
     router.get("/", function(request, response){
@@ -48,7 +48,7 @@ module.exports = function({accountManager}){
                 }
             }else{
                 response.status(201).end()
-                request.session.userId = account.dataValues.personId
+                request.body.IdToken.userId = account.dataValues.personId
                 response.redirect("/login")
             }
         })  

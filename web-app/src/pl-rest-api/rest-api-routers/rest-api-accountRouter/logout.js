@@ -4,7 +4,7 @@ module.exports = function({accountManager}){
     const router = express.router
 
     router.post("/", function(request, response){
-        request.session.isLoggedIn = false
+        request.body.IdToken = false
         response.status(201).end()
         response.redirect("/")
     })

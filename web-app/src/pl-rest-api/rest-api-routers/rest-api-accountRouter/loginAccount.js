@@ -14,7 +14,7 @@ module.exports = function({accountManager}){
         const invalidRequest = request.body.invalid_request
         const username = request.body.username
         const password = request.body.password
-        const token = request.body.accessToken
+        const token = request.body.idToken
         
     
         if(grantType != "password"){

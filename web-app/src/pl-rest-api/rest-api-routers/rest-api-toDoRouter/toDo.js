@@ -27,14 +27,14 @@ module.exports = function({toDoManager}){
     router.post("/", function(request, response){
 
         const todo = request.body.todo
-        const isLoggedIn = request.sesion.isLoggedIn
-        toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
+        const token = request.body.accessToken
+        toDoManager.createTodo(todo, token, function(errors, newTodo){
             if(errors.length > 0){
                 if (errors.inclues("databaseError")){
                     response.status(500).end()
                 }
                 else if(errors.inclues("Need to be logged in!")){
-                    response.status(401).end
+                    response.status(401).end()
                 }else{
                     const model = {
                         errors
@@ -48,17 +48,17 @@ module.exports = function({toDoManager}){
         })
     })
 
-    router.post("/deletePost", function(request, response){
+    router.delete("/deletePost", function(request, response){
         const todo = request.body.todo
-        const isLoggedIn = request.session.isLoggedIn
+        const token = request.body.accessToken
 
-        toDoManager.deleteToDo(todo, isLoggedIn, function(errors, deletedToDo){
+        toDoManager.deleteToDo(todo, token, function(errors, deletedToDo){
             if(errors.length > 0){
                 if (errors.inclues("databaseError")){
                     response.status(500).end()
                 }
                 else if(errors.inclues("Need to be logged in!")){
-                    response.status(401).end
+                    response.status(401).end()
                 }else{
                     const model = {
                         errors
