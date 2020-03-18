@@ -20,9 +20,9 @@ services:
     build: session-database
     ports:
       - "6379:6379"
-  spa-frontend:
-    build: "./spa-frontend"
+  spa:
+    build: "./spa"
     ports:
       - "8080:3000"
     volumes:
-      -"./spa-frontend:/spa-frontend"
+      - "./spa:/spa"

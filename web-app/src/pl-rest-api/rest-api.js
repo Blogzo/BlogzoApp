@@ -44,7 +44,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     }
 
     //ToDos!
-    router.get("/toDoLists", function(requst, response){
+    router.get("/toDoLists", authorization, function(requst, response){
         if(errors.inclues("databaseErrors")){
             response.status(500).end()
         }
@@ -69,7 +69,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(401).end()
                 }
             }else{
-                response.status(200).end()
+                response.status(201).end()
             }
         })
     })
@@ -185,12 +185,12 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.post("/logout", function(request, response){
         localStorage.accessToken = ""
         localStorage.idToken = ""
-        response.status(201).end()
+        response.status(200).end()
     })
 
     //blogRouter!
 
-    router.get("/blogposts", authorization, function(request, response){
+    router.get("/blogposts", function(request, response){
         
         
         blogpostHandler.getAllBlogposts(function(blogposts, errors){
@@ -206,7 +206,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.get("/blogposts/create", function(request, response){
+    router.get("/blogposts/create", authorization, function(request, response){
         response.status(200).end()
     })
 
@@ -227,7 +227,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             }else{
                 blogManager.getUsernameById(blogpost.userId, function(errors, username){
                     console.log("errorsWithThisFuckingShit:", errors)
-                    response.status(200).end()
+                    response.status(200).json(blogpost)
                 })
             }
         })
@@ -247,7 +247,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             return next(error)
         }
 
-        blogManager.createBlogpost(title, content, posted, file, userId, accessToken, function(errors, blogId){
+        blogManager.createBlogpost(title, content, posted, file, userId, function(errors, blogId){
             console.log("errorInPL:", errors)
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -257,6 +257,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(401).end()
                 }
             }else{
+                response.setHeader("Location", "/blogposts/"+blogId)
                 response.status(201).end()
             }
         })

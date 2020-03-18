@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 
-function fetchAllBlogposts(){
+export function fetchAllBlogposts(){
 
     fetch(
         "http://localhost:3000/blogposts"
@@ -186,6 +186,6 @@ function fetchAllToDoLists(){
     })
 }
 
-export { fetchAllBlogposts, fetchAllToDoLists, fetchBlogpost }
+export { fetchAllBlogposts}
 
 
