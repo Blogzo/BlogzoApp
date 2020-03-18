@@ -19,15 +19,15 @@
     <h1 style="text-align: center;"><b>Blogpost</b></h1>
     <div class="container card mb-4 p-1">
 
-        <img class="card-img-top" src="/blogpost-img/{{blogpost.imageFile}}" alt="Card image cap">
+        <img class="card-img-top" src="/blogpost-img/{{blogpost.dataValues.imageFile}}" alt="Card image cap">
         <div class="card-body">
-            <h2 class="card-title">{{blogpost.title}}</h2>
+            <h2 class="card-title">{{blogpost.dataValues.title}}</h2>
             <p class="card-text">                
-                {{blogpost.content}}
+                {{blogpost.dataValues.content}}
             </p>
         </div>
         <div class="card-footer text-muted">
-            Posted on {{blogpost.posted}}, by {{username.account.dataValues.username}}
+            Posted on {{blogpost.dataValues.posted}}, by {{username.account.dataValues.username}}
         </div>
     </div>
 {{else}}

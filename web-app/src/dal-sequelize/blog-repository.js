@@ -19,7 +19,7 @@ module.exports = function({}){
         },
 
         getBlogpostId: function(blogId, callback){
-            blogposts.Blogpost.findByPk(blogId, {raw:true}).then(function(Blogpost){
+            blogposts.Blogpost.findByPk(blogId).then(function(Blogpost){
                 console.log("BlogpostSEQ:", Blogpost)
                 callback([], Blogpost)
             }).catch(function(errors){

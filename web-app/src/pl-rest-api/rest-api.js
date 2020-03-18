@@ -10,14 +10,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     const correctPassword = "abc123"
     const serverSecret = "sdfkjdslkfjslkfd"
 
-    router.use(function(request, response, next){
 
-        response.setHeader("Access-Control-Allow-Origin", "*")
-        response.setHeader("Access-Control-Allow-Methods", "*")
-        response.setHeader("Access-Control-Allow-Headers", "*")
-        response.setHeader("Access-Control-Expose-Headers", "*")
-        next()
-    })
 
     var authorization = function(request, response, next){
         
@@ -43,17 +36,20 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     }
 
     //ToDos!
-    router.get("/toDoLists", authorization, function(requst, response){
-        if(errors.inclues("databaseErrors")){
-            response.status(500).end()
-        }
-        else if(errors.inclues("Needs to be logged in!")){
-            response.status(401).end()
-            
-        }
-        else{
-            response.status(200).end()
-        }
+    router.get("/toDoLists", function(requst, response){
+        toDoManager.getAllToDos(function(errors, toDos){
+            if(errors.length > 0){
+                if(errors.includes("databaseErrors")){
+                    response.status(500).end()
+                }
+                else if(errors.inclues("Needs to be logged in!")){
+                    response.status(401).end()
+                    
+                }
+            }else{
+                response.status(200).end(toDos)
+            }
+        })
     })
 
     router.post("/toDoLists", authorization, function(request, response){
@@ -106,22 +102,20 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 }
             }else{
 
-                const payload = {id: userId, "username": username, "password": password}
+                const payload = {id: account.userId, "username": account.username, "password": account.password}
 
                 jwt.sign(payload, serverSecret).then(function(error, result){
                     console.log("result", result)
                     if(error){
                         response.status(500).end()
                     }else{
-                        const idToken = jwt.sign({sub: 1, email: email, username: username},serverSecret)
-                        response.status(200).json(result)
+                        const idToken = jwt.sign({sub: account.userId, email: account.email, username: account.username},serverSecret)
+                        response.status(201).json({
+                            access_token: result,
+                            id_token: idToken
+                        })
                     }
-                })
-
-                response.status(201).json({
-                    access_token: accessToken,
-                    id_token: idToken
-                })
+                })  
 
             }
         })  
@@ -191,27 +185,20 @@ module.exports = function({accountManager, blogManager, toDoManager}){
 
     router.get("/blogposts", function(request, response){
         
-        
         blogManager.getAllBlogposts(function(errors, blogposts){
-            
-            if(errors.includes("databaseError")){  
-                response.status(500).end()
-            }
-            else if(errors.length > 0){
-                response.status(500).end()
+            console.log("blogposts", blogposts)
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){  
+                    response.status(500).end()
+                }            
             }else{
                 response.status(200).json(blogposts)
             }
         })
     })
 
-    router.get("/blogposts/create", authorization, function(request, response){
-        response.status(200).end()
-    })
-
-    router.get("/blogposts/:blogId", authorization, function(request, response){
+    router.get("/blogposts/:blogId", function(request, response){
         const blogId = request.params.blogId  
-        console.log("loggedin", token)
         blogManager.getBlogpostId(blogId, function(errors, blogpost){
             console.log("errorsInPL:", errors)
             if(errors.length > 0){
@@ -220,16 +207,15 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 }
                 else if(errrors.includes("Need to be logged in!")){
                     response.status(401).end()
-                }else{
-                    response.status(200).end()
                 }
             }else{
-                blogManager.getUsernameById(blogpost.userId, function(errors, username){
-                    console.log("errorsWithThisFuckingShit:", errors)
-                    response.status(200).json(blogpost)
-                })
+                response.status(200).json(blogpost)
             }
         })
+    })
+
+    router.get("/blogposts/create", authorization, function(request, response){
+        response.status(200).end()
     })
 
     router.post("/blogposts/create", authorization, function(request, response, next){

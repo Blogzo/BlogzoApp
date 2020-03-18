@@ -28,7 +28,6 @@ module.exports = function({toDoRepository}){
             if(errors.length > 0){
                 console.log("errortodoBLL:", errors)
                 callback(0, errors)
-                return
             }else{
                 toDoRepository.getAllToDos(function(toDos, errors){
                     callback(toDos, errors)
@@ -41,7 +40,6 @@ module.exports = function({toDoRepository}){
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
             if(errors.length > 0){
                 callback(0, errors)
-                return
             }
             if(isLoggedIn){
                 toDoRepository.createTodo(newTodo, function(todo, errors){

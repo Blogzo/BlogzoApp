@@ -86,6 +86,15 @@ app.use(expressSession({
   resave: false,
   store: new redisStore({ client: redisClient})
 }))
+app.use(function(request, response, next){
+
+  response.setHeader("Access-Control-Allow-Origin", "*")
+  response.setHeader("Access-Control-Allow-Methods", "*")
+  response.setHeader("Access-Control-Allow-Headers", "*")
+  response.setHeader("Access-Control-Expose-Headers", "*")
+  next()
+})
+
 const maxSize = 700 * 500
 app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
 app.use(csrf({ cookie: true}))

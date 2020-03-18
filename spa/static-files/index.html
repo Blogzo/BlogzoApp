@@ -19,6 +19,7 @@
 			<li><a href="/">Home</a></li>
 			<li><a href="/blogposts">View blogposts</a></li>
 			<li><a href="/create-account">Create account</a></li>
+			<li><a href="/toDoLists">ToDoList</a></li>
 			<li class="showIfLoggedOut"><a href="/create-blogpost">Create blogpost</a></li>
 			<li class="showIfLoggedOut"><a href="/login">Login</a></li>
 			<li><a href="/toDoLists">toDoLists</a></li>
@@ -53,8 +54,11 @@
 		
 		<div id="blogpost-page">
 			<h1>Blogpost</h1>
-			<div>Name: <span class="name"></span></div>
-			<div>Id: <span class="id"></span></div>
+			<div>Title: <span class="title"></span></div>
+			<div>Content: <span class="content"></span></div>
+			<div>Posted: <span class="posted"></span></div>
+			<div>Image: <span class="image"></span></div>
+			<div>User: <span class="user"></span></div>
 		</div>
 		
 		<div id="create-blogpost-page">
@@ -86,7 +90,10 @@
 					Email: <input type="text" class="email">
 			    </div>
 			    <div>
-					Password: <input type="password" class="password">
+					Password: <input type="password" class="userPassword">
+				  </div>
+				<div>
+					re-Password: <input type="password" class="userPassword2">
 		  		</div>
 				<input type="submit" value="Create">
 			</form>
