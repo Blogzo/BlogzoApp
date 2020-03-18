@@ -3,7 +3,7 @@ services:
   "web-app":
     build: "./web-app"
     ports:
-      - "3000:8080"
+      - "8080:8080"
       - "9229:9229"
     volumes:
       - "./web-app/src:/web-app/src"
@@ -23,6 +23,6 @@ services:
   spa:
     build: "./spa"
     ports:
-      - "8080:3000"
+      - "3000:3000"
     volumes:
       - "./spa:/spa"
