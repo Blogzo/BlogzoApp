@@ -1,7 +1,6 @@
 
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const blogpostHandler = require('../bll/blog-manager')
 
 module.exports = function({accountManager, blogManager, toDoManager}){
 
@@ -193,7 +192,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.get("/blogposts", function(request, response){
         
         
-        blogpostHandler.getAllBlogposts(function(blogposts, errors){
+        blogManager.getAllBlogposts(function(errors, blogposts){
             
             if(errors.includes("databaseError")){  
                 response.status(500).end()
@@ -237,7 +236,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const title = request.body.title
         const content = request.body.content
         const posted = request.body.posted
-        const userId = request.session.userId
         console.log("userid", userId)
         const file = request.file.originalname
 

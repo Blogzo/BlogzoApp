@@ -1,4 +1,4 @@
-import { fetchAllBlogposts } from'./communicationBackend'
+//import { fetchAllBlogposts, fetchAllToDoLists, fetchBlogpost } from'./communicationBackend'
 
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -52,10 +52,13 @@ function changeToPage(url){
         document.getElementById("login-page").classList.add("current-page")
     }else if(new RegExp("^/blogposts/[0-9]+$").test(url)){
         document.getElementById("blogpost-page").classList.add("current-page")
+        fetchBlogpost()
         //const blogId = url.split("/")[2]
         //fetchBlogpost(blogId)
     }else if(url == "/create-blogpost"){
         document.getElementById("create-blogpost-page").classList.add("current-page")
+    }else if(url == "toDoLists"){
+        document.getElementById("toDoLists-page").classList.add("current-page")
     }else{
         document.getElementById("error-page").classList.add("current-page")
     }
@@ -73,4 +76,77 @@ function logout(){
     localStorage.accessToken = ""
     document.body.classList.remove("isLoggedIn")
     document.body.classList.add("isLoggedOut")
+}
+
+function fetchAllBlogposts(){
+
+    fetch(
+        "http://localhost:8080/theRestAPI/blogposts"
+    ).then(function(response){
+        const statuscode = response.status
+        if(statuscode == 200){
+            return response.json()
+        }
+    }).then(function(blogposts){
+        const u1 = document.querySelector("#blogposts-page u1")
+        u1.innerText = ""
+        for(const blogpost in blogposts){
+            const li = document.createElement("li")
+            const anchor = document.createElement("a")
+            anchor.innerText = blogpost.name
+            anchor.setAttribute("href", '/blogposts/'+blogpost.id)
+            li.appendChild(anchor)
+            u1.append(li)
+        }
+    }).catch(function(error){
+        console.log(error)
+    })
+}
+
+
+function fetchBlogpost(blogId){
+
+    fetch(
+        "http://localhost:8080/theRestAPI/blogposts/"+blogId
+    ).then(function(response){
+        const statuscode = response.status
+        if(statuscode == 200){
+            return response.json()
+        }else{
+            //error
+        }
+    }).then(function(blogpost){
+        const nameSpan = document.querySelector("#blogpost-page .name")
+        const idSpan = document.querySelector("#blogpost-page .blogId")
+        nameSpan.innerText = blogpost.name
+        idSpan.innerText = blogpost.blogId
+    }).catch(function(error){
+        console.log(error)
+    })
+}
+
+
+function fetchAllToDoLists(){
+
+    fetch(
+        "http://localhost:8080/theRestAPI/toDoLists"
+    ).then(function(response){
+        const statuscode = response.status
+        if(statuscode == 200){
+            return response.json()
+        }
+    }).then(function(toDolists){
+        const u1 = document.querySelector("#toDoLists-page u1")
+        u1.innerText = ""
+        for(const toDo in toDolists){
+            const li = document.createElement("li")
+            const anchor = document.createElement("a")
+            anchor.innerText = blogpost.name
+            anchor.setAttribute("href", '/toDoLists/'+toDo.id)
+            li.appendChild(anchor)
+            u1.append(li)
+        }
+    }).catch(function(error){
+        console.log(error)
+    })
 }
