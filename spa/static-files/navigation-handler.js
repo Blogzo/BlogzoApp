@@ -53,6 +53,13 @@ document.addEventListener("DOMContentLoaded", function(){
             console.log(error)
             //Update the view and display error
         })
+
+        document.querySelector("#toDoLists-page").addEventListener("submit", function(event){
+
+            event.preventDefault()
+
+            
+        })
     })
     
     document.querySelector("#login-page").addEventListener("submit", function(event){
@@ -232,7 +239,3 @@ function fetchAllToDoLists(){
         console.log(error)
     })
 }
-
-
-
-
