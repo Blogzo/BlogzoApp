@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 const redis = require('redis')
 const csrf = require('csurf')
 const awilix = require('awilix')  
+//const cors = require('cors')
 
 const redisClient = redis.createClient({host: 'session-database'})
 const redisStore = require('connect-redis')(expressSession)
@@ -86,10 +87,13 @@ app.use(expressSession({
   resave: false,
   store: new redisStore({ client: redisClient})
 }))
+//app.use(cors())
+
 app.use(function(request, response, next){
 
-  response.setHeader("Access-Control-Allow-Origin", "*")
-  response.setHeader("Access-Control-Allow-Methods", "*")
+  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
+  //response.setHeader("Access-Control-Allow-Credentials", true)
+  response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
   response.setHeader("Access-Control-Allow-Headers", "*")
   response.setHeader("Access-Control-Expose-Headers", "*")
   next()
@@ -97,19 +101,19 @@ app.use(function(request, response, next){
 
 const maxSize = 700 * 500
 app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
-app.use(csrf({ cookie: true}))
+/*app.use(csrf({ cookie: true}))
 app.use(function(request, response, next){
   var token = request.csrfToken()
   response.locals.isLoggedIn = request.session.isLoggedIn
   response.locals.csrfToken = token
   next()
-})
+})*/
 
 app.use(function(error, request, response, next){
   
   if(error !== 'EBADCSRFTOKEN') return next(error)
-  response.send(403)
-  response.send('Form tampered with!')
+    response.send(403)
+    response.send('Form tampered with!')
 })
 
 app.engine("hbs", expressHandlebars({

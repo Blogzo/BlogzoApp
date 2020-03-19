@@ -30,6 +30,13 @@
                             <button class="add btn btn-primary font-weight-bold todo-list-add-btn">Add</button>
                         </div>
                     </form>
+                   {{#if errors.length}}
+                        <ul id="list" style="text-align: center;">
+                            {{#each errors}}
+                                    <b>{{this}}</b>
+                            {{/each}}
+                        </ul>
+                    {{/if}}
                     {{#if toDos.length}}
                         {{#each toDos}}
                             <div class="list-wrapper">
