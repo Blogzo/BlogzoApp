@@ -27,11 +27,11 @@ module.exports = function({toDoRepository}){
             const errors = this.getValidationErrors(0, isLoggedIn)
             if(errors.length > 0){
                 console.log("errortodoBLL:", errors)
-                callback(0, errors)
+                callback(errors, [])
                 return
             }else{
-                toDoRepository.getAllToDos(function(toDos, errors){
-                    callback(toDos, errors)
+                toDoRepository.getAllToDos(function(errors, toDos){
+                    callback(errors, toDos)
                 })
             }
         },
@@ -40,12 +40,12 @@ module.exports = function({toDoRepository}){
 
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
             if(errors.length > 0){
-                callback(0, errors)
+                callback(errors, [])
                 return
             }
             if(isLoggedIn){
-                toDoRepository.createTodo(newTodo, function(todo, errors){
-                    callback(todo, errors)
+                toDoRepository.createTodo(newTodo, function(errors, todo){
+                    callback(errors, todo)
                 })
             }
         },
@@ -56,8 +56,8 @@ module.exports = function({toDoRepository}){
                 console.log("errorsDeleteBLL:", errors)
                 callback([], errors)
             }else{
-                toDoRepository.deleteToDo(deletedToDo, function(todo, errors){
-                    callback(todo, errors)
+                toDoRepository.deleteToDo(deletedToDo, function(errors, todo){
+                    callback(errors, todo)
                 })
             }
         }

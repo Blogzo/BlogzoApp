@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const email = document.querySelector("#create-account-page .email").value
         const userPassword = document.querySelector("#create-account-page .userPassword").value
         const userPassword2 = document.querySelector("#create-account-page .userPassword2").value
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
         const user = {
             username,
@@ -35,13 +36,47 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
         fetch(
-            "http://localhost:3000/restAPI/create-account", {
+            "http://localhost:8080/restAPI/create-account", {
+                method: "POST",
+                headers: {
+                    "CSRF-Token": token,
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer "+localStorage.accessToken
+                },
+                body: JSON.stringify(user)
+            }
+        ).then(function(response){
+            if(response.status(200).end()){
+                console.log("createAccountResponse", response)
+                return response.json()
+                //Update view
+            }else{
+                //Display error
+            }
+        }).catch(function(error){
+            console.log(error)
+            //Update the view and display error
+        })
+    })
+
+    document.querySelector("#create-todo-page").addEventListener("submit", function(event){
+
+        event.preventDefault()
+
+        const toDo = document.querySelector("#create-todo-page .name").value
+
+        const newToDo = {
+            toDo
+        }
+
+        fetch(
+            "http://localhost:8080/restAPI/toDoLists", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": "Bearer "+localStorage.accessToken
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(newToDo)
             }
         ).then(function(response){
             if(response.status(200).end()){
@@ -65,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const userpassword = document.querySelector("#login-page .userPassword").value
 
         fetch(
-            "http://localhost:3000/restAPI/login", {
+            "http://localhost:8080/restAPI/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
@@ -73,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 body: "grant_type=userPassword&username="+username+"&userPassword"+userpassword            
             }
         ).then(function(response){
+            console.log("loginResponse", response)
             const statuscode = response.status
             if(statuscode == 200){
                 return response.json()
@@ -80,9 +116,10 @@ document.addEventListener("DOMContentLoaded", function(){
                 //error
             }
         }).then(function(body){
+            console.log("bodyResponse", body)
             //Read out info about user account from id_token
             login(body.access_token)
-            console.log(accessToken)
+            //console.log(accessToken)
 
         }).catch(function(error){
             console.log(error)
@@ -129,8 +166,8 @@ function changeToPage(url){
         document.getElementById("blogpost-page").classList.add("current-page")
         const blogId = url.split("/")[2]
         fetchBlogpost(blogId)
-    }else if(url == "/create-blogpost"){
-        document.getElementById("create-blogpost-page").classList.add("current-page")
+    }else if(url == "/create-todo"){
+        document.getElementById("create-todo-page").classList.add("current-page")
     }else{
         document.getElementById("error-page").classList.add("current-page")
     }
@@ -198,10 +235,12 @@ function fetchBlogpost(blogId){
         const contentSpan = document.querySelector("#blogpost-page .content")
         const postedSpan = document.querySelector("#blogpost-page .posted")
         const imageSpan = document.querySelector("#blogpost-page .image")
-        titleSpan.innerText = blogpost.title
-        contentSpan.innerText = blogpost.content
-        postedSpan.innerText = blogpost.posted
-        imageSpan.innerText = blogpost.imageFile
+        const user = document.querySelector('#blogpost-page .user')
+        titleSpan.innerText = blogpost.blogpost.title
+        contentSpan.innerText = blogpost.blogpost.content
+        postedSpan.innerText = blogpost.blogpost.posted
+        imageSpan.innerText = blogpost.blogpost.imageFile
+        user.innerText = blogpost.account.account.username
 
     }).catch(function(error){
         console.log(error)
@@ -216,7 +255,7 @@ function fetchAllToDoLists(){
         console.log("toDoResponse", response)
         const statuscode = response.status
         if(statuscode != 200){
-            console.log(statuscode+ " "+response.body)
+            console.log(statuscode + " " + response.body)
         }else{
             return response.json()
         }                
@@ -226,10 +265,9 @@ function fetchAllToDoLists(){
         ul.innerText = ""
         for(const toDo in toDolists){
             const li = document.createElement("li")
-            const anchor = document.createElement("a")
-            anchor.innerText = toDolists.toDo
-            anchor.setAttribute("href", '/toDoLists/'+toDo.id)
-            li.appendChild(anchor)
+            const p = document.createElement("p")
+            p.innerText = toDolists[toDo].toDo
+            li.appendChild(p)
             ul.append(li)
         }
     }).catch(function(error){

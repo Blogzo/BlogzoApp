@@ -1,48 +1,10 @@
-document.addEventListener("DOMContentLoaded", function(){
+/*document.addEventListener("DOMContentLoaded", function(){
 
    
 
    
 
-    document.querySelector("#create-blogpost-page").addEventListener("submit", function(event){
-
-        event.preventDefault()
-
-        const title = document.querySelector("#create-blogpost-page .title").value
-        const content = document.querySelector("#create-blogpost-page .content").value
-        const posted = document.querySelector("#create-blogpost-page .posted").value
-        const image = document.querySelector("#create-blogpost-page .image").value
-
-
-        const blogpost = {
-            title,
-            content,
-            posted,
-            image
-        }
-
-        fetch(
-            "http://localhost:3000/create-blogpost", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer "+localStorage.accessToken
-                },
-                body: JSON.stringify(blogpost)
-            }
-        ).then(function(response){
-            if(response.status(200).end()){
-                console.log(response)
-                return response.json()
-                //Update view
-            }else{
-                //Display error
-            }
-        }).catch(function(error){
-            console.log(error)
-            //Update the view and display error
-        })
-    })
+    
 })
 
 
@@ -118,7 +80,7 @@ export function fetchAllToDoLists(){
     }).catch(function(error){
         console.log(error)
     })
-}
+}*/
 
 
 

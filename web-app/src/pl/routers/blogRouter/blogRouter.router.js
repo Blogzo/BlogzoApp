@@ -93,6 +93,9 @@ module.exports = function({blogManager}){
                 if(errors.includes("databaseError")){
                     response.send("<h1>Something went wrong!</h1>")
                 }
+                else if(errors instanceof multer.MulterError){
+                    response.send("<h1>To large file!</h1>")
+                }
                 else if(errors.includes("Need to be logged in!")){
                     response.render("unauthorized.hbs")
                 }else{

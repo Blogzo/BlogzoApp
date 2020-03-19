@@ -28,27 +28,12 @@ module.exports = function({blogManager}){
     router.get("/", function(request, response){
         // TODO: Extracting the payload is better put in a function
         // (preferably a middleware function).
-        const authorixationHeader = request.get('authorization')
-        const accessToken = authorixationHeader.substr("Bearer ".length)
-    
-        try {
-            // TODO: Better to use jwt.verify asynchronously.
-            const payload = jwt.verify(accessToken, serverSecret)
-            
-            // Use payload to implement authorization...
-            
-        }catch(e){
-            response.status(401).end()
-            return
-        }
-        
-        blogpostHandler.getAllBlogposts(function(blogposts, errors){
-            
-            if(errors.includes("databaseError")){  
-                response.status(500).end()
-            }
-            else if(errors.length > 0){
-                response.status(500).end()
+        blogManager.getAllBlogposts(function(errors, blogposts){
+            console.log("blogposts", blogposts)
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){  
+                    response.status(500).end()
+                }            
             }else{
                 response.status(200).json(blogposts)
             }
