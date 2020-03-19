@@ -35,22 +35,20 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
         fetch(
-            "http://localhost:3000/restAPI/create-account", {
+            "http://localhost:8080/restAPI/create-account", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer "+localStorage.accessToken
                 },
                 body: JSON.stringify(user)
             }
         ).then(function(response){
-            if(response.status(200).end()){
-                console.log(response)
-                return response.json()
-                //Update view
-            }else{
-                //Display error
-            }
+            console.log("response", response)
+            response.status(200).end()
+            console.log(response)
+            return response.json()
+            //Update view
+            
         }).catch(function(error){
             console.log(error)
             //Update the view and display error
@@ -65,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const userpassword = document.querySelector("#login-page .userPassword").value
 
         fetch(
-            "http://localhost:3000/restAPI/login", {
+            "http://localhost:8080/restAPI/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
@@ -73,9 +71,10 @@ document.addEventListener("DOMContentLoaded", function(){
                 body: "grant_type=userPassword&username="+username+"&userPassword"+userpassword            
             }
         ).then(function(response){
+            console.log("response", response)
             const statuscode = response.status
             if(statuscode == 200){
-                return response.json()
+                return response.text()
             }else{
                 //error
             }
@@ -131,8 +130,6 @@ function changeToPage(url){
         fetchBlogpost(blogId)
     }else if(url == "/create-blogpost"){
         document.getElementById("create-blogpost-page").classList.add("current-page")
-    }else if(url == "toDoLists"){
-        document.getElementById("toDoLists-page").classList.add("current-page")
     }else{
         document.getElementById("error-page").classList.add("current-page")
     }
@@ -150,6 +147,33 @@ function logout(){
     localStorage.accessToken = ""
     document.body.classList.remove("isLoggedIn")
     document.body.classList.add("isLoggedOut")
+}
+
+function fetchBlogpost(blogId){
+    
+    fetch(
+        "http://localhost:8080/restAPI/blogposts/"+blogId,
+    ).then(function(response){
+        const statuscode = response.status
+        console.log("blogpostsResponse:", response)
+        if(statuscode != 200){
+            console.log(statuscode+ " "+response.body)
+        }else{
+            return response.json()
+        }
+    }).then(function(blogposts){
+        console.log("blogposts:", blogposts)
+        const titleSpan = document.querySelector("#blogpost-page .title")
+        const contentSpan = document.querySelector("#blogpost-page .content")
+        const postedSpan = document.querySelector("#blogpost-page .posted")
+        const imageSpan = document.querySelector("#blogpost-page .image")
+        titleSpan.innerText = blogposts.title
+        contentSpan.innerText = blogposts.content
+        postedSpan.innerText = blogposts.posted
+        imageSpan.innerText = blogposts.image
+    }).catch(function(error){
+        console.log("Fetch error", error)
+    })
 }
 
 function fetchAllBlogposts(){
@@ -181,34 +205,6 @@ function fetchAllBlogposts(){
     })
 }
 
-
-function fetchBlogpost(blogId){
-    
-    fetch(
-        "http://localhost:8080/restAPI/blogposts/"+blogId,
-    ).then(function(response){
-        const statuscode = response.status
-        console.log("blogpostsResponse:", response)
-        if(statuscode != 200){
-            console.log(statuscode+ " "+response.body)
-        }else{
-            return response.json()
-        }
-    }).then(function(blogposts){
-        console.log("blogposts:", blogposts)
-        const titleSpan = document.querySelector("#blogpost-page .title")
-        const contentSpan = document.querySelector("#blogpost-page .content")
-        const postedSpan = document.querySelector("#blogpost-page .posted")
-        const imageSpan = document.querySelector("#blogpost-page .image")
-        titleSpan.innerText = blogpost.title
-        contentSpan.innerText = blogpost.content
-        postedSpan.innerText = blogpost.posted
-        imageSpan.innerText = blogpost.image
-    }).catch(function(error){
-        console.log("Fetch error", error)
-    })
-}
-
 function fetchAllToDoLists(){
     console.log("inside fetchAllTodos")
     fetch(
@@ -227,10 +223,9 @@ function fetchAllToDoLists(){
         ul.innerText = ""
         for(const toDo in toDolists){
             const li = document.createElement("li")
-            const anchor = document.createElement("a")
-            anchor.innerText = toDolists.toDo
-            anchor.setAttribute("href", '/toDoLists/'+toDo.id)
-            li.appendChild(anchor)
+            const p = document.createElement("p")
+            p.innerText = toDolists[toDo].toDo
+            li.appendChild(p)
             ul.append(li)
         }
     }).catch(function(error){

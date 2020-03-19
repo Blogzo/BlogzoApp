@@ -37,7 +37,8 @@ module.exports = function({accountManager, blogManager, toDoManager}){
 
     //ToDos!
     router.get("/toDoLists", function(requst, response){
-        toDoManager.getAllToDos(function(errors, toDos){
+        const isLoggedIn = true
+        toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
             if(errors.length > 0){
                 if(errors.includes("databaseErrors")){
                     response.status(500).end()
@@ -47,7 +48,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     
                 }
             }else{
-                response.status(200).end(toDos)
+                response.status(200).json(toDos)
             }
         })
     })
@@ -65,6 +66,42 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 }
             }else{
                 response.status(201).end()
+            }
+        })
+    })
+
+    router.delete("/toDoLists/deletePost", authorization, function(request, response){
+        const todo = request.body.todo
+        const isLoggedIn = true
+
+        toDoManager.deleteTodo(todo, isLoggedIn, function(errors, deletedToDo){
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.status(401).end
+                }
+            }else{
+                response.status(200).end()
+            }
+        })
+    })
+
+    router.put("/toDoLists/updatePost", authorization, function(request, response){
+        const todo = request.body.todo
+        const isLoggedIn = true
+
+        toDoManager.updateTodo(todo, isLoggedIn, function(request, response){
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.status(401).end()
+                }
+            }else{
+                response.status(200).end()
             }
         })
     })
@@ -199,7 +236,8 @@ module.exports = function({accountManager, blogManager, toDoManager}){
 
     router.get("/blogposts/:blogId", function(request, response){
         const blogId = request.params.blogId  
-        blogManager.getBlogpostId(blogId, function(errors, blogpost){
+        const isLoggedIn = true
+        blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
             console.log("errorsInPL:", errors)
             if(errors.length > 0){
                 if(errors.includes("databaseError")){

@@ -58,6 +58,18 @@ module.exports = function({toDoRepository}){
                     callback(todo, errors)
                 })
             }
+        },
+        updateTodo: function(updateTodo, isLoggedIn, callback){
+            
+            const errors = this.getValidationErrors(updateTodo, isLoggedIn)
+            if(errors.length > 0){
+                console.log("errorsUpdateBLL:", errors)
+                callback([], errors)
+            }else{
+                toDoRepository.updateTodo(updateTodo, function(todo, errors){
+                    callback(todo, errors)
+                })
+            }
         }
     }
 }
