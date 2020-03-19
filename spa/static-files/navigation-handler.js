@@ -58,9 +58,52 @@ document.addEventListener("DOMContentLoaded", function(){
 
             event.preventDefault()
 
-            
+            const toDos = document.querySelector("#toDoLists li")
+
+            fetch(
+                "http://localhost:8080/restAPI/toDoLists/deletePost", {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify(toDos)
+                }
+            ).then(function(response){
+                console.log("deleteResponse", response)
+                const statuscode = response.status
+                if(statuscode != 200){
+                    return response.text()
+                }
+            }).catch(function(error){
+                console.log("error", error)
+            })
         })
     })
+
+    document.querySelector("#toDoLists-page").addEventListener("submit", function(event){
+        
+        const toDo = document.querySelector("toDoLists li")
+        
+        event.preventDefault()
+
+        fetch(
+            "http:/localhost:8080/restAPI/toDoLists/updatePost", {
+                method: "PUT",
+                headers: {
+                    "Content-type": "Application/json"
+                },
+                body: JSON.stringify(toDo)
+            }
+        ).then(function(response){
+            console.log("updateResponse:", response)
+            const statuscode = response.status
+            if(statuscode != 200){
+                return response.text()
+            }
+        }).catch(function(error){
+            console.log("error", error)
+        })
+    }) 
     
     document.querySelector("#login-page").addEventListener("submit", function(event){
 
@@ -137,6 +180,8 @@ function changeToPage(url){
         fetchBlogpost(blogId)
     }else if(url == "/create-blogpost"){
         document.getElementById("create-blogpost-page").classList.add("current-page")
+    }else if(url == "/toDoLists/delete"){
+        
     }else{
         document.getElementById("error-page").classList.add("current-page")
     }
