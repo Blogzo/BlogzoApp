@@ -49,7 +49,54 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.post("/toDoLists", authorization, function(request, response){
+    router.put("/toDoLists/:todoId", function(request, response){
+        const todo = request.body.todo
+        const todoId = request.params.todoId
+        console.log("todo", todo)
+        console.log("todoId", todoId)
+        const isLoggedIn = true
+        console.log("inside update todo")
+        toDoManager.updateTodo(todoId, todo, isLoggedIn, function(errors, newTodo){
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.status(401).end()
+                }
+                else if(!newTodo){
+                    response.status(404).end()
+                }
+                else{
+                    response.status(400).json(errors)
+                }
+            }else{
+                response.status(204).end()
+            }
+        })
+    })
+
+    router.get("/toDoLists/:todoId", function(request, response){
+        const todoId = request.params.todoId  
+        const isLoggedIn = true
+        toDoManager.getToDoId(todoId, isLoggedIn, function(errors, todo){
+            console.log("errorsInPL:", errors)
+            console.log("todoInPL:", todo)
+
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.status(401).end()
+                }
+            }else{
+                response.status(200).json(todo)
+            }
+        })
+    })
+
+    router.post("/toDoLists", function(request, response){
 
         const todo = request.body.todo
         toDoManager.createTodo(todo, function(errors, newTodo){
@@ -59,36 +106,21 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 }
                 else if(errors.inclues("Need to be logged in!")){
                     response.status(401).end()
+                }else{
+                    response.status(400).json(errors)
                 }
             }else{
+                response.setHeader("Location", "/toDoLists/"+newTodo)
                 response.status(201).end()
             }
         })
     })
 
-    router.delete("/toDoLists/deletePost", authorization, function(request, response){
-        const todo = request.body.todo
+    router.delete("/toDoLists/:todoId", function(request, response){
+        const todoId = request.params.todoId
         const isLoggedIn = true
-
-        toDoManager.deleteTodo(todo, isLoggedIn, function(errors, deletedToDo){
-            if(errors.length > 0){
-                if(errors.includes("databaseError")){
-                    response.status(500).end()
-                }
-                else if(errors.includes("Need to be logged in!")){
-                    response.status(401).end
-                }
-            }else{
-                response.status(200).end()
-            }
-        })
-    })
-
-    router.put("/toDoLists/updatePost", authorization, function(request, response){
-        const todo = request.body.todo
-        const isLoggedIn = true
-
-        toDoManager.updateTodo(todo, isLoggedIn, function(request, response){
+        console.log("todoId", todoId)
+        toDoManager.deleteTodo(todoId, isLoggedIn, function(errors, deletedToDo){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).end()
@@ -96,24 +128,18 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 else if(errors.includes("Need to be logged in!")){
                     response.status(401).end()
                 }
+                else if(!deletedToDo){
+                    response.status(404).end()
+                }
             }else{
-                response.status(200).end()
+                response.status(204).end()
             }
         })
     })
 
+
+
     //createAccount!
-    router.get("/create-account", function(request, response){
-        if(errors.includes("databaseError")){
-            response.status(500).end()
-        }
-        else if(!account){
-            response.status(404).end()
-        }
-        else{
-            response.status(200).end()
-        }
-    })
 
     router.post("/create-account", function(request, response){
         const email = request.body.email
@@ -160,12 +186,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     })
 
     //loginAccount
-    router.get("/login", function(request, response){
-        response.status(200).end()
-        response.render("login.hbs")
-
-    })
-
+   
     router.post("/login", function(request, response){
 
         const grantType = request.body.grant_type
@@ -274,39 +295,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                         response.status(200).json(model)
                     }
                 })
-            }
-        })
-    })
-
-    router.get("/blogposts/create", authorization, function(request, response){
-        response.status(200).end()
-    })
-
-    router.post("/blogposts/create", authorization, function(request, response, next){
-        const title = request.body.title
-        const content = request.body.content
-        const posted = request.body.posted
-        console.log("userid", userId)
-        const file = request.file.originalname
-
-        if(!file){
-            const error = new Error("please upload a file")
-            error.httpStatusCode = 400
-            return next(error)
-        }
-
-        blogManager.createBlogpost(title, content, posted, file, userId, function(errors, blogId){
-            console.log("errorInPL:", errors)
-            if(errors.length > 0){
-                if(errors.includes("databaseError")){
-                    response.status(500).end()
-                }
-                else if(errors.includes("Need to be logged in!")){
-                    response.status(401).end()
-                }
-            }else{
-                response.setHeader("Location", "/blogposts/"+blogId)
-                response.status(201).end()
             }
         })
     })

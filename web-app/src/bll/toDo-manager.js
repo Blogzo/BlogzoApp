@@ -36,6 +36,20 @@ module.exports = function({toDoRepository}){
             }
         },
 
+        getToDoId: function(todoId, isLoggedIn, callback){
+            console.log("todoIdInBLL", todoId)
+            const errors = this.getValidationErrors(0, isLoggedIn)
+            console.log("errrosInBLL:", errors)
+            if(errors.length > 0){
+                callback(errors, [])
+                return
+            }else{
+                toDoRepository.getToDoId(todoId, function(errors, todo){
+                    callback(errors, todo)
+                })
+            }   
+        },
+
         createTodo: function(newTodo, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
@@ -49,27 +63,29 @@ module.exports = function({toDoRepository}){
                 })
             }
         },
-        deleteToDo: function(deletedToDo, isLoggedIn, callback){
 
-            const errors = this.getValidationErrors(deletedToDo, isLoggedIn)
+        deleteTodo: function(todoId, isLoggedIn, callback){
+
+            const errors = this.getValidationErrors(0, isLoggedIn)
             if(errors.length > 0){
                 console.log("errorsDeleteBLL:", errors)
-                callback([], errors)
+                callback(errors, [])
             }else{
-                toDoRepository.deleteToDo(deletedToDo, function(errors, todo){
+                toDoRepository.deleteTodo(todoId, function(errors, todo){
                     callback(errors, todo)
                 })
             }
         },
-        updateTodo: function(updateTodo, isLoggedIn, callback){
+
+        updateTodo: function(todoId, updateTodo, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(updateTodo, isLoggedIn)
             if(errors.length > 0){
                 console.log("errorsUpdateBLL:", errors)
-                callback([], errors)
+                callback(errors, [])
             }else{
-                toDoRepository.updateTodo(updateTodo, function(todo, errors){
-                    callback(todo, errors)
+                toDoRepository.updateTodo(todoId, updateTodo, function(errors, todo){
+                    callback(errors, todo)
                 })
             }
         }

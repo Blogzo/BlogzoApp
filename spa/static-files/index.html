@@ -6,6 +6,7 @@
 	<title>BLOGZO</title>
 	<link rel="stylesheet" href="/styles.css">
 	<script src="/navigation-handler.js"></script>
+	<script src="/communicationBackend.js"></script>
 </head>
 <body>
 	
@@ -49,7 +50,29 @@
 			<ul>
 				
 			</ul>
-			<input type="submit" value="delete">
+		</div>
+
+		<div id="toDoList-page">
+			<h1>Todo</h1>
+			<ul>
+				<div>To do: <span class="toDo"></span></div>
+			</ul>
+			<form action="">
+				<input type="submit" value="Delete">
+				<button>Update</button>
+			</form>
+		</div>
+
+		<div id="update-todo-page">
+			<h1>Update todo</h1>
+			<form action="">
+				<ul>
+					<div>
+						New todo: <input type="text" class="newTodo">
+					</div>
+				</ul>
+				<input type="submit" value="Update">
+			</form>
 		</div>
 		
 		<div id="blogpost-page">
@@ -64,9 +87,8 @@
 		<div id="create-todo-page">
 			<h1>Create todo</h1>
 			<form action="">
-			<meta name="csrf-token" content="">
 				<div>
-					Todo: <input type="text" class="name">
+					Todo: <input type="text" class="todo">
 				</div>
 				<input type="submit" value="Create">
 			</form>
@@ -75,7 +97,6 @@
 		<div id="create-account-page">
 			<h1>Create account</h1>
 			<form action="">
-			<meta name="csrf-token" content="">
 
 				<div>
 					Username: <input type="text" class="username">
