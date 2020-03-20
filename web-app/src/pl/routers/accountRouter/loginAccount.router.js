@@ -31,7 +31,6 @@ module.exports = function({accountManager}){
 				response.redirect("/blogposts")
 			}
 		})
-		
 	})
 	return router 
 }

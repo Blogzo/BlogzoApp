@@ -92,7 +92,7 @@ app.use(expressSession({
 app.use(function(request, response, next){
 
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
-  //response.setHeader("Access-Control-Allow-Credentials", true)
+  response.setHeader("Access-Control-Allow-Credentials", true)
   response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
   response.setHeader("Access-Control-Allow-Headers", "*")
   response.setHeader("Access-Control-Expose-Headers", "*")
@@ -101,14 +101,14 @@ app.use(function(request, response, next){
 
 const maxSize = 700 * 500
 app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
-/*app.use(csrf({ cookie: true}))
+/* app.use(csrf({ cookie: true}))
 app.use(function(request, response, next){
   var token = request.csrfToken()
   response.locals.isLoggedIn = request.session.isLoggedIn
   response.locals.csrfToken = token
   next()
-})*/
-
+})
+ */
 app.use(function(error, request, response, next){
   
   if(error !== 'EBADCSRFTOKEN') return next(error)

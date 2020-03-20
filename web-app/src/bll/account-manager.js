@@ -37,7 +37,7 @@ module.exports = function({accountRepository}){
                 if(userPassword.length != ""){
                     if(bcrypt.compareSync(password, userPassword.dataValues.userPassword)){
                         console.log("password match")
-                        callback(errors, userPassword)
+                        callback([], userPassword)
                     }else{
                         console.log("password dont match")
                         const errors = []

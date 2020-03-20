@@ -45,12 +45,13 @@ document.addEventListener("DOMContentLoaded", function(){
                 body: JSON.stringify(user)
             }
         ).then(function(response){
-            if(response.status(200).end()){
-                console.log("createAccountResponse", response)
-                return response.json()
-                //Update view
+            console.log("createAccountResponse", response)
+            const statuscode = response.status
+            if(statuscode == 201){
+                const url = "/login"
+                changeToPage(url)
             }else{
-                //Display error
+                console.log(statuscode)
             }
         }).catch(function(error){
             console.log(error)
@@ -85,11 +86,7 @@ document.addEventListener("DOMContentLoaded", function(){
             }else{
                 //Display error
             }
-            console.log("response", response)
-            response.status(200).end()
-            console.log(response)
-            return response.json()
-            //Update view
+            
             
         }).catch(function(error){
             console.log(error)
@@ -100,15 +97,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
             event.preventDefault()
 
-            const toDos = document.querySelector("#toDoLists li")
-
             fetch(
                 "http://localhost:8080/restAPI/toDoLists/deletePost", {
-                    method: "POST",
+                    method: "DELETE",
                     headers: {
-                        "Content-type": "application/json"
-                    },
-                    body: JSON.stringify(toDos)
+                        "Content-type": "application/json",
+                        "Authorization": "Bearer "+localStorage.accessToken
+                        
+                    }
                 }
             ).then(function(response){
                 console.log("deleteResponse", response)
@@ -124,17 +120,15 @@ document.addEventListener("DOMContentLoaded", function(){
 
     document.querySelector("#toDoLists-page").addEventListener("submit", function(event){
         
-        const toDo = document.querySelector("toDoLists li")
-        
         event.preventDefault()
 
         fetch(
             "http:/localhost:8080/restAPI/toDoLists/updatePost", {
                 method: "PUT",
                 headers: {
-                    "Content-type": "Application/json"
-                },
-                body: JSON.stringify(toDo)
+                    "Content-type": "Application/json",
+                    "Authorization": "Bearer "+localStorage.accessToken
+                }
             }
         ).then(function(response){
             console.log("updateResponse:", response)
@@ -152,29 +146,37 @@ document.addEventListener("DOMContentLoaded", function(){
         event.preventDefault()
 
         const username = document.querySelector("#login-page .username").value
-        const userpassword = document.querySelector("#login-page .userPassword").value
+        const password = document.querySelector("#login-page .userPassword").value
 
+        const loginInfo = {
+            grant_type: "password",
+            Username: username,
+            userPassword: password
+        }
         fetch(
+            
             "http://localhost:8080/restAPI/login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
+                    "Content-Type": "application/json"
                 },
-                body: "grant_type=userPassword&username="+username+"&userPassword"+userpassword            
+                body: JSON.stringify(loginInfo)
+                
             }
         ).then(function(response){
             console.log("loginResponse", response)
             const statuscode = response.status
             if(statuscode == 200){
-                return response.text()
+                return response.json()
             }else{
-                //error
+                console.log(statuscode)
             }
         }).then(function(body){
             console.log("bodyResponse", body)
-            //Read out info about user account from id_token
-            login(body.access_token)
-            //console.log(accessToken)
+            
+            login(body.idToken)
+            const url = "/"
+            changeToPage(url)
 
         }).catch(function(error){
             console.log(error)
@@ -223,6 +225,8 @@ function changeToPage(url){
         fetchBlogpost(blogId)
     }else if(url == "/create-blogpost"){
         document.getElementById("create-blogpost-page").classList.add("current-page")
+    }else if(url == "/logout"){
+        logout()
     }else if(url == "toDoLists"){
         document.getElementById("toDoLists-page").classList.add("current-page")
     }else if(url == "/create-todo"){
@@ -234,9 +238,9 @@ function changeToPage(url){
     }
 }
 
-function login(accessToken){
+function login(idToken){
     
-    localStorage.accessToken = accessToken
+    localStorage.idToken = idToken
     document.body.classList.remove("isLoggedOut")
     document.body.classList.add("isLoggedIn")
 }
@@ -260,16 +264,18 @@ function fetchBlogpost(blogId){
         }else{
             return response.json()
         }
-    }).then(function(blogposts){
-        console.log("blogposts:", blogposts)
+    }).then(function(blogpost){
         const titleSpan = document.querySelector("#blogpost-page .title")
         const contentSpan = document.querySelector("#blogpost-page .content")
         const postedSpan = document.querySelector("#blogpost-page .posted")
         const imageSpan = document.querySelector("#blogpost-page .image")
-        titleSpan.innerText = blogposts.title
-        contentSpan.innerText = blogposts.content
-        postedSpan.innerText = blogposts.posted
-        imageSpan.innerText = blogposts.image
+        const user = document.querySelector('#blogpost-page .user')
+        titleSpan.innerText = blogpost.blogpost.title
+        contentSpan.innerText = blogpost.blogpost.content
+        postedSpan.innerText = blogpost.blogpost.posted
+        imageSpan.innerText = blogpost.blogpost.imageFile
+        user.innerText = blogpost.account.account.username
+
     }).catch(function(error){
         console.log("Fetch error", error)
     })
@@ -289,16 +295,16 @@ function fetchAllBlogposts(){
         }
     }).then(function(blogposts){
         console.log("blogposts:", blogposts)
-        const titleSpan = document.querySelector("#blogpost-page .title")
-        const contentSpan = document.querySelector("#blogpost-page .content")
-        const postedSpan = document.querySelector("#blogpost-page .posted")
-        const imageSpan = document.querySelector("#blogpost-page .image")
-        const user = document.querySelector('#blogpost-page .user')
-        titleSpan.innerText = blogpost.blogpost.title
-        contentSpan.innerText = blogpost.blogpost.content
-        postedSpan.innerText = blogpost.blogpost.posted
-        imageSpan.innerText = blogpost.blogpost.imageFile
-        user.innerText = blogpost.account.account.username
+        const u1 = document.querySelector("#blogposts-page ul")
+        u1.innerText = ""
+        for(const blogpost in blogposts){
+            const li = document.createElement("li")
+            const anchor = document.createElement("a")
+            anchor.innerText = blogposts[blogpost].title
+            anchor.setAttribute("href", '/blogposts/'+blogposts[blogpost].blogId)
+            li.appendChild(anchor)
+            u1.append(li)
+        }
     }).catch(function(error){
         console.log("Fetch error", error)
     })
@@ -316,15 +322,16 @@ function fetchAllToDoLists(){
         }else{
             return response.json()
         }                
-    }).then(function(toDolists){
-        console.log("Todo", toDolists)
+    }).then(function(toDoLists){
+        console.log("Todo", toDoLists)
         const ul = document.querySelector("#toDoLists-page ul")
         ul.innerText = ""
-        for(const toDo in toDolists){
+        for(const toDo in toDoLists){
             const li = document.createElement("li")
-            const p = document.createElement("p")
-            p.innerText = toDolists[toDo].toDo
-            li.appendChild(p)
+            const a = document.createElement("a")
+            a.innerText = toDoLists[toDo].toDo
+            a.setAttribute("href", '/toDoLists/'+toDoLists[toDo].todoId)
+            li.appendChild(a)
             ul.append(li)
         }
     }).catch(function(error){

@@ -36,6 +36,20 @@ module.exports = function({toDoRepository}){
             }
         },
 
+        getToDoById: function(todoId, isLoggedIn, callback){
+            
+            const errors = this.getValidationErrors(0, 0, isLoggedIn)
+            console.log("errrosInBLL:", errors)
+            if(errors.length > 0){
+                callback(errors, [])
+                return
+            }else{
+                blogRepository.getToDoBytId(blogId, function(errors, toDo){
+                    callback(errors, toDo)
+                })
+            }   
+        },
+
         createTodo: function(newTodo, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
@@ -54,7 +68,7 @@ module.exports = function({toDoRepository}){
             const errors = this.getValidationErrors(deletedToDo, isLoggedIn)
             if(errors.length > 0){
                 console.log("errorsDeleteBLL:", errors)
-                callback([], errors)
+                callback(errors, [])
             }else{
                 toDoRepository.deleteToDo(deletedToDo, function(errors, todo){
                     callback(errors, todo)
@@ -66,10 +80,10 @@ module.exports = function({toDoRepository}){
             const errors = this.getValidationErrors(updateTodo, isLoggedIn)
             if(errors.length > 0){
                 console.log("errorsUpdateBLL:", errors)
-                callback([], errors)
+                callback(errors, [])
             }else{
-                toDoRepository.updateTodo(updateTodo, function(todo, errors){
-                    callback(todo, errors)
+                toDoRepository.updateTodo(updateTodo, function(errors, todo){
+                    callback(errors, todo)
                 })
             }
         }

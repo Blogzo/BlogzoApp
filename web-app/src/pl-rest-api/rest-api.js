@@ -49,6 +49,35 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
+    router.get("/toDoLists/:todoId", function(request, response){
+        const todoId = request.params.todoId  
+        const isLoggedIn = true
+        toDoManager.getToDoById(todoId, isLoggedIn, function(errors, toDo){
+            console.log("errorsInPL:", errors)
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errrors.includes("Need to be logged in!")){
+                    response.status(401).end()
+                }
+            }else{
+                blogManager.getUsernameById(blogpost.userId, function(errors, toDo){
+                    if(errors.length > 0){
+                        if(errors.includes("databaseError")){
+                            response.status(500).end()
+                        }
+                    }else{
+                        const model = {
+                            toDo
+                        }
+                        response.status(200).json(model)
+                    }
+                })
+            }
+        })
+    })
+
     router.post("/toDoLists", authorization, function(request, response){
 
         const todo = request.body.todo
@@ -143,18 +172,18 @@ module.exports = function({accountManager, blogManager, toDoManager}){
 
                 const payload = {id: account.personId, "username": account.username, "password": account.userPassword}
                 console.log("Payload:", payload)
-                jwt.sign(payload, serverSecret).then(function(error, result){
+                jwt.sign(payload, serverSecret, function(error, result){
                     console.log("result", result)
                     if(error){
                         response.status(500).end()
                     }else{
                         //const idToken = jwt.sign({sub: account.userId, email: account.email, username: account.username},serverSecret)
                         response.status(201).json({
-                            access_token: result
+                            access_token: result,
+                            id_token: payload
                         })
                     }
-                })  
-
+                })
             }
         })  
     })
@@ -170,25 +199,19 @@ module.exports = function({accountManager, blogManager, toDoManager}){
 
         const grantType = request.body.grant_type
         const invalidRequest = request.body.invalid_request
-        const username = request.body.username
+        const username = request.body.Username
         const userPassword = request.body.userPassword
 
-
+        console.log("body", request.body)
+        console.log("Usernamen and password", username, userPassword)
         if(grantType != "password"){
             response.status(400).json({error: "unsupported_grant_type", error_description: "The authorization grant type is not supported by the authorization server."})
             return
         }
-        /*if(!token){ //ändra om detta till invalid grant
-            response.status(401).json({error: "invalid_client", error_description: "Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method)."})
-        }
 
-        if(!isLoggedIn){
-            response.status(401).json({error: "unauthorized_client", error_description: "The client is not authorized."})
-        }*/
-
-        accountManager.getUserPassword(username, userPassword, function(error, account){
-            if(error.length > 0){
-                if(error.includes("DatabaseError")){
+        accountManager.getUserPassword(username, userPassword, function(errors, account){
+            if(errors.length > 0){
+                if(errors.includes("DatabaseError")){
                     response.status(500).end()
                 }else{
 					const model = {
@@ -200,27 +223,21 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             else if(!account){
                 response.status(404).end()
             }else {
-                const payload = {id: account.personId, "username": username, "userPassword": password}
-                console.olog("loginPayload", payload)
+                const payload = {id: account.personId, "username": username, "password": userPassword}
+                console.log("loginPayload", payload)
                 // TODO: Better to use jwt.sign asynchronously.
-                jwt.sign(payload, serverSecret).then(function(error, result){
+                jwt.sign(payload, serverSecret, function(error, result){
                     console.log("result", result)
                     if(error){
-                        response.status(500).end()
+                        console.log(error)
+                        response.status(404).json({error: "invalid_grant"})
                     }else{
-                        const idToken = jwt.sign(
-                            {sub: 1, email: email, username: username},
-                            serverSecret
-                        )
-                        
                         response.status(200).json({
                             access_token: result,
-                            id_token: idToken
+                            id_token: payload
                         })
+                        console.log("access and id", result, idToken)
                     }
-                }).catch(function(error){
-                    console.log(error)
-                    response.status(404).json({error: "invalid_grant"})
                 })
             }
         })
@@ -280,35 +297,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
 
     router.get("/blogposts/create", authorization, function(request, response){
         response.status(200).end()
-    })
-
-    router.post("/blogposts/create", authorization, function(request, response, next){
-        const title = request.body.title
-        const content = request.body.content
-        const posted = request.body.posted
-        console.log("userid", userId)
-        const file = request.file.originalname
-
-        if(!file){
-            const error = new Error("please upload a file")
-            error.httpStatusCode = 400
-            return next(error)
-        }
-
-        blogManager.createBlogpost(title, content, posted, file, userId, function(errors, blogId){
-            console.log("errorInPL:", errors)
-            if(errors.length > 0){
-                if(errors.includes("databaseError")){
-                    response.status(500).end()
-                }
-                else if(errors.includes("Need to be logged in!")){
-                    response.status(401).end()
-                }
-            }else{
-                response.setHeader("Location", "/blogposts/"+blogId)
-                response.status(201).end()
-            }
-        })
     })
     return router
 }

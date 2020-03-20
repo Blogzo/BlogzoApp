@@ -14,6 +14,16 @@ module.exports = function({}){
             })
         },
 
+        getToDoById: function(todoId, callback){
+            toDos.toDo.findByPk(todoId).then(function(toDo){
+                console.log("toDoSEQ", toDo)
+                callback([], toDo)
+            }).catch(function(errors){
+                console.log(errors)
+                callback(errors, [])
+            })
+        },
+
         createTodo: function(todo, callback){
             toDos.toDo.create({toDo: todo}).then(function(newTodo){
                 console.log("newTodoSEQ:", newTodo)
@@ -24,8 +34,11 @@ module.exports = function({}){
             })
         },
 
-        deleteTodo: function(todo, callback){
-            toDos.toDo.destroy({toDo: todo}).then(function(deletedToDo){
+        deleteTodo: function(callback){
+            toDos.toDo.destroy({
+                where: {},
+                truncate: true
+            }).then(function(deletedToDo){
                 console.log("deleteToDoSEQ:", deletedToDo)
                 callback([], deletedToDo)
             }).catch(function(errors){
