@@ -66,6 +66,42 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
+    router.delete("/toDoLists/deletePost", authorization, function(request, response){
+        const todo = request.body.todo
+        const isLoggedIn = true
+
+        toDoManager.deleteTodo(todo, isLoggedIn, function(errors, deletedToDo){
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.status(401).end
+                }
+            }else{
+                response.status(200).end()
+            }
+        })
+    })
+
+    router.put("/toDoLists/updatePost", authorization, function(request, response){
+        const todo = request.body.todo
+        const isLoggedIn = true
+
+        toDoManager.updateTodo(todo, isLoggedIn, function(request, response){
+            if(errors.length > 0){
+                if(errors.includes("databaseError")){
+                    response.status(500).end()
+                }
+                else if(errors.includes("Need to be logged in!")){
+                    response.status(401).end()
+                }
+            }else{
+                response.status(200).end()
+            }
+        })
+    })
+
     //createAccount!
     router.get("/create-account", function(request, response){
         if(errors.includes("databaseError")){

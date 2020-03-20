@@ -32,6 +32,15 @@ module.exports = function({}){
                 console.log(errors)
                 callback(errors, [])
             })
+        },
+        updateTodo: function(todo, callback){
+            toDos.toDo.update({toDo: todo}).then(function(updateTodo){
+                console.log("updateToDoSEQ:", updateTodo)
+                callback([], updateTodo)
+            }).catch(function(errors){
+                console.log(errors)
+                callback(errors, [])
+            })
         }
     }
 }

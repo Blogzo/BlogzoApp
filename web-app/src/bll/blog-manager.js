@@ -45,7 +45,7 @@ module.exports = function({blogRepository}){
                 blogRepository.getBlogpostId(blogId, function(errors, blogpost){
                     callback(errors, blogpost)
                 })
-            }    
+            }   
         },
 
         getUsernameById: function(userId, callback){
