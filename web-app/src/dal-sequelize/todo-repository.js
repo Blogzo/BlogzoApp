@@ -14,16 +14,6 @@ module.exports = function({}){
             })
         },
 
-        getToDoById: function(todoId, callback){
-            toDos.toDo.findByPk(todoId).then(function(toDo){
-                console.log("toDoSEQ", toDo)
-                callback([], toDo)
-            }).catch(function(errors){
-                console.log(errors)
-                callback(errors, [])
-            })
-        },
-
         createTodo: function(todo, callback){
             toDos.toDo.create({toDo: todo}).then(function(newTodo){
                 console.log("newTodoSEQ:", newTodo)
@@ -34,10 +24,19 @@ module.exports = function({}){
             })
         },
 
-        deleteTodo: function(callback){
+        getToDoId: function(todoId, callback){
+            toDos.toDo.findByPk(todoId).then(function(todo){
+                console.log("todoListsSEQ:", todo)
+                callback([], todo)
+            }).catch(function(errors){
+                console.log(errors)
+                callback(errors, [])
+            })
+        },
+
+        deleteTodo: function(todoID, callback){
             toDos.toDo.destroy({
-                where: {},
-                truncate: true
+                where: { todoId: todoID }
             }).then(function(deletedToDo){
                 console.log("deleteToDoSEQ:", deletedToDo)
                 callback([], deletedToDo)
@@ -46,8 +45,9 @@ module.exports = function({}){
                 callback(errors, [])
             })
         },
-        updateTodo: function(todo, callback){
-            toDos.toDo.update({toDo: todo}).then(function(updateTodo){
+
+        updateTodo: function(todoID, newTodo, callback){
+            toDos.toDo.update({toDo: newTodo}, {where: {todoId: todoID}}).then(function(updateTodo){
                 console.log("updateToDoSEQ:", updateTodo)
                 callback([], updateTodo)
             }).catch(function(errors){

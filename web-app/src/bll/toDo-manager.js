@@ -36,16 +36,16 @@ module.exports = function({toDoRepository}){
             }
         },
 
-        getToDoById: function(todoId, isLoggedIn, callback){
-            
-            const errors = this.getValidationErrors(0, 0, isLoggedIn)
+        getToDoId: function(todoId, isLoggedIn, callback){
+            console.log("todoIdInBLL", todoId)
+            const errors = this.getValidationErrors(0, isLoggedIn)
             console.log("errrosInBLL:", errors)
             if(errors.length > 0){
                 callback(errors, [])
                 return
             }else{
-                blogRepository.getToDoBytId(blogId, function(errors, toDo){
-                    callback(errors, toDo)
+                toDoRepository.getToDoId(todoId, function(errors, todo){
+                    callback(errors, todo)
                 })
             }   
         },
@@ -63,26 +63,28 @@ module.exports = function({toDoRepository}){
                 })
             }
         },
-        deleteToDo: function(deletedToDo, isLoggedIn, callback){
 
-            const errors = this.getValidationErrors(deletedToDo, isLoggedIn)
+        deleteTodo: function(todoId, isLoggedIn, callback){
+
+            const errors = this.getValidationErrors(0, isLoggedIn)
             if(errors.length > 0){
                 console.log("errorsDeleteBLL:", errors)
                 callback(errors, [])
             }else{
-                toDoRepository.deleteToDo(deletedToDo, function(errors, todo){
+                toDoRepository.deleteTodo(todoId, function(errors, todo){
                     callback(errors, todo)
                 })
             }
         },
-        updateTodo: function(updateTodo, isLoggedIn, callback){
+
+        updateTodo: function(todoId, updateTodo, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(updateTodo, isLoggedIn)
             if(errors.length > 0){
                 console.log("errorsUpdateBLL:", errors)
                 callback(errors, [])
             }else{
-                toDoRepository.updateTodo(updateTodo, function(errors, todo){
+                toDoRepository.updateTodo(todoId, updateTodo, function(errors, todo){
                     callback(errors, todo)
                 })
             }

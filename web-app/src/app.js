@@ -107,8 +107,8 @@ app.use(function(request, response, next){
   response.locals.isLoggedIn = request.session.isLoggedIn
   response.locals.csrfToken = token
   next()
-})
- */
+}) */
+
 app.use(function(error, request, response, next){
   
   if(error !== 'EBADCSRFTOKEN') return next(error)
@@ -130,6 +130,8 @@ app.use("/logout", logoutRouter)
 app.use("/blogposts", theBlogRouter)
 app.use("/toDoLists", theToDoRouter)
 app.use("/restAPI", theRestAPI)
+
+
 
 app.get('/', function (request, response) {
     response.render("start.hbs")
