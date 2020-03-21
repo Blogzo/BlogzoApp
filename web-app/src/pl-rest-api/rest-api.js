@@ -7,29 +7,28 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     const router = express.Router()
     const serverSecret = "sdfkjdslkfjslkfd"
 
-
-
     var authorization = function(request, response, next){
         
         try{
 
             const authorizationHeader = request.get('authorization')
             const accessToken = authorizationHeader.substr("Bearer ".length)
+            console.log("accessToken", accessToken)
             
-            const payload = jwt.verify(accessToken, serverSecret, function(error, decoded){
+            jwt.verify(accessToken, serverSecret, function(error, decoded){
                 if(error){
+                    console.log("error", error)
                     response.status(401).end()
                 }else{
                     response.status(200).json(decoded)
+                    console.log("decoded", decoded)
                     next()
                 }
-            })
-            
+            }) 
         }catch(error){
-            response.status(400).end()
+            response.status(401).end()
             return
         }
-        
     }
 
     //ToDos!
@@ -40,7 +39,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 if(errors.includes("databaseErrors")){
                     response.status(500).end()
                 }
-                else if(errors.inclues("Needs to be logged in!")){
+                else if(errors.includes("Needs to be logged in!")){
                     response.status(401).end()   
                 }
             }else{
@@ -49,13 +48,10 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.put("/toDoLists/:todoId", function(request, response){
+    router.put("/toDoLists/:todoId", authorization, function(request, response){
         const todo = request.body.todo
         const todoId = request.params.todoId
-        console.log("todo", todo)
-        console.log("todoId", todoId)
         const isLoggedIn = true
-        console.log("inside update todo")
         toDoManager.updateTodo(todoId, todo, isLoggedIn, function(errors, newTodo){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -99,60 +95,12 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.post("/toDoLists", authorization, function(request, response){
 
         const todo = request.body.todo
-        const todoId = request.params.todoId
-        console.log("todo", todo)
-        console.log("todoId", todoId)
-        const isLoggedIn = true
-        console.log("inside update todo")
-        toDoManager.updateTodo(todoId, todo, isLoggedIn, function(errors, newTodo){
-            if(errors.length > 0){
-                if(errors.includes("databaseError")){
-                    response.status(500).end()
-                }
-                else if(errors.includes("Need to be logged in!")){
-                    response.status(401).end()
-                }
-                else if(!newTodo){
-                    response.status(404).end()
-                }
-                else{
-                    response.status(400).json(errors)
-                }
-            }else{
-                response.status(204).end()
-            }
-        })
-    })
-
-    router.get("/toDoLists/:todoId", function(request, response){
-        const todoId = request.params.todoId  
-        const isLoggedIn = true
-        toDoManager.getToDoId(todoId, isLoggedIn, function(errors, todo){
-            console.log("errorsInPL:", errors)
-            console.log("todoInPL:", todo)
-
-            if(errors.length > 0){
-                if(errors.includes("databaseError")){
-                    response.status(500).end()
-                }
-                else if(errors.includes("Need to be logged in!")){
-                    response.status(401).end()
-                }
-            }else{
-                response.status(200).json(todo)
-            }
-        })
-    })
-
-    router.post("/toDoLists", function(request, response){
-
-        const todo = request.body.todo
         toDoManager.createTodo(todo, function(errors, newTodo){
             if(errors.length > 0){
-                if (errors.inclues("databaseError")){
+                if (errors.includes("databaseError")){
                     response.status(500).end()
                 }
-                else if(errors.inclues("Need to be logged in!")){
+                else if(errors.includes("Need to be logged in!")){
                     response.status(401).end()
                 }else{
                     response.status(400).json(errors)
@@ -164,7 +112,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.delete("/toDoLists/:todoId", function(request, response){
+    router.delete("/toDoLists/:todoId", authorization, function(request, response){
         const todoId = request.params.todoId
         const isLoggedIn = true
         console.log("todoId", todoId)
@@ -201,7 +149,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             console.log("newAccountPL", account)
             
             if(errors.length > 0){
-                
                 if(errors.includes("databaseError")){
                     response.status(500).end()
                 }
@@ -222,10 +169,8 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     if(error){
                         response.status(500).end()
                     }else{
-                        //const idToken = jwt.sign({sub: account.userId, email: account.email, username: account.username},serverSecret)
                         response.status(201).json({
-                            access_token: result,
-                            id_token: payload
+                            access_token: result
                         })
                     }
                 })
@@ -238,7 +183,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.post("/login", function(request, response){
 
         const grantType = request.body.grant_type
-        const invalidRequest = request.body.invalid_request
+        //const invalidRequest = request.body.invalid_request
         const username = request.body.Username
         const userPassword = request.body.userPassword
 
@@ -274,19 +219,12 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     }else{
                         response.status(200).json({
                             access_token: result,
-                            id_token: payload
                         })
-                        console.log("access and id", result, idToken)
+                        console.log("accessToken", result)
                     }
                 })
             }
         })
-    })
-    //logout!
-    router.post("/logout", function(request, response){
-        localStorage.accessToken = ""
-        localStorage.idToken = ""
-        response.status(200).end()
     })
 
     //blogRouter!
@@ -305,7 +243,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.get("/blogposts/:blogId", function(request, response){
+    router.get("/blogposts/:blogId", authorization, function(request, response){
         const blogId = request.params.blogId  
         const isLoggedIn = true
         blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
@@ -314,7 +252,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 if(errors.includes("databaseError")){
                     response.status(500).end()
                 }
-                else if(errrors.includes("Need to be logged in!")){
+                else if(errors.includes("Need to be logged in!")){
                     response.status(401).end()
                 }
             }else{

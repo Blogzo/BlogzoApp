@@ -10,10 +10,10 @@ module.exports = function({toDoManager}){
         toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
+                    response.status(401).render("unauthorized.hbs")
                 }else{
                     console.log("toDOsInPL:", toDos)
                     const model = {
@@ -39,10 +39,10 @@ module.exports = function({toDoManager}){
         toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
+                    response.status(401).render("unauthorized.hbs")
                 }else{
                     const model = {
                         errors
@@ -64,10 +64,10 @@ module.exports = function({toDoManager}){
         toDoManager.deleteToDo(todo, isLoggedIn, function(errors, deletedToDo){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
+                    response.status(401).render("unauthorized.hbs")
                 }else{
                     const model = {
                         errors
@@ -88,10 +88,10 @@ module.exports = function({toDoManager}){
         toDoManager.updateTodo(todo, isLoggedIn, function(errors, updateTodo){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
+                    response.status(401).render("unauthorized.hbs")
                 }else{
                     const model = {
                         errors

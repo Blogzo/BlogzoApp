@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const email = document.querySelector("#create-account-page .email").value
         const userPassword = document.querySelector("#create-account-page .userPassword").value
         const userPassword2 = document.querySelector("#create-account-page .userPassword2").value
-        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        //const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
         const user = {
             username,
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "http://localhost:8080/restAPI/create-account", {
             method: "POST",
             headers: {
-                "CSRF-Token": token,
+                //"CSRF-Token": token,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(user)
@@ -34,9 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeToPage(url)
             }else{
                 console.log(statuscode)
+                const url = "/error-page"
+                changeToPage(url)
             }
         }).catch(function (error) {
             console.log(error)
+            const url = "/error-page"
+            changeToPage(url)
             //Update the view and display error
         })
     })
@@ -60,7 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify(newToDo)
         }
-        ).then(function (response) {
+        ).then(function(response) {
+            console.log("createTodoResponse:", response)
             const statusCode = response.status
             console.log(statusCode)
             if (statusCode == 201) {
@@ -69,6 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeToPage(url)
             }else {
                 console.log(statusCode)
+                const url = "/error-page"
+                changeToPage(url)
             }
 
         }).catch(function (error) {
@@ -77,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
             changeToPage(url)
         })
     })
-
 
     document.querySelector("#toDoList-page form").addEventListener("submit", function (event) {
         console.log("inside deleteTodo")
@@ -104,6 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeToPage(url)
             } else {
                 console.log(statuscode)
+                const url = "/error-page"
+                changeToPage(url)
             }
         }).catch(function (error) {
             console.log("error", error)
@@ -113,24 +121,28 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     document.querySelector("#update-todo-page form").addEventListener("submit", function (event) {
+        event.preventDefault()
         console.log("inside update todo")
         const todo = document.querySelector("#update-todo-page .newTodo").value
         const url = location.pathname
         const todoId = url.split("/")[2]
-    
-    
-        const newToDo = {
-            todo
+        console.log("accessToken", localStorage.accessToken)
+        var isLoggedIn = false
+        if(localStorage.accessToken != ""){
+            isLoggedIn = true
         }
-    
-        event.preventDefault()
-    
+
+        const newToDo = {
+            todo,
+            isLoggedIn
+        }    
     
         fetch(
             "http://localhost:8080/restAPI/toDoLists/" + todoId, {
             method: "PUT",
             headers: {
-                "Content-type": "Application/json"
+                "Content-type": "Application/json",
+                "Authorization": "Bearer " + localStorage.accessToken
             },
             body: JSON.stringify(newToDo)
         }
@@ -143,8 +155,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeToPage(url)
             } else {
                 console.log(statuscode)
+                const url = "/error-page"
+                changeToPage(url)
             }
-    
         }).catch(function (error) {
             console.log("error", error)
             const url = "/error-page"
@@ -181,11 +194,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json()
             }else{
                 console.log(statuscode)
+                const url = "/error-page"
+                changeToPage(url)
             }
         }).then(function(body){
             console.log("bodyResponse", body)
             
-            login(body.idToken)
+            login(body.access_token)
             const url = "/"
             changeToPage(url)
     
@@ -212,6 +227,9 @@ function fetchAllBlogposts() {
         const statuscode = response.status
         if (statuscode == 200) {
             return response.json()
+        }else{
+            const url = "/error-page"
+            changeToPage(url)
         }
     }).then(function (blogposts) {
         const ul = document.querySelector("#blogposts-page ul")
@@ -226,6 +244,8 @@ function fetchAllBlogposts() {
         }
     }).catch(function (error) {
         console.log(error)
+        const url = "/error-page"
+        changeToPage(url)
     })
 }
 
@@ -233,13 +253,15 @@ function fetchAllBlogposts() {
 function fetchBlogpost(blogId) {
 
     fetch(
-        "http://localhost:8080/restAPI/blogposts/" + blogId
+        "http://localhost:8080/restAPI/blogposts/"+blogId
     ).then(function (response) {
         const statuscode = response.status
         if (statuscode == 200) {
             return response.json()
         } else {
             //error
+            const url = "/error-page"
+            changeToPage(url)
         }
     }).then(function (blogpost) {
         const title = document.querySelector("#blogpost-page .title")
@@ -256,11 +278,14 @@ function fetchBlogpost(blogId) {
 
     }).catch(function (error) {
         console.log(error)
+        const url = "/error-page"
+        changeToPage(url)
     })
 }
 
 
 function fetchAllToDoLists() {
+    
 
     fetch(
         "http://localhost:8080/restAPI/toDoLists"
@@ -268,6 +293,10 @@ function fetchAllToDoLists() {
         const statuscode = response.status
         if (statuscode == 200) {
             return response.json()
+        }else{
+            console.log(statuscode)
+            const url = "/error-page"
+            changeToPage(url)
         }
     }).then(function (toDoLists) {
         console.log("toDoLists", toDoLists)
@@ -283,6 +312,8 @@ function fetchAllToDoLists() {
         }
     }).catch(function (error) {
         console.log(error)
+        const url = "/error-page"
+        changeToPage(url)
     })
 }
 
@@ -297,6 +328,8 @@ function fetchToDo(todoId) {
         } else {
             //error
             console.log(statuscode)
+            const url = "/error-page"
+            changeToPage(url)
         }
     }).then(function (todo) {
         console.log("todo:", todo)
@@ -304,6 +337,8 @@ function fetchToDo(todoId) {
         toDo.innerText = todo.toDo
     }).catch(function (error) {
         console.log(error)
+        const url = "/error-page"
+        changeToPage(url)
     })
 }
 

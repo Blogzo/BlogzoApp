@@ -80,7 +80,7 @@ function changeToPage(url){
 
 function login(idToken){
     
-    localStorage.idToken = idToken
+    localStorage.accessToken = idToken
     document.body.classList.remove("isLoggedOut")
     document.body.classList.add("isLoggedIn")
 }

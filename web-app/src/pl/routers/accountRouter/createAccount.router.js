@@ -21,16 +21,18 @@ module.exports = function({accountManager}){
             console.log("errorPL:", errors)
             console.log("newAccountPL", account)
 
-            if(errors.length > 0){
+            if(errors){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }
                 //check SequelizeUniqueConstraintError
                 else if(errors.includes("Username already exists!")){
                     uniqueError.push("Username already exists!")
                     errors = uniqueError
                     const model = {
-                        errors
+                        errors,
+                        username,
+                        email
                     }
                     response.render("create-account.hbs", model)
                 }
@@ -38,12 +40,16 @@ module.exports = function({accountManager}){
                     uniqueError.push("email must be unique!")
                     errors = uniqueError
                     const model = {
-                        errors
+                        errors,
+                        username,
+                        email
                     }
                     response.render("create-account.hbs", model)
                 }else{
                     const model = {
-                        errors
+                        errors,
+                        username,
+                        email
                     }
                     console.log("modelcreateAccount:", model)
                     response.render("create-account.hbs", model)

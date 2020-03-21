@@ -71,7 +71,7 @@ module.exports = function({accountRepository}){
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
             accountRepository.createAccount(username, email, hashedPassword, function(errors, account){
                 console.log("errorsInBLL:", errors)
-                if(errors.length > 0){
+                if(errors){
                     if(errors.errors[0].message.includes("username must be unique")){
                         console.log("Inside username must be unique!")
                         const uniqueUsernameError = []

@@ -9,7 +9,7 @@ module.exports = function({blogManager}){
         blogManager.getAllBlogposts(function(errors, blogposts){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }else{
                     const model = {
                         errors
@@ -43,10 +43,10 @@ module.exports = function({blogManager}){
             console.log("errorsInPL", errors)
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
+                    response.status(401).render("unauthorized.hbs")
                 }else{
                    
                     const model = {
@@ -91,13 +91,13 @@ module.exports = function({blogManager}){
             console.log("errorInPl:", errors)
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
                 }
                 else if(errors instanceof multer.MulterError){
                     response.send("<h1>To large file!</h1>")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
+                    response.status(401).render("unauthorized.hbs")
                 }else{
                  
                     const model = {

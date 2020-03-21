@@ -18,13 +18,17 @@ module.exports = function({accountManager}){
 
 			if(errors.length > 0){
 				if(errors.includes("databaseError")){
-					response.send("<h1>Something went wrong!</h1>")
+                    response.status(500).render("errors.hbs")
 				}else{
 					const model = {
-						errors: errors
+						errors: errors,
+						username
 					}
 					response.render("login.hbs", model)	
 				}
+			}
+			else if(!account){
+				response.status(404).render("notFound.hbs")
 			}else{
 				request.session.isLoggedIn = true
 				request.session.username = username
