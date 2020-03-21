@@ -72,12 +72,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("createTodoResponse:", response)
                 const url = "/toDolists"
                 changeToPage(url)
-            }else {
+            }else if(statuscode == 401){
+                const url = "/unauthorized-page"
+                changeToPage(url)
+            }else{
                 console.log(statusCode)
                 const url = "/error-page"
                 changeToPage(url)
             }
-
         }).catch(function (error) {
             console.log(error)
             const url = "/error-page"
@@ -91,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const url = location.pathname
         const todoId = url.split("/")[2]
-        console.log("todoId", todoId)
 
         fetch(
             "http://localhost:8080/restAPI/toDoLists/" + todoId, {
@@ -108,7 +109,10 @@ document.addEventListener("DOMContentLoaded", function () {
             if (statuscode == 204) {
                 const url = "/toDoLists"
                 changeToPage(url)
-            } else {
+            }else if(statuscode == 401){
+                const url = "/unauthorized-page"
+                changeToPage(url)
+            }else{
                 console.log(statuscode)
                 const url = "/error-page"
                 changeToPage(url)
@@ -126,15 +130,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const todo = document.querySelector("#update-todo-page .newTodo").value
         const url = location.pathname
         const todoId = url.split("/")[2]
-        console.log("accessToken", localStorage.accessToken)
-        var isLoggedIn = false
-        if(localStorage.accessToken != ""){
-            isLoggedIn = true
-        }
-
+        
         const newToDo = {
-            todo,
-            isLoggedIn
+            todo
         }    
     
         fetch(
@@ -153,7 +151,10 @@ document.addEventListener("DOMContentLoaded", function () {
             if (statuscode == 204) {
                 const url = "/toDoLists"
                 changeToPage(url)
-            } else {
+            }else if(statuscode == 401){
+                const url = "/unauthorized-page"
+                changeToPage(url)
+            }else {
                 console.log(statuscode)
                 const url = "/error-page"
                 changeToPage(url)
@@ -192,6 +193,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const statuscode = response.status
             if(statuscode == 200){
                 return response.json()
+            }else if(statuscode == 404){
+                console.log("usernmae to short or password do not match")
             }else{
                 console.log(statuscode)
                 const url = "/error-page"
@@ -206,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
         }).catch(function(error){
             console.log(error)
-    
+            
         })
     })
     
@@ -220,12 +223,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function fetchAllBlogposts() {
-
+    console.log("inside fetch")
+    
     fetch(
         "http://localhost:8080/restAPI/blogposts"
-    ).then(function (response) {
+    ).then(function(response){
         const statuscode = response.status
-        if (statuscode == 200) {
+        if(statuscode == 200){
             return response.json()
         }else{
             const url = "/error-page"
@@ -253,14 +257,18 @@ function fetchAllBlogposts() {
 function fetchBlogpost(blogId) {
 
     fetch(
-        "http://localhost:8080/restAPI/blogposts/"+blogId
-    ).then(function (response) {
+        "http://localhost:8080/restAPI/blogposts/"+blogId, {
+            headers: {
+                "Authorization": "Bearer " + localStorage.accessToken
+            }
+        }
+    ).then(function(response){
         const statuscode = response.status
+        console.log(statuscode)
         if (statuscode == 200) {
             return response.json()
-        } else {
-            //error
-            const url = "/error-page"
+        }else if(statuscode == 401){
+            const url = "/unauthorized-page"
             changeToPage(url)
         }
     }).then(function (blogpost) {
@@ -286,19 +294,26 @@ function fetchBlogpost(blogId) {
 
 function fetchAllToDoLists() {
     
-
+    console.log("accesstoken", localStorage.accessToken)
     fetch(
-        "http://localhost:8080/restAPI/toDoLists"
-    ).then(function (response) {
+        "http://localhost:8080/restAPI/toDoLists", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.accessToken
+            }
+        }
+    ).then(function(response){
         const statuscode = response.status
-        if (statuscode == 200) {
+        console.log(statuscode)
+        if (statuscode == 200){
             return response.json()
+        }else if(statuscode == 401){
+            const url = "/unauthorized-page"
+            changeToPage(url)
         }else{
-            console.log(statuscode)
             const url = "/error-page"
             changeToPage(url)
         }
-    }).then(function (toDoLists) {
+    }).then(function(toDoLists){
         console.log("toDoLists", toDoLists)
         const ul = document.querySelector("#toDoLists-page ul")
         ul.innerText = ""
@@ -320,12 +335,20 @@ function fetchAllToDoLists() {
 function fetchToDo(todoId) {
 
     fetch(
-        "http://localhost:8080/restAPI/toDoLists/" + todoId
+        "http://localhost:8080/restAPI/toDoLists/" + todoId, {
+            headers: {
+                "Authorization": "Bearer " + localStorage.accessToken
+            }
+        }
     ).then(function (response) {
         const statuscode = response.status
+        console.log(statuscode)
         if (statuscode == 200) {
             return response.json()
-        } else {
+        }else if(statuscode == 401){
+            const url = "/unauthorized-page"
+            changeToPage(url)
+        }else {
             //error
             console.log(statuscode)
             const url = "/error-page"

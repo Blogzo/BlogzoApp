@@ -30,7 +30,7 @@ module.exports = function({blogRepository}){
 
             blogRepository.getBlogposts(function(errors, blogposts){
                 console.log("blogpostsinBLL:", blogposts)
-                callback([errors], blogposts)
+                callback(errors, blogposts)
             })
         },
 

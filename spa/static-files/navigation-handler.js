@@ -71,10 +71,10 @@ function changeToPage(url){
         logout()
     }else if(url == "/create-todo"){
         document.getElementById("create-todo-page").classList.add("current-page")
-    }else if(url == "/toDoLists/delete"){
-        
-    }else{
+    }else if(url == "/error-page"){
         document.getElementById("error-page").classList.add("current-page")
+    }else if(url == "/unauthorized-page"){
+        document.getElementById("unauthorized-page").classList.add("current-page")
     }
 }
 

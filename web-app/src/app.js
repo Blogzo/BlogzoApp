@@ -101,6 +101,13 @@ app.use(function(request, response, next){
 
 const maxSize = 700 * 500
 app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
+app.use(csrf({ cookie: true}))
+app.use(function(request, response, next){
+  var token = request.csrfToken()
+  response.locals.isLoggedIn = request.session.isLoggedIn
+  response.locals.csrfToken = token
+  next()
+}) 
 
 app.use(function(error, request, response, next){
   
@@ -123,14 +130,6 @@ app.use("/logout", logoutRouter)
 app.use("/blogposts", theBlogRouter)
 app.use("/toDoLists", theToDoRouter)
 app.use("/restAPI", theRestAPI)
-
-app.use(csrf({ cookie: true}))
-app.use(function(request, response, next){
-  var token = request.csrfToken()
-  response.locals.isLoggedIn = request.session.isLoggedIn
-  response.locals.csrfToken = token
-  next()
-}) 
 
 app.get('/', function (request, response) {
     response.render("start.hbs")

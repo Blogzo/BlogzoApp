@@ -38,6 +38,8 @@ module.exports = function({blogManager}){
     
         const blogId = request.params.blogId
         const isLoggedIn = request.session.isLoggedIn
+        console.log(isLoggedIn)
+        
         console.log("loggedin", isLoggedIn)
         blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
             console.log("errorsInPL", errors)
@@ -55,7 +57,6 @@ module.exports = function({blogManager}){
                     response.render("blogpost.hbs", model)   
                 }
             }else{
-                console.log("errorsWithTheFuckingShit:", errors)
                 blogManager.getUsernameById(blogpost.userId, function(errors, username){
                     console.log("errorsWithTheFuckingShit:", errors)
                     const model = {

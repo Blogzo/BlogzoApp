@@ -17,11 +17,11 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             
             jwt.verify(accessToken, serverSecret, function(error, decoded){
                 if(error){
+                    console.log("decoded", decoded)
+                    
                     console.log("error", error)
                     response.status(401).end()
                 }else{
-                    response.status(200).json(decoded)
-                    console.log("decoded", decoded)
                     next()
                 }
             }) 
@@ -32,7 +32,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     }
 
     //ToDos!
-    router.get("/toDoLists", function(requst, response){
+    router.get("/toDoLists", authorization, function(request, response){
         const isLoggedIn = true
         toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
             if(errors.length > 0){
@@ -40,6 +40,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(500).end()
                 }
                 else if(errors.includes("Needs to be logged in!")){
+                    console.log("inside need to be logged in")
                     response.status(401).end()   
                 }
             }else{
@@ -72,7 +73,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.get("/toDoLists/:todoId", function(request, response){
+    router.get("/toDoLists/:todoId", authorization, function(request, response){
         const todoId = request.params.todoId  
         const isLoggedIn = true
         toDoManager.getToDoId(todoId, isLoggedIn, function(errors, todo){
@@ -153,6 +154,8 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(500).end()
                 }
                 else if(errors.includes("email must be unique!")){
+                    response.status(400).end()
+                }else if(errors.includes("username must be unique!")){
                     response.status(400).end()
                 }else{
                     const model = {
