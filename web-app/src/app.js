@@ -85,7 +85,6 @@ app.use(expressSession({
   store: new redisStore({ client: redisClient})
 }))
 
-
 app.use(function(request, response, next){
 
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
@@ -99,7 +98,6 @@ app.use(function(request, response, next){
 const maxSize = 700 * 500
 app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
 
-
 app.use(function(error, request, response, next){
   
   if(error !== 'EBADCSRFTOKEN') return next(error)
@@ -112,7 +110,6 @@ app.engine("hbs", expressHandlebars({
   extname: 'hbs',
   layoutsDir: path.join(__dirname, '/pl/layouts')
 }))
-
 
 app.use("/restAPI", theRestAPI)
 

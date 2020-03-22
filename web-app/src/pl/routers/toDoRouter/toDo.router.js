@@ -31,7 +31,6 @@ module.exports = function({toDoManager}){
         })
     })
 
-
     router.post("/", function(request, response){
     
         const todo = request.body.todo

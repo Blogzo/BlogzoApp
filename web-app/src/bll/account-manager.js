@@ -10,7 +10,6 @@ module.exports = function({accountRepository}){
             const errors = []
             var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-
             if(username.length < 5){
                 errors.push("Username to short!")
             }

@@ -27,7 +27,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         }
     }
 
-    //ToDos!
     router.get("/toDoLists/:userId", authorization, function(request, response){
         
         const isLoggedIn = true
@@ -53,7 +52,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const todo = request.body.todo
         const todoId = request.params.todoId
         const isLoggedIn = true
-        
         
         toDoManager.updateTodo(todoId, todo, isLoggedIn, function(errors, newTodo){
             
@@ -142,10 +140,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-
-
-    //createAccount!
-
     router.post("/create-account", function(request, response){
         
         const email = request.body.email
@@ -169,9 +163,9 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(400).json({ errors })
                 }
             }else{
-
                 const payload = {userId: account.personId, "username": account.username, "password": account.userPassword}
                 jwt.sign(payload, serverSecret, function(error, result){
+                    
                     if(error){
                         response.status(500).end()
                     }else{
@@ -183,8 +177,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             }
         })  
     })
-
-    //loginAccount
    
     router.post("/login", function(request, response){
 
@@ -214,6 +206,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             }else {
                 const payload = {userId: account.personId, "username": username, "password": userPassword}
                 jwt.sign(payload, serverSecret, function(error, result){
+                    
                     if(error){
                         response.status(404).json({error: "invalid_grant"})
                     }else{
@@ -226,8 +219,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             }
         })
     })
-
-    //blogRouter!
 
     router.get("/blogposts", function(request, response){
         
