@@ -22,7 +22,7 @@ module.exports = function({accountManager}){
             console.log("errorPL:", errors)
             console.log("newAccountPL", account)
 
-            if(errors.length > 0){
+            if(errors){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
                 }
@@ -37,8 +37,18 @@ module.exports = function({accountManager}){
                     }
                     response.render("create-account.hbs", model)
                 }
-                else if(errors.includes("email must be unique!")){
-                    uniqueError.push("email must be unique!")
+                else if(errors.includes("Email already exists!")){
+                    uniqueError.push("Email already exists!")
+                    errors = uniqueError
+                    const model = {
+                        errors,
+                        username,
+                        email
+                    }
+                    response.render("create-account.hbs", model)
+                }
+                else if(errors.includes("Password do not match!")){
+                    uniqueError.push("Password do not match!")
                     errors = uniqueError
                     const model = {
                         errors,
@@ -52,8 +62,8 @@ module.exports = function({accountManager}){
                         username,
                         email
                     }
-                    console.log("modelcreateAccount:", {model})
-                    response.render("create-account.hbs", {model})
+                    console.log("modelcreateAccount:", model)
+                    response.render("create-account.hbs", model)
                 }
             }else{
                 request.session.userId = account.dataValues.personId

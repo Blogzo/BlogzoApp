@@ -61,8 +61,7 @@ module.exports = function({toDoRepository}){
             if(errors.length > 0){
                 callback(errors, [])
                 return
-            }
-            if(isLoggedIn){
+            }else{
                 toDoRepository.createTodo(newTodo, function(errors, todo){
                     callback(errors, todo)
                 })
@@ -76,6 +75,7 @@ module.exports = function({toDoRepository}){
             if(errors.length > 0){
                 console.log("errorsDeleteBLL:", errors)
                 callback(errors, [])
+                return
             }else{
                 toDoRepository.deleteTodo(todoId, function(errors, todo){
                     callback(errors, todo)

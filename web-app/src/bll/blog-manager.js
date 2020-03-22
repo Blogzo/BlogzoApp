@@ -41,7 +41,7 @@ module.exports = function({blogRepository}){
             console.log("errrosInBLL:", errors)
             
             if(errors.length > 0){
-                callback(errors, [])
+                callback(errors)
                 return
             }else{
                 blogRepository.getBlogpostId(blogId, function(errors, blogpost){
@@ -62,7 +62,7 @@ module.exports = function({blogRepository}){
             const errors = this.getValidationErrors(title, content, isLoggedIn)
             
             if(errors.length > 0){
-                callback(errors, [])
+                callback(errors)
                 return
             }else{
                 blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){

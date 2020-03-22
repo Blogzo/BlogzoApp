@@ -60,7 +60,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         
         toDoManager.updateTodo(todoId, todo, isLoggedIn, function(errors, newTodo){
             
-            if(errors.length > 0){
+            if(errors){
                 if(errors.includes("databaseError")){
                     response.status(500).end()
                 }
@@ -71,7 +71,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(404).end()
                 }
                 else{
-                    response.status(400).json(errors)
+                    response.status(400).json({ errors })
                 }
             }else{
                 response.status(204).end()
@@ -104,10 +104,11 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.post("/toDoLists", authorization, function(request, response){
 
         const todo = request.body.todo
+        console.log("inside post todolist")
         
         toDoManager.createTodo(todo, function(errors, newTodo){
             
-            if(errors.length > 0){
+            if(errors){
                 if (errors.includes("databaseError")){
                     response.status(500).end()
                 }
@@ -117,6 +118,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(400).json(errors)
                 }
             }else{
+                console.log("inside 201")
                 response.setHeader("Location", "/toDoLists/"+newTodo)
                 response.status(201).end()
             }
@@ -163,19 +165,18 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             console.log("errorPL:", errors)
             console.log("newAccountPL", account)
             
-            if(errors.length > 0){
-                if(errors.includes("databaseError")){
+            if(errors){
+                if(errors.includes('databaseError')){
                     response.status(500).end()
                 }
-                else if(errors.includes("email must be unique!")){
-                    response.status(400).end()
-                }else if(errors.includes("username must be unique!")){
-                    response.status(400).end()
-                }else{
-                    const model = {
-                        errors
-                    }
-                    response.status(400).json(model)
+                else if(errors.includes('email must be unique!')){
+                    response.status(400).json({ errors })
+                }
+                else if(errors.includes('Username already exists!')){
+                    response.status(400).json({ errors })
+                }
+                else if(errors.includes('Password do not match!')){
+                    response.status(400).json({ errors })
                 }
             }else{
 
@@ -202,8 +203,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const grantType = request.body.grant_type
         const username = request.body.Username
         const userPassword = request.body.userPassword
-        console.log("body", request.body)
-        console.log("Usernamen and password", username, userPassword)
         
         if(grantType != "password"){
             response.status(400).json({error: "unsupported_grant_type", error_description: "The authorization grant type is not supported by the authorization server."})
@@ -211,16 +210,17 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         }
 
         accountManager.getUserPassword(username, userPassword, function(errors, account){
-            
-            if(errors.length > 0){
-                if(errors.includes("DatabaseError")){
+            console.log("errorLoginRestAPI", errors)
+            if(errors){
+                if(errors.includes('DatabaseError')){
                     response.status(500).end()
-                }else{
-					const model = {
-						errors: errors
-					}
-					response.status(404).json(model)	
-				}
+                }
+                else if(errors.includes('Username do not exists')){
+                    response.status(400).json({ errors })
+                }
+                else if(errors.includes('Wrong password')){
+                    response.status(400).json({ errors })
+                }
             }
             else if(!account){
                 response.status(404).end()

@@ -66,7 +66,7 @@ function changeToPage(url){
         document.getElementById("toDoList-page").classList.add("current-page")
         const todoId = url.split("/")[2]
         fetchToDo(todoId)
-    }else if(url == "toDoLists"){
+    }else if(url == "/toDoLists"){
         document.getElementById("toDoLists-page").classList.add("current-page")
     }else if(url == "/logout"){
         logout()

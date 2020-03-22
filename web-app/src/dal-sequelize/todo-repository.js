@@ -21,7 +21,7 @@ module.exports = function({}){
                 console.log("newTodoSEQ:", newTodo)
                 callback([], newTodo)
             }).catch(function(errors){
-                console.log(errors)
+                console.log("errorsSEQ", errors)
                 callback(errors, [])
             })
         },

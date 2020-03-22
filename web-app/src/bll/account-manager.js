@@ -27,21 +27,21 @@ module.exports = function({accountRepository}){
                 console.log("errorsInBLL:", errors)
                 console.log("userpasswordBLL:", userPassword)
 
-                if(userPassword.length != ""){
+                if(userPassword){
                     if(bcrypt.compareSync(password, userPassword.dataValues.userPassword)){
                         console.log("password match")
-                        callback([], userPassword)
+                        callback(null, userPassword)
                     }else{
-                        console.log("password dont match")
+                        console.log("Password do not match")
                         const errors = []
-                        errors.push("Wrong password!")
-                        callback(errors, [])
+                        errors.push("Wrong password")
+                        callback(errors)
                         return
                     }
                 }else{
                     const errors = []
-                    errors.push("Username do not exists!")
-                    callback(errors, [])
+                    errors.push("Username do not exists")
+                    callback(errors)
                 }
             })
         },
@@ -51,7 +51,7 @@ module.exports = function({accountRepository}){
             const errors = this.getValidationErrors(username, userPassword, userPassword2)
            
             if(errors.length > 0){
-                callback(errors, [])
+                callback(errors)
                 return
             }
             
@@ -60,23 +60,27 @@ module.exports = function({accountRepository}){
             
             accountRepository.createAccount(username, email, hashedPassword, function(errors, account){
                 console.log("errorsInBLL:", errors)
-                if(errors.length > 0){
+                if(errors){
                     if(errors.errors[0].message.includes("username must be unique")){
                         console.log("Inside username must be unique!")
                         const uniqueUsernameError = []
                         uniqueUsernameError.push("Username already exists!")
-                        callback(uniqueUsernameError, [])
+                        callback(uniqueUsernameError)
                         return
                     }
                     if(errors.errors[0].message.includes("email must be unique")){
                         console.log("Inside email must be unique!")
                         const uniqueEmailError = []
                         uniqueEmailError.push("Email already exists!")
-                        callback(uniqueEmailError, [])
+                        callback(uniqueEmailError)
                         return
+                    }else{
+                        const databaseError = []
+                        databaseError.push("databaseError")
+                        callback(databaseError)
                     }
                 }else{
-                    callback([], account)
+                    callback(null, account)
                 }
             })
         }

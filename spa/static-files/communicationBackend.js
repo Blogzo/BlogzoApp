@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-
+    
+    //error handling done
     document.querySelector("#create-account-page form").addEventListener("submit", function (event) {
 
         event.preventDefault()
@@ -28,14 +29,23 @@ document.addEventListener("DOMContentLoaded", function () {
         ).then(function(response){
             console.log("createAccountResponse", response)
             const statuscode = response.status
+            console.log(statuscode)
+            
             if(statuscode == 201){
                 const url = "/login"
                 changeToPage(url)
+            }else if(statuscode == 400){
+                return response.json()
             }else{
-                console.log(statuscode)
                 const url = "/error-page"
                 changeToPage(url)
             }
+        }).then(function(model) {
+            console.log("model", model);
+            const error = document.querySelector("#create-account-page p")
+            error.innerText = model.errors 
+
+        
         }).catch(function (error) {
             console.log(error)
             const url = "/error-page"
@@ -69,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const statusCode = response.status
             console.log(statusCode)
             if (statusCode == 201) {
-                console.log("createTodoResponse:", response)
                 const url = "/toDolists"
                 changeToPage(url)
             }else if(statuscode == 401){
@@ -167,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
             changeToPage(url)
         })
     })
-
+    //error handling done
     document.querySelector("#login-page form").addEventListener("submit", function (event) {
 
         event.preventDefault()
@@ -188,15 +197,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(loginInfo)
-                
             }
         ).then(function(response){
             console.log("loginResponse", response)
             const statuscode = response.status
             if(statuscode == 200){
                 return response.json()
-            }else if(statuscode == 404){
-                console.log("usernmae to short or password do not match")
+            }
+            else if(statuscode == 400){
+                return response.json()
+            }
+            else if(statuscode == 404){
+                console.log("Can not find account")
+                const error = document.querySelector("#login-page p")
+                error.innerText = "Can not find that account!"
             }else{
                 console.log(statuscode)
                 const url = "/error-page"
@@ -204,20 +218,23 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }).then(function(body){
             console.log("bodyResponse", body)
-            
-            login(body.access_token)
-            const url = "/"
-            changeToPage(url)
-    
+            if(body.errors){
+                const error = document.querySelector("#login-page p")
+                error.innerText = body.errors
+            }else{
+                login(body.access_token)
+                const url = "/"
+                changeToPage(url)
+            }
         }).catch(function(error){
             console.log(error)
-            
+            const url = "/error-page"
+            changeToPage(url)
         })
     })
     
     document.querySelector("#toDoList-page form button").addEventListener("click", function (event) {
         
-        console.log("Inside button click")
         event.preventDefault()
         const url = "/update-todo"
         changeToPage(url)
@@ -226,9 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function fetchAllBlogposts() {
-    
-    console.log("inside fetch")
-    
+        
     fetch(
         "http://localhost:8080/restAPI/blogposts"
     ).then(function(response){
