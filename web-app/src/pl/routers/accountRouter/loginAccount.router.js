@@ -16,9 +16,9 @@ module.exports = function({accountManager}){
 		
 		accountManager.getUserPassword(username, userPassword, function(errors, account){
 
-			if(errors.length > 0){
+			if(errors){
 				if(errors.includes("databaseError")){
-                    response.status(500).render("errors.hbs")
+                    response.status(500).render("error500.hbs")
 				}else{
 					const model = {
 						errors: errors,

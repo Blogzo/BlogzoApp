@@ -24,7 +24,7 @@ module.exports = function({accountManager}){
 
             if(errors){
                 if(errors.includes("databaseError")){
-                    response.status(500).render("errors.hbs")
+                    response.status(500).render("error500.hbs")
                 }
                 //check SequelizeUniqueConstraintError
                 else if(errors.includes("Username already exists!")){

@@ -9,7 +9,7 @@ module.exports = function({blogManager}){
         blogManager.getAllBlogposts(function(errors, blogposts){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.status(500).render("errors.hbs")
+                    response.status(500).render("error500.hbs")
                 }else{
                     const model = {
                         errors
@@ -45,11 +45,15 @@ module.exports = function({blogManager}){
             console.log("errorsInPL", errors)
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.status(500).render("errors.hbs")
+                    response.status(500).render("error500.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.status(401).render("unauthorized.hbs")
-                }else{
+                    response.status(401).render("unauthorized401.hbs")
+                }
+                else if(!blogpost){
+                    response.status(404).render("notFound.hbs")
+                }
+                else{
                    
                     const model = {
                         errors
@@ -58,14 +62,12 @@ module.exports = function({blogManager}){
                 }
             }else{
                 blogManager.getUsernameById(blogpost.userId, function(errors, username){
-                    console.log("errorsWithTheFuckingShit:", errors)
                     const model = {
                         blogpost,
                         errors,
                         username
                     }
                     console.log("blogpostModel:", model)
-                    console.log("UsernameBlogpost",  model.username.account.dataValues.username)
                     response.render("blogpost.hbs", model)
                 })    
             }
@@ -92,15 +94,12 @@ module.exports = function({blogManager}){
             
             console.log("errorInPl:", errors)
             
-            if(errors.length > 0){
+            if(errors){
                 if(errors.includes("databaseError")){
-                    response.render("errors.hbs")
-                }
-                else if(errors instanceof multer.MulterError){
-                    response.send("<h1>To large file!</h1>")
+                    response.status(500).render("error500.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.render("unauthorized.hbs")
+                    response.status(401).render("unauthorized401.hbs")
                 }else{
                     const model = {
                         errors

@@ -13,7 +13,7 @@ module.exports = function({toDoManager}){
                     response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.status(401).render("unauthorized.hbs")
+                    response.status(401).render("unauthorized401.hbs")
                 }else{
                     console.log("toDOsInPL:", toDos)
                     const model = {
@@ -43,7 +43,7 @@ module.exports = function({toDoManager}){
                     response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.status(401).render("unauthorized.hbs")
+                    response.status(401).render("unauthorized401.hbs")
                 }else{
                     const model = {
                         errors
@@ -69,7 +69,7 @@ module.exports = function({toDoManager}){
                     response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.status(401).render("unauthorized.hbs")
+                    response.status(401).render("unauthorized401.hbs")
                 }else{
                     const model = {
                         errors
@@ -94,7 +94,7 @@ module.exports = function({toDoManager}){
                     response.status(500).render("errors.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.status(401).render("unauthorized.hbs")
+                    response.status(401).render("unauthorized401.hbs")
                 }else{
                     const model = {
                         errors
