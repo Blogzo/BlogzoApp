@@ -66,7 +66,7 @@ function changeToPage(url){
         document.getElementById("toDoList-page").classList.add("current-page")
         const todoId = url.split("/")[2]
         fetchToDo(todoId)
-    }else if(url == "toDoLists"){
+    }else if(url == "/toDoLists"){
         document.getElementById("toDoLists-page").classList.add("current-page")
     }else if(url == "/logout"){
         logout()
@@ -79,9 +79,8 @@ function changeToPage(url){
     }
 }
 
-function login(idToken){
-    
-    localStorage.accessToken = idToken
+function login(access_token){
+    localStorage.accessToken = access_token
     document.body.classList.remove("isLoggedOut")
     document.body.classList.add("isLoggedIn")
 }

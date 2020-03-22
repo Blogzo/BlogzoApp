@@ -9,21 +9,17 @@ module.exports = function({}){
             toDos.toDo.findAll({
                 where: {userId: UserId}
             }).then(function(getAllToDos){
-                console.log("allTodosSEQ:", getAllToDos)
                 callback([], getAllToDos)
             }).catch(function(errors){
-                console.log("ErrorInSEQ",errors)
                 callback(errors, [])
             })
         },
 
-        createTodo: function(todo, callback){
+        createTodo: function(UserId, todo, callback){
             
-            toDos.toDo.create({toDo: todo}).then(function(newTodo){
-                console.log("newTodoSEQ:", newTodo)
-                callback([], newTodo)
+            toDos.toDo.create({toDo: todo, userId: UserId}).then(function(newTodo){
+                callback(null, newTodo)
             }).catch(function(errors){
-                console.log(errors)
                 callback(errors, [])
             })
         },
@@ -31,10 +27,8 @@ module.exports = function({}){
         getToDoId: function(todoId, callback){
             
             toDos.toDo.findByPk(todoId).then(function(todo){
-                console.log("todoListsSEQ:", todo)
                 callback([], todo)
             }).catch(function(errors){
-                console.log(errors)
                 callback(errors, [])
             })
         },
@@ -44,10 +38,8 @@ module.exports = function({}){
             toDos.toDo.destroy({
                 where: { todoId: todoID }
             }).then(function(deletedToDo){
-                console.log("deleteToDoSEQ:", deletedToDo)
                 callback([], deletedToDo)
             }).catch(function(errors){
-                console.log(errors)
                 callback(errors, [])
             })
         },
@@ -55,10 +47,8 @@ module.exports = function({}){
         updateTodo: function(todoID, newTodo, callback){
             
             toDos.toDo.update({toDo: newTodo}, {where: {todoId: todoID}}).then(function(updateTodo){
-                console.log("updateToDoSEQ:", updateTodo)
                 callback([], updateTodo)
             }).catch(function(errors){
-                console.log(errors)
                 callback(errors, [])
             })
         }

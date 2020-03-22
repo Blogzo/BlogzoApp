@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-
+    
+    //error handling done
     document.querySelector("#create-account-page form").addEventListener("submit", function (event) {
 
         event.preventDefault()
@@ -20,41 +21,41 @@ document.addEventListener("DOMContentLoaded", function () {
             "http://localhost:8080/restAPI/create-account", {
             method: "POST",
             headers: {
-                //"CSRF-Token": token,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(user)
         }
         ).then(function(response){
-            console.log("createAccountResponse", response)
-            const statuscode = response.status
-            if(statuscode == 201){
-                const url = "/login"
-                changeToPage(url)
+            const statusCode = response.status
+            if(statusCode == 201){
+                return response.json()
+            }else if(statuscode == 400){
+                window.location.replace("/error-page")
             }else{
-                console.log(statuscode)
                 const url = "/error-page"
                 changeToPage(url)
             }
-        }).catch(function (error) {
-            console.log(error)
+        }).then(function(model) {
+            const url = "/login"
+            changeToPage(url)
+        }).catch(function(errors) {
             const url = "/error-page"
             changeToPage(url)
-            //Update the view and display error
+            
         })
     })
 
     document.querySelector("#create-todo-page form").addEventListener("submit", function (event) {
         
-        console.log("inside createtodo")
         event.preventDefault()
 
         const todo = document.querySelector("#create-todo-page .todo").value
-
+        const userId = localStorage.userId
         const newToDo = {
-            todo
+            todo,
+            userId   
         }
-
+        
         fetch(
             "http://localhost:8080/restAPI/toDoLists", {
             method: "POST",
@@ -65,23 +66,18 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify(newToDo)
         }
         ).then(function(response) {
-            console.log("createTodoResponse:", response)
             const statusCode = response.status
-            console.log(statusCode)
             if (statusCode == 201) {
-                console.log("createTodoResponse:", response)
                 const url = "/toDolists"
                 changeToPage(url)
-            }else if(statuscode == 401){
+            }else if(statusCode == 401){
                 const url = "/unauthorized-page"
                 changeToPage(url)
             }else{
-                console.log(statusCode)
                 const url = "/error-page"
                 changeToPage(url)
             }
         }).catch(function (error) {
-            console.log(error)
             const url = "/error-page"
             changeToPage(url)
         })
@@ -89,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelector("#toDoList-page form").addEventListener("submit", function (event) {
         
-        console.log("inside deleteTodo")
         event.preventDefault()
 
         const url = location.pathname
@@ -104,9 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         ).then(function (response) {
-            console.log("deleteResponse", response)
             const statuscode = response.status
-            console.log("statuscode", statuscode)
             if (statuscode == 204) {
                 const url = "/toDoLists"
                 changeToPage(url)
@@ -114,12 +107,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 const url = "/unauthorized-page"
                 changeToPage(url)
             }else{
-                console.log(statuscode)
                 const url = "/error-page"
                 changeToPage(url)
             }
         }).catch(function (error) {
-            console.log("error", error)
             const url = "/error-page"
             changeToPage(url)
         })
@@ -128,7 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#update-todo-page form").addEventListener("submit", function (event) {
         
         event.preventDefault()
-        console.log("inside update todo")
         const todo = document.querySelector("#update-todo-page .newTodo").value
         const url = location.pathname
         const todoId = url.split("/")[2]
@@ -138,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }    
     
         fetch(
-            "http://localhost:8080/restAPI/toDoLists/" + todoId, {
+            "http://localhost:8080/restAPI/toDoLists/" + localStorage.userId + "/" + todoId, {
             method: "PUT",
             headers: {
                 "Content-type": "Application/json",
@@ -147,9 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify(newToDo)
         }
         ).then(function (response) {
-            console.log("updateResponse:", response)
             const statuscode = response.status
-            console.log("statuscode", statuscode)
             if (statuscode == 204) {
                 const url = "/toDoLists"
                 changeToPage(url)
@@ -157,17 +145,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 const url = "/unauthorized-page"
                 changeToPage(url)
             }else {
-                console.log(statuscode)
                 const url = "/error-page"
                 changeToPage(url)
             }
         }).catch(function (error) {
-            console.log("error", error)
             const url = "/error-page"
             changeToPage(url)
         })
     })
-
+    //error handling done
     document.querySelector("#login-page form").addEventListener("submit", function (event) {
 
         event.preventDefault()
@@ -188,36 +174,40 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(loginInfo)
-                
             }
         ).then(function(response){
-            console.log("loginResponse", response)
             const statuscode = response.status
             if(statuscode == 200){
                 return response.json()
-            }else if(statuscode == 404){
-                console.log("usernmae to short or password do not match")
+            }
+            else if(statuscode == 400){
+                return response.json()
+            }
+            else if(statuscode == 404){
+                const error = document.querySelector("#login-page p")
+                error.innerText = "Can not find that account!"
             }else{
-                console.log(statuscode)
                 const url = "/error-page"
                 changeToPage(url)
             }
         }).then(function(body){
-            console.log("bodyResponse", body)
-            
-            login(body.access_token)
-            const url = "/"
-            changeToPage(url)
-    
+            if(body.errors){
+                const error = document.querySelector("#login-page p")
+                error.innerText = body.errors
+            }else{
+                login(body.access_token)
+                localStorage.userId = body.id_token.userId
+                const url = "/"
+                changeToPage(url)
+            }
         }).catch(function(error){
-            console.log(error)
-            
+            const url = "/error-page"
+            changeToPage(url)
         })
     })
     
     document.querySelector("#toDoList-page form button").addEventListener("click", function (event) {
         
-        console.log("Inside button click")
         event.preventDefault()
         const url = "/update-todo"
         changeToPage(url)
@@ -226,9 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function fetchAllBlogposts() {
-    
-    console.log("inside fetch")
-    
+        
     fetch(
         "http://localhost:8080/restAPI/blogposts"
     ).then(function(response){
@@ -251,7 +239,6 @@ function fetchAllBlogposts() {
             ul.append(li)
         }
     }).catch(function (error) {
-        console.log(error)
         const url = "/error-page"
         changeToPage(url)
     })
@@ -268,7 +255,6 @@ function fetchBlogpost(blogId) {
         }
     ).then(function(response){
         const statuscode = response.status
-        console.log(statuscode)
         if (statuscode == 200) {
             return response.json()
         }else if(statuscode == 401){
@@ -289,7 +275,6 @@ function fetchBlogpost(blogId) {
         user.innerText = blogpost.account.account.username
 
     }).catch(function (error) {
-        console.log(error)
         const url = "/error-page"
         changeToPage(url)
     })
@@ -298,17 +283,14 @@ function fetchBlogpost(blogId) {
 
 function fetchAllToDoLists() {
     
-    console.log("accesstoken", localStorage.accessToken)
-    
     fetch(
-        "http://localhost:8080/restAPI/toDoLists", {
+        "http://localhost:8080/restAPI/toDoLists/" + localStorage.userId, {
             headers: {
                 "Authorization": "Bearer " + localStorage.accessToken
             }
         }
     ).then(function(response){
         const statuscode = response.status
-        console.log(statuscode)
         if (statuscode == 200){
             return response.json()
         }else if(statuscode == 401){
@@ -319,7 +301,6 @@ function fetchAllToDoLists() {
             changeToPage(url)
         }
     }).then(function(toDoLists){
-        console.log("toDoLists", toDoLists)
         const ul = document.querySelector("#toDoLists-page ul")
         ul.innerText = ""
         for (const toDo in toDoLists) {
@@ -331,7 +312,6 @@ function fetchAllToDoLists() {
             ul.append(li)
         }
     }).catch(function (error) {
-        console.log(error)
         const url = "/error-page"
         changeToPage(url)
     })
@@ -340,31 +320,27 @@ function fetchAllToDoLists() {
 function fetchToDo(todoId) {
 
     fetch(
-        "http://localhost:8080/restAPI/toDoLists/" + todoId, {
+        "http://localhost:8080/restAPI/toDoLists/" + localStorage.userId + "/" + todoId, {
             headers: {
                 "Authorization": "Bearer " + localStorage.accessToken
             }
         }
     ).then(function (response) {
         const statuscode = response.status
-        console.log(statuscode)
         if (statuscode == 200) {
             return response.json()
         }else if(statuscode == 401){
             const url = "/unauthorized-page"
             changeToPage(url)
         }else {
-            //error
-            console.log(statuscode)
             const url = "/error-page"
             changeToPage(url)
         }
     }).then(function (todo) {
-        console.log("todo:", todo)
+
         const toDo = document.querySelector("#toDoList-page .toDo")
         toDo.innerText = todo.toDo
     }).catch(function (error) {
-        console.log(error)
         const url = "/error-page"
         changeToPage(url)
     })

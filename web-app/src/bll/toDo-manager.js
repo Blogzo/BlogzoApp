@@ -28,11 +28,11 @@ module.exports = function({toDoRepository}){
             const errors = this.getValidationErrors(0, isLoggedIn)
             
             if(errors.length > 0){
-                console.log("errortodoBLL:", errors)
                 callback(errors, [])
                 return
             }else{
                 toDoRepository.getAllToDos(userId, function(errors, toDos){
+                    
                     callback(errors, toDos)
                 })
             }
@@ -40,30 +40,29 @@ module.exports = function({toDoRepository}){
 
         getToDoId: function(todoId, isLoggedIn, callback){
             
-            console.log("todoIdInBLL", todoId)
             const errors = this.getValidationErrors(0, isLoggedIn)
-            console.log("errrosInBLL:", errors)
             
             if(errors.length > 0){
                 callback(errors, [])
                 return
             }else{
                 toDoRepository.getToDoId(todoId, function(errors, todo){
+                   
                     callback(errors, todo)
                 })
             }   
         },
 
-        createTodo: function(newTodo, isLoggedIn, callback){
+        createTodo: function(userId, newTodo, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])
                 return
-            }
-            if(isLoggedIn){
-                toDoRepository.createTodo(newTodo, userId, function(errors, todo){
+            }else{
+                toDoRepository.createTodo(userId, newTodo, function(errors, todo){
+                    
                     callback(errors, todo)
                 })
             }
@@ -74,10 +73,11 @@ module.exports = function({toDoRepository}){
             const errors = this.getValidationErrors(0, isLoggedIn)
             
             if(errors.length > 0){
-                console.log("errorsDeleteBLL:", errors)
                 callback(errors, [])
+                return
             }else{
                 toDoRepository.deleteTodo(todoId, function(errors, todo){
+                    
                     callback(errors, todo)
                 })
             }
@@ -88,10 +88,10 @@ module.exports = function({toDoRepository}){
             const errors = this.getValidationErrors(updateTodo, isLoggedIn)
             
             if(errors.length > 0){
-                console.log("errorsUpdateBLL:", errors)
                 callback(errors, [])
             }else{
                 toDoRepository.updateTodo(todoId, updateTodo, function(errors, todo){
+                    
                     callback(errors, todo)
                 })
             }

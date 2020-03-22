@@ -16,7 +16,7 @@ module.exports = function({accountManager}){
 		
 		accountManager.getUserPassword(username, userPassword, function(errors, account){
 
-			if(errors.length > 0){
+			if(errors){
 				if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
 				}else{
@@ -32,6 +32,7 @@ module.exports = function({accountManager}){
 			}else{
 				request.session.isLoggedIn = true
 				request.session.username = username
+				request.session.userId = account.dataValues.personId
 				response.redirect("/blogposts")
 			}
 		})
