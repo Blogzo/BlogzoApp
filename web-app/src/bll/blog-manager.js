@@ -4,6 +4,7 @@ module.exports = function({blogRepository}){
     return {
 
         getValidationErrors: function(title, content, isLoggedIn){
+            
             const errors = []
 
             if(title.length < 5){
@@ -38,6 +39,7 @@ module.exports = function({blogRepository}){
             
             const errors = this.getValidationErrors(0, 0, isLoggedIn)
             console.log("errrosInBLL:", errors)
+            
             if(errors.length > 0){
                 callback(errors, [])
                 return
@@ -58,12 +60,13 @@ module.exports = function({blogRepository}){
         createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(title, content, isLoggedIn)
+            
             if(errors.length > 0){
                 callback(errors, [])
                 return
             }else{
                 blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
-                    console.log("errorsBLL", errors)
+                    console.log("errorsBLL:", errors)
                     callback(errors, blogpost)
                 })
             }    

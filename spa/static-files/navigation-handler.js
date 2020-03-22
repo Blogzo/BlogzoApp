@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	}
 	
 	document.body.addEventListener("click", function(event){
-		if(event.target.tagName == "A"){
+        
+        if(event.target.tagName == "A"){
 			event.preventDefault()
 			const url = event.target.getAttribute("href")
 			goToPage(url)
@@ -22,24 +23,24 @@ document.addEventListener("DOMContentLoaded", function(){
 })
 
 window.addEventListener("popstate", function(event){
-	const url = location.pathname
+    
+    const url = location.pathname
 	changeToPage(url)
 })
 
 function goToPage(url){
-	changeToPage(url)
+    
+    changeToPage(url)
 	history.pushState({}, "", url)
-	
 }
 
 function changeToPage(url){
 
     const currentPageDiv = document.getElementsByClassName("current-page")[0]
+    
     if(currentPageDiv){
         currentPageDiv.classList.remove("current-page")
     }
-
-    //put into array 
 
     if(url == "/"){
         document.getElementById("home-page").classList.add("current-page")

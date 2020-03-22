@@ -24,7 +24,9 @@ module.exports = function({toDoRepository}){
         },
 
         getAllToDos: function(isLoggedIn, callback){
+            
             const errors = this.getValidationErrors(0, isLoggedIn)
+            
             if(errors.length > 0){
                 console.log("errortodoBLL:", errors)
                 callback(errors, [])
@@ -37,9 +39,11 @@ module.exports = function({toDoRepository}){
         },
 
         getToDoId: function(todoId, isLoggedIn, callback){
+            
             console.log("todoIdInBLL", todoId)
             const errors = this.getValidationErrors(0, isLoggedIn)
             console.log("errrosInBLL:", errors)
+            
             if(errors.length > 0){
                 callback(errors, [])
                 return
@@ -53,6 +57,7 @@ module.exports = function({toDoRepository}){
         createTodo: function(newTodo, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
+            
             if(errors.length > 0){
                 callback(errors, [])
                 return
@@ -67,6 +72,7 @@ module.exports = function({toDoRepository}){
         deleteTodo: function(todoId, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(0, isLoggedIn)
+            
             if(errors.length > 0){
                 console.log("errorsDeleteBLL:", errors)
                 callback(errors, [])
@@ -80,6 +86,7 @@ module.exports = function({toDoRepository}){
         updateTodo: function(todoId, updateTodo, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(updateTodo, isLoggedIn)
+            
             if(errors.length > 0){
                 console.log("errorsUpdateBLL:", errors)
                 callback(errors, [])

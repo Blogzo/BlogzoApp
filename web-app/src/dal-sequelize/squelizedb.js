@@ -2,7 +2,8 @@ const Sequelize = require('sequelize')
 const { DATABASE_NAME, USERNAME, ROOT, PASSWORD, PORT, HOST, DIALECT } = require('./constants')
 
 const sequelize = new Sequelize({
-    database: DATABASE_NAME,
+    
+  database: DATABASE_NAME,
     root: ROOT,
     password: PASSWORD,
     host: HOST,
@@ -18,7 +19,8 @@ const sequelize = new Sequelize({
 })
 
 function connection(sqlizeObj, isConnected){
-    if(!isConnected){
+    
+  if(!isConnected){
       setTimeout(function(){
         sqlizeObj.authenticate().then(()=>{
           sqlizeObj.sync()

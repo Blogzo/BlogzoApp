@@ -5,6 +5,7 @@ module.exports = function({}){
     return {
 
         getAllToDos: function(callback){
+            
             toDos.toDo.findAll().then(function(getAllToDos){
                 console.log("allTodosSEQ:", getAllToDos)
                 callback([], getAllToDos)
@@ -15,6 +16,7 @@ module.exports = function({}){
         },
 
         createTodo: function(todo, callback){
+            
             toDos.toDo.create({toDo: todo}).then(function(newTodo){
                 console.log("newTodoSEQ:", newTodo)
                 callback([], newTodo)
@@ -25,6 +27,7 @@ module.exports = function({}){
         },
 
         getToDoId: function(todoId, callback){
+            
             toDos.toDo.findByPk(todoId).then(function(todo){
                 console.log("todoListsSEQ:", todo)
                 callback([], todo)
@@ -35,6 +38,7 @@ module.exports = function({}){
         },
 
         deleteTodo: function(todoID, callback){
+            
             toDos.toDo.destroy({
                 where: { todoId: todoID }
             }).then(function(deletedToDo){
@@ -47,6 +51,7 @@ module.exports = function({}){
         },
 
         updateTodo: function(todoID, newTodo, callback){
+            
             toDos.toDo.update({toDo: newTodo}, {where: {todoId: todoID}}).then(function(updateTodo){
                 console.log("updateToDoSEQ:", updateTodo)
                 callback([], updateTodo)

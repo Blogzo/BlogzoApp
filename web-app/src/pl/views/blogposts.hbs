@@ -21,7 +21,6 @@
                 </form>  
                 {{/if}}
             </ul>
-
         </div>
     </div>
 </nav>
@@ -34,14 +33,14 @@
 {{#if blogposts.length}}
     {{#each blogposts}}
     <div class="container card mb-4 border">
-    <img class="card-img-top" src="/blogpost-img/{{dataValues.imageFile}}" width="750" height="600" alt="Image not found">
-    <div class="card-body">
-        <h2 class="card-title">{{dataValues.title}}</h2>
-        <a href="/blogposts/{{dataValues.blogId}}" class="btn btn-primary">Read more &rarr;</a>
-    </div>
-    <div class="card-footer text-muted">
-        Posted on {{dataValues.posted}}, by {{account.dataValues.username}} 
-    </div>
+        <img class="card-img-top" src="/blogpost-img/{{imageFile}}" width="750" height="600" alt="Image not found">
+        <div class="card-body">
+            <h2 class="card-title">{{title}}</h2>
+            <a href="/blogposts/{{blogId}}" class="btn btn-primary">Read more &rarr;</a>
+        </div>
+        <div class="card-footer text-muted">
+            Posted on {{posted}}, by {{account.username}} 
+        </div>
     </div>
     {{/each}}
 {{/if}}

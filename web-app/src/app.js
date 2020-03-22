@@ -7,7 +7,6 @@ const cookieParser = require('cookie-parser')
 const redis = require('redis')
 const csrf = require('csurf')
 const awilix = require('awilix')  
-//const cors = require('cors')
 
 const redisClient = redis.createClient({host: 'session-database'})
 const redisStore = require('connect-redis')(expressSession)
@@ -66,12 +65,10 @@ var storage = multer.diskStorage({
 app.set('views', path.join(__dirname+"/pl", "views"))
 
 redisClient.on("error", function(error){
-
   console.log("Redis error:", error)
 })
 
 redisClient.on("end", function(){
-
   console.log("Redis connection closed")
 })
 
@@ -87,7 +84,7 @@ app.use(expressSession({
   resave: false,
   store: new redisStore({ client: redisClient})
 }))
-//app.use(cors())
+
 
 app.use(function(request, response, next){
 
@@ -101,13 +98,7 @@ app.use(function(request, response, next){
 
 const maxSize = 700 * 500
 app.use(multer({ storage: storage, limits: { fileSize: maxSize } }).single('imageFile'))
-app.use(csrf({ cookie: true}))
-app.use(function(request, response, next){
-  var token = request.csrfToken()
-  response.locals.isLoggedIn = request.session.isLoggedIn
-  response.locals.csrfToken = token
-  next()
-}) 
+
 
 app.use(function(error, request, response, next){
   
@@ -122,6 +113,17 @@ app.engine("hbs", expressHandlebars({
   layoutsDir: path.join(__dirname, '/pl/layouts')
 }))
 
+
+app.use("/restAPI", theRestAPI)
+
+app.use(csrf({ cookie: true}))
+app.use(function(request, response, next){
+  var token = request.csrfToken()
+  response.locals.isLoggedIn = request.session.isLoggedIn
+  response.locals.csrfToken = token
+  next()
+}) 
+
 app.use(express.static(__dirname + '/pl/public'))
 app.use(express.static(__dirname + '/uploaded-img'))
 app.use("/create-account", theCreateAccountRouter)
@@ -129,7 +131,6 @@ app.use("/login", theLoginRouter)
 app.use("/logout", logoutRouter)
 app.use("/blogposts", theBlogRouter)
 app.use("/toDoLists", theToDoRouter)
-app.use("/restAPI", theRestAPI)
 
 app.get('/', function (request, response) {
     response.render("start.hbs")

@@ -79,7 +79,7 @@ module.exports = function({blogManager}){
         const content = request.body.content
         const posted = request.body.posted
         const userId = request.session.userId
-        console.log("userid", userId)
+        console.log("useridBefore", userId)
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
         if(!file){
@@ -89,18 +89,19 @@ module.exports = function({blogManager}){
         }
        
         blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
+            
             console.log("errorInPl:", errors)
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
-                    response.status(500).render("errors.hbs")
+                    response.render("errors.hbs")
                 }
                 else if(errors instanceof multer.MulterError){
                     response.send("<h1>To large file!</h1>")
                 }
                 else if(errors.includes("Need to be logged in!")){
-                    response.status(401).render("unauthorized.hbs")
+                    response.render("unauthorized.hbs")
                 }else{
-                 
                     const model = {
                         errors
                     }

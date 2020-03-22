@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const email = document.querySelector("#create-account-page .email").value
         const userPassword = document.querySelector("#create-account-page .userPassword").value
         const userPassword2 = document.querySelector("#create-account-page .userPassword2").value
-        //const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
         const user = {
             username,
@@ -46,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     document.querySelector("#create-todo-page form").addEventListener("submit", function (event) {
+        
         console.log("inside createtodo")
         event.preventDefault()
 
@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     document.querySelector("#toDoList-page form").addEventListener("submit", function (event) {
+        
         console.log("inside deleteTodo")
         event.preventDefault()
 
@@ -125,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     document.querySelector("#update-todo-page form").addEventListener("submit", function (event) {
+        
         event.preventDefault()
         console.log("inside update todo")
         const todo = document.querySelector("#update-todo-page .newTodo").value
@@ -214,6 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     
     document.querySelector("#toDoList-page form button").addEventListener("click", function (event) {
+        
         console.log("Inside button click")
         event.preventDefault()
         const url = "/update-todo"
@@ -223,6 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function fetchAllBlogposts() {
+    
     console.log("inside fetch")
     
     fetch(
@@ -295,6 +299,7 @@ function fetchBlogpost(blogId) {
 function fetchAllToDoLists() {
     
     console.log("accesstoken", localStorage.accessToken)
+    
     fetch(
         "http://localhost:8080/restAPI/toDoLists", {
             headers: {

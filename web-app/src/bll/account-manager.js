@@ -21,13 +21,6 @@ module.exports = function({accountRepository}){
             return errors
         },
 
-        getAccountById: function(personId){
-
-            accountRepository.getAccountById(personId, function(errors, account){
-                callback(errors, account)
-            })
-        },
-
         getUserPassword: function(username, password, callback){
 
             accountRepository.getUserPassword(username, function(errors, userPassword){
@@ -53,22 +46,18 @@ module.exports = function({accountRepository}){
             })
         },
 
-        getAccount: function(username, userPassword, callback){
-
-            accountRepository.getAccount(username, userPassword, function(errors, account){
-                callback(errors, account)
-            })
-        },
-
         createAccount: function(username, email, userPassword, userPassword2, callback){
 
             const errors = this.getValidationErrors(username, userPassword, userPassword2)
+           
             if(errors.length > 0){
                 callback(errors, [])
                 return
             }
+            
             const saltrounds = 10
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
+            
             accountRepository.createAccount(username, email, hashedPassword, function(errors, account){
                 console.log("errorsInBLL:", errors)
                 if(errors.length > 0){

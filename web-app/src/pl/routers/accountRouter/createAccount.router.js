@@ -18,6 +18,7 @@ module.exports = function({accountManager}){
         const userPassword2 = request.body.userPassword2
            
         accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, account){
+            
             console.log("errorPL:", errors)
             console.log("newAccountPL", account)
 
@@ -51,8 +52,8 @@ module.exports = function({accountManager}){
                         username,
                         email
                     }
-                    console.log("modelcreateAccount:", model)
-                    response.render("create-account.hbs", model)
+                    console.log("modelcreateAccount:", {model})
+                    response.render("create-account.hbs", {model})
                 }
             }else{
                 request.session.userId = account.dataValues.personId

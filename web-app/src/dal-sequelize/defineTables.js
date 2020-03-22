@@ -2,6 +2,7 @@ const sequelize = require('./squelizedb')
 const Sequelize = require('sequelize')
 
 const Blogpost = sequelize.define('blogposts', {
+    
     blogId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -17,10 +18,12 @@ const Blogpost = sequelize.define('blogposts', {
 })
 
 Blogpost.sync().then(() => {
+    
     console.log("Blogposts table created!")
 })
 
 const Account = sequelize.define('accounts', {
+    
     personId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -43,10 +46,12 @@ const Account = sequelize.define('accounts', {
 })
 
 Account.sync().then(() => {
+    
     console.log("Accounts table created!")
 })
 
 const toDo = sequelize.define('toDoLists', {
+    
     todoId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -59,6 +64,7 @@ const toDo = sequelize.define('toDoLists', {
 })
 
 toDo.sync().then(() => {
+    
     console.log("toDoLists table created!")
 })
 

@@ -9,6 +9,7 @@ module.exports = function({}){
             const query = "INSERT INTO accounts (username, email, userPassword) VALUES (?, ?, ?)"
             const values = [username, email, userPassword]
             console.log("values:", values)
+            
             db.query(query, values, function(errors, results){
                 if(errors){
                     callback(["databaseError"], null)
@@ -17,22 +18,6 @@ module.exports = function({}){
                 }
             })
         },
-
-        getAccount: function(username, userPassword, callback){
-
-            const query = "SELECT * FROM accounts WHERE username = ? AND userPassword = ?"
-            const values = [username, userPassword]
-        
-            db.query(query, values, function(errors, account){
-        
-                if(errors){
-                    callback(["databaseError"], null)
-                }else{
-                    callback([], account)
-                }
-            })
-        },
-
 
         getUserPassword: function(username, callback){
 
@@ -45,19 +30,6 @@ module.exports = function({}){
                     callback(["databaseError"], null)
                 }else{
                     callback([], userPassword)
-                }
-            })
-        },
-
-        getAccountById: function(id){
-
-            const query = "SELECT * FROM accounts WHERE id = ?"
-            const value = [id]
-            db.query(query, value, function(errors, account){
-                if(errors){
-                    callback(["databaseError"], null)
-                }else{
-                    callback([], account)
                 }
             })
         }

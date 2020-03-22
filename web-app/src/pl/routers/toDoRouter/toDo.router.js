@@ -36,6 +36,7 @@ module.exports = function({toDoManager}){
     
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
+        
         toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -58,6 +59,7 @@ module.exports = function({toDoManager}){
     })
 
     router.post("/deletePost", function(request, response){
+        
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
 
@@ -82,6 +84,7 @@ module.exports = function({toDoManager}){
     })
 
     router.post("updatePost", function(request, response){
+        
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
 

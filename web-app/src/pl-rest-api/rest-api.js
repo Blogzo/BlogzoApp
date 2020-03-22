@@ -33,8 +33,11 @@ module.exports = function({accountManager, blogManager, toDoManager}){
 
     //ToDos!
     router.get("/toDoLists", authorization, function(request, response){
+        
         const isLoggedIn = true
+        
         toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
+            
             if(errors.length > 0){
                 if(errors.includes("databaseErrors")){
                     response.status(500).end()
@@ -50,10 +53,13 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     })
 
     router.put("/toDoLists/:todoId", authorization, function(request, response){
+        
         const todo = request.body.todo
         const todoId = request.params.todoId
         const isLoggedIn = true
+        
         toDoManager.updateTodo(todoId, todo, isLoggedIn, function(errors, newTodo){
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).end()
@@ -74,8 +80,10 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     })
 
     router.get("/toDoLists/:todoId", authorization, function(request, response){
+        
         const todoId = request.params.todoId  
         const isLoggedIn = true
+        
         toDoManager.getToDoId(todoId, isLoggedIn, function(errors, todo){
             console.log("errorsInPL:", errors)
             console.log("todoInPL:", todo)
@@ -96,7 +104,9 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.post("/toDoLists", authorization, function(request, response){
 
         const todo = request.body.todo
+        
         toDoManager.createTodo(todo, function(errors, newTodo){
+            
             if(errors.length > 0){
                 if (errors.includes("databaseError")){
                     response.status(500).end()
@@ -114,10 +124,13 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     })
 
     router.delete("/toDoLists/:todoId", authorization, function(request, response){
+        
         const todoId = request.params.todoId
         const isLoggedIn = true
         console.log("todoId", todoId)
+        
         toDoManager.deleteTodo(todoId, isLoggedIn, function(errors, deletedToDo){
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).end()
@@ -139,6 +152,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     //createAccount!
 
     router.post("/create-account", function(request, response){
+        
         const email = request.body.email
         const username = request.body.username
         const userPassword = request.body.userPassword
@@ -186,18 +200,18 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.post("/login", function(request, response){
 
         const grantType = request.body.grant_type
-        //const invalidRequest = request.body.invalid_request
         const username = request.body.Username
         const userPassword = request.body.userPassword
-
         console.log("body", request.body)
         console.log("Usernamen and password", username, userPassword)
+        
         if(grantType != "password"){
             response.status(400).json({error: "unsupported_grant_type", error_description: "The authorization grant type is not supported by the authorization server."})
             return
         }
 
         accountManager.getUserPassword(username, userPassword, function(errors, account){
+            
             if(errors.length > 0){
                 if(errors.includes("DatabaseError")){
                     response.status(500).end()
@@ -215,7 +229,9 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 console.log("loginPayload", payload)
                 // TODO: Better to use jwt.sign asynchronously.
                 jwt.sign(payload, serverSecret, function(error, result){
+                    
                     console.log("result", result)
+                    
                     if(error){
                         console.log(error)
                         response.status(404).json({error: "invalid_grant"})
@@ -235,7 +251,9 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.get("/blogposts", function(request, response){
         
         blogManager.getAllBlogposts(function(errors, blogposts){
+            
             console.log("blogposts", blogposts)
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){  
                     response.status(500).end()
@@ -247,10 +265,14 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     })
 
     router.get("/blogposts/:blogId", authorization, function(request, response){
+        
         const blogId = request.params.blogId  
         const isLoggedIn = true
+        
         blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
+            
             console.log("errorsInPL:", errors)
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).end()
@@ -260,6 +282,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 }
             }else{
                 blogManager.getUsernameById(blogpost.userId, function(errors, account){
+                    
                     if(errors.length > 0){
                         if(errors.includes("databaseError")){
                             response.status(500).end()
