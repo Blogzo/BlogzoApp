@@ -6,8 +6,10 @@ module.exports = function({toDoManager}){
 
     router.get("/", function(request, response){
         
-        const isLoggedIn = request.session.isLoggedIn   
-        toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
+        const isLoggedIn = request.session.isLoggedIn
+        const userId = request.session.userId
+        toDoManager.getAllToDos(userId, isLoggedIn, function(errors, toDos){
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
@@ -15,11 +17,9 @@ module.exports = function({toDoManager}){
                 else if(errors.includes("Need to be logged in!")){
                     response.status(401).render("unauthorized401.hbs")
                 }else{
-                    console.log("toDOsInPL:", toDos)
                     const model = {
                         errors
                     }
-                    console.log("modelTodo:", model)
                     response.render("toDoLists.hbs", model)
                 }
             }else{
@@ -35,10 +35,12 @@ module.exports = function({toDoManager}){
     router.post("/", function(request, response){
     
         const todo = request.body.todo
+        const userId = request.session.userId
         const isLoggedIn = request.session.isLoggedIn
         
-        toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
-            if(errors.length > 0){
+        toDoManager.createTodo(userId, todo, isLoggedIn, function(errors, newTodo){
+            
+            if(errors){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
                 }
@@ -48,7 +50,6 @@ module.exports = function({toDoManager}){
                     const model = {
                         errors
                     }
-                    console.log("todoErrorPL:", model)
                     response.render("toDoLists.hbs", model)
                 }
             }else{
@@ -64,6 +65,7 @@ module.exports = function({toDoManager}){
         const isLoggedIn = request.session.isLoggedIn
 
         toDoManager.deleteToDo(todo, isLoggedIn, function(errors, deletedToDo){
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
@@ -74,7 +76,6 @@ module.exports = function({toDoManager}){
                     const model = {
                         errors
                     }
-                    console.log("todoErrorPL:", model)
                     response.render("toDoLists.hbs", model)
                 }
             }else{
@@ -89,6 +90,7 @@ module.exports = function({toDoManager}){
         const isLoggedIn = request.session.isLoggedIn
 
         toDoManager.updateTodo(todo, isLoggedIn, function(errors, updateTodo){
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
@@ -99,7 +101,6 @@ module.exports = function({toDoManager}){
                     const model = {
                         errors
                     }
-                    console.log("todoErrorPL:", {model})
                     response.render("todoLists.hbs", {model})
                 }
             }else{

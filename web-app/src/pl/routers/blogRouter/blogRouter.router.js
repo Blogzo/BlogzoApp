@@ -7,6 +7,7 @@ module.exports = function({blogManager}){
     router.get("/", function(request, response){
         
         blogManager.getAllBlogposts(function(errors, blogposts){
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
@@ -20,7 +21,6 @@ module.exports = function({blogManager}){
                 const model = {
                     blogposts  
                 }
-                console.log("blogpostsModel:", model)
                 response.render("blogposts.hbs", model) 
             }
         })
@@ -38,11 +38,9 @@ module.exports = function({blogManager}){
     
         const blogId = request.params.blogId
         const isLoggedIn = request.session.isLoggedIn
-        console.log(isLoggedIn)
         
-        console.log("loggedin", isLoggedIn)
         blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
-            console.log("errorsInPL", errors)
+
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
@@ -67,7 +65,6 @@ module.exports = function({blogManager}){
                         errors,
                         username
                     }
-                    console.log("blogpostModel:", model)
                     response.render("blogpost.hbs", model)
                 })    
             }
@@ -81,7 +78,6 @@ module.exports = function({blogManager}){
         const content = request.body.content
         const posted = request.body.posted
         const userId = request.session.userId
-        console.log("useridBefore", userId)
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
         if(!file){
@@ -91,10 +87,8 @@ module.exports = function({blogManager}){
         }
        
         blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
-            
-            console.log("errorInPl:", errors)
-            
-            if(errors){
+
+            if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
                 }

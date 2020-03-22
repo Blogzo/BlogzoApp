@@ -19,9 +19,6 @@ module.exports = function({accountManager}){
            
         accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, account){
             
-            console.log("errorPL:", errors)
-            console.log("newAccountPL", account)
-
             if(errors){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
@@ -62,7 +59,6 @@ module.exports = function({accountManager}){
                         username,
                         email
                     }
-                    console.log("modelcreateAccount:", model)
                     response.render("create-account.hbs", model)
                 }
             }else{

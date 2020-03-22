@@ -18,8 +18,6 @@ const Blogpost = sequelize.define('blogposts', {
 })
 
 Blogpost.sync().then(() => {
-    
-    console.log("Blogposts table created!")
 })
 
 const Account = sequelize.define('accounts', {
@@ -46,8 +44,6 @@ const Account = sequelize.define('accounts', {
 })
 
 Account.sync().then(() => {
-    
-    console.log("Accounts table created!")
 })
 
 const toDo = sequelize.define('toDoLists', {
@@ -58,17 +54,17 @@ const toDo = sequelize.define('toDoLists', {
         autoIncrement: true,
         allowNull: false
     },
-    toDo: Sequelize.TEXT
+    toDo:{type: Sequelize.TEXT
+    }
 }, {
     timestamps: false
 })
 
 toDo.sync().then(() => {
-    
-    console.log("toDoLists table created!")
 })
 
 Blogpost.belongsTo(Account, {foreignKey: "userId", foreignKeyConstraint: true})
+toDo.belongsTo(Account, {foreignKey: "userId", foreignKeyConstraint: true})
 
 module.exports = {
 

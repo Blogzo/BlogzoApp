@@ -30,7 +30,7 @@ module.exports = function({blogRepository}){
         getAllBlogposts: function(callback){
 
             blogRepository.getBlogposts(function(errors, blogposts){
-                console.log("blogpostsinBLL:", blogposts)
+
                 callback(errors, blogposts)
             })
         },
@@ -38,13 +38,13 @@ module.exports = function({blogRepository}){
         getBlogpostId: function(blogId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(0, 0, isLoggedIn)
-            console.log("errrosInBLL:", errors)
             
             if(errors.length > 0){
                 callback(errors)
                 return
             }else{
                 blogRepository.getBlogpostId(blogId, function(errors, blogpost){
+                    
                     callback(errors, blogpost)
                 })
             }   
@@ -52,7 +52,7 @@ module.exports = function({blogRepository}){
 
         getUsernameById: function(userId, callback){
             blogRepository.getUsernameById(userId, function(errors, username){
-                console.log("usernameInBLL:", username)
+
                 callback(errors, username)
             })
         },
@@ -66,7 +66,7 @@ module.exports = function({blogRepository}){
                 return
             }else{
                 blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
-                    console.log("errorsBLL:", errors)
+
                     callback(errors, blogpost)
                 })
             }    

@@ -32,6 +32,7 @@ module.exports = function({accountManager}){
 			}else{
 				request.session.isLoggedIn = true
 				request.session.username = username
+				request.session.userId = account.dataValues.personId
 				response.redirect("/blogposts")
 			}
 		})

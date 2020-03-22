@@ -4,11 +4,12 @@ module.exports = function({}){
 
     return {
 
-        getAllToDos: function(callback){
+        getAllToDos: function(userId, callback){
 
-            const query = "SELECT * FROM todoList"
+            const query = "SELECT * FROM todoList WHERE userId = ?"
+            const values = [userId]
            
-            db.query(query, function(error, toDoList){
+            db.query(query, values, function(error, toDoList){
                 if(error){
                     callback(["databaseError"], null)
                 }else{
@@ -17,10 +18,10 @@ module.exports = function({}){
             })
         },
 
-        createTodo: function(todo, callback){
+        createTodo: function(todo, userId, callback){
 
-            const query = "INSERT INTO todoList (todo) VALUES (?)"
-            const values = [todo]
+            const query = "INSERT INTO todoList (todo, userId) VALUES (?,?)"
+            const values = [todo, userId]
             
             db.query(query, values, function(error, newTodo){
                 if(error){

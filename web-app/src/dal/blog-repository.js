@@ -35,9 +35,9 @@ module.exports = function({}){
 
             const query = "SELECT username FROM accounts INNER JOIN blogposts ON accounts.personId = blogposts.userId WHERE userId = ?"
             const value = [userId]
-            console.log("userIdInDAL:", userId)
             
             db.query(query, value, function(errors, username){
+                
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
@@ -53,6 +53,7 @@ module.exports = function({}){
             const values = [title, content, posted, imageFile, userId]
             
             db.query(query, values, function(errors, blogpost){
+                
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
@@ -68,7 +69,7 @@ module.exports = function({}){
            
             for(i in userId){
                 db.query(query, values, function(errors, username){
-                    console.log("usernamesInDal", username)
+                    
                     if(errors){
                         callback(["databaseError:"], null)
                     }else{

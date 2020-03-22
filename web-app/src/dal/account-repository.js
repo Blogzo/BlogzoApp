@@ -8,9 +8,9 @@ module.exports = function({}){
 
             const query = "INSERT INTO accounts (username, email, userPassword) VALUES (?, ?, ?)"
             const values = [username, email, userPassword]
-            console.log("values:", values)
             
             db.query(query, values, function(errors, results){
+                
                 if(errors){
                     callback(["databaseError"], null)
                 }else{

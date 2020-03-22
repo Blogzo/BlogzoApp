@@ -9,10 +9,8 @@ module.exports = function({}){
             accounts.Account.findOne({
                 where: { username: Username }
             }).then(function(getUserPassword){
-                console.log("userPasswordSEQ:", getUserPassword)
                 callback(null, getUserPassword)
             }).catch(function(errors){
-                console.log("errorsInSEQ:", errors)
                 callback(errors)
             })
         },
@@ -20,10 +18,8 @@ module.exports = function({}){
         createAccount: function(Username, Email, UserPassword, callback){
             
             accounts.Account.create({username: Username, email: Email, userPassword: UserPassword}).then(function(createAccount){
-                console.log("accountInDAL:", createAccount)
                 callback(null, createAccount)
             }).catch(function(errors){
-                console.log("errorsInSEQ:", errors)
                 callback(errors)
             })
         }
