@@ -6,8 +6,9 @@ module.exports = function({toDoManager}){
 
     router.get("/", function(request, response){
         
-        const isLoggedIn = request.session.isLoggedIn   
-        toDoManager.getAllToDos(isLoggedIn, function(errors, toDos){
+        const isLoggedIn = request.session.isLoggedIn
+        const userId = request.session.userId
+        toDoManager.getAllToDos(userId, isLoggedIn, function(errors, toDos){
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
@@ -36,6 +37,7 @@ module.exports = function({toDoManager}){
     
         const todo = request.body.todo
         const isLoggedIn = request.session.isLoggedIn
+        console.log("userid", userId);
         
         toDoManager.createTodo(todo, isLoggedIn, function(errors, newTodo){
             if(errors.length > 0){

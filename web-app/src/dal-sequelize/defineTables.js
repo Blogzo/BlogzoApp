@@ -69,6 +69,7 @@ toDo.sync().then(() => {
 })
 
 Blogpost.belongsTo(Account, {foreignKey: "userId", foreignKeyConstraint: true})
+toDo.belongsTo(Account, {foreignKey: "userId", foreignKeyConstraint: true})
 
 module.exports = {
 

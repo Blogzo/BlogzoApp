@@ -23,7 +23,7 @@ module.exports = function({toDoRepository}){
 
         },
 
-        getAllToDos: function(isLoggedIn, callback){
+        getAllToDos: function(userId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(0, isLoggedIn)
             
@@ -32,7 +32,7 @@ module.exports = function({toDoRepository}){
                 callback(errors, [])
                 return
             }else{
-                toDoRepository.getAllToDos(function(errors, toDos){
+                toDoRepository.getAllToDos(userId, function(errors, toDos){
                     callback(errors, toDos)
                 })
             }
@@ -63,7 +63,7 @@ module.exports = function({toDoRepository}){
                 return
             }
             if(isLoggedIn){
-                toDoRepository.createTodo(newTodo, function(errors, todo){
+                toDoRepository.createTodo(newTodo, userId, function(errors, todo){
                     callback(errors, todo)
                 })
             }

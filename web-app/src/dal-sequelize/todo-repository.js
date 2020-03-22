@@ -4,13 +4,15 @@ module.exports = function({}){
 
     return {
 
-        getAllToDos: function(callback){
+        getAllToDos: function(UserId, callback){
             
-            toDos.toDo.findAll().then(function(getAllToDos){
+            toDos.toDo.findAll({
+                where: {userId: UserId}
+            }).then(function(getAllToDos){
                 console.log("allTodosSEQ:", getAllToDos)
                 callback([], getAllToDos)
             }).catch(function(errors){
-                console.log(errors)
+                console.log("ErrorInSEQ",errors)
                 callback(errors, [])
             })
         },
