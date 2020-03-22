@@ -22,7 +22,7 @@ module.exports = function({accountManager}){
             console.log("errorPL:", errors)
             console.log("newAccountPL", account)
 
-            if(errors){
+            if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
                 }
