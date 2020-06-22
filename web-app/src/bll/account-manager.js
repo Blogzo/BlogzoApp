@@ -25,7 +25,7 @@ module.exports = function({accountRepository}){
             return errors
         },
 
-        getUserPassword: function(username, password, callback){
+        checkUserPassword: function(username, password, callback){
 
             accountRepository.getUserPassword(username, function(errors, userPassword){
 

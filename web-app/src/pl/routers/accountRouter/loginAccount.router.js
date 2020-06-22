@@ -14,7 +14,7 @@ module.exports = function({accountManager}){
 		const username = request.body.username
 		const userPassword = request.body.password
 		
-		accountManager.getUserPassword(username, userPassword, function(errors, account){
+		accountManager.checkUserPassword(username, userPassword, function(errors, account){
 
 			if(errors){
 				if(errors.includes("databaseError")){
