@@ -8,7 +8,7 @@ module.exports = function({toDoManager}){
         
         const isLoggedIn = request.session.isLoggedIn
         const userId = request.session.userId
-        toDoManager.getAllToDos(userId, isLoggedIn, function(errors, toDos){
+        toDoManager.getAllToDosForAccount(userId, isLoggedIn, function(errors, toDos){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){

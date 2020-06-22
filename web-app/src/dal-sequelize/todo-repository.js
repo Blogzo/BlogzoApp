@@ -4,7 +4,7 @@ module.exports = function({}){
 
     return {
 
-        getAllToDos: function(UserId, callback){
+        getAllToDosForAccount: function(UserId, callback){
             
             toDos.toDo.findAll({
                 where: {userId: UserId}

@@ -4,7 +4,7 @@ module.exports = function({}){
 
     return {
 
-        getAllToDos: function(userId, callback){
+        getAllToDosForAccount: function(userId, callback){
 
             const query = "SELECT * FROM todoList WHERE userId = ?"
             const values = [userId]

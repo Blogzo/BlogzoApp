@@ -23,7 +23,7 @@ module.exports = function({toDoRepository}){
 
         },
 
-        getAllToDos: function(userId, isLoggedIn, callback){
+        getAllToDosForAccount: function(userId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(0, isLoggedIn)
             
