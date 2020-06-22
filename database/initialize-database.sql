@@ -1,11 +1,11 @@
 
 
 CREATE TABLE IF NOT EXISTS accounts (
-    personId INT NOT NULL AUTO_INCREMENT,
+    accountId INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     userPassword VARCHAR(255) NOT NULL,    
-    CONSTRAINT person_id PRIMARY KEY (personId)
+    CONSTRAINT account_id PRIMARY KEY (accountId)
 );
 
 CREATE TABLE IF NOT EXISTS blogposts (
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS blogposts (
     imageFile VARCHAR(255) NOT NULL,
     userId INT NOT NULL,
     CONSTRAINT blog_id PRIMARY KEY (blogId),
-    CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(personId)
+    CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(accountId)
 );
 
 CREATE TABLE IF NOT EXISTS todoList (
@@ -24,5 +24,5 @@ CREATE TABLE IF NOT EXISTS todoList (
     todo VARCHAR(255) NOT NULL,
     CONSTRAINT todo_id PRIMARY KEY (todoId),
     userId INT NOT NULL,
-    CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(personId)
+    CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(accountId)
 );
