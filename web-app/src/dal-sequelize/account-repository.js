@@ -9,20 +9,19 @@ module.exports = function({}){
             accounts.Account.findOne({
                 where: { username: Username }
             }).then(function(getUserPassword){
-                callback(null, getUserPassword)
+                callback([], getUserPassword)
             }).catch(function(errors){
-                callback(errors)
+                callback(["databaseError"], null)
             })
         },
 
         createAccount: function(Username, Email, UserPassword, callback){
             
             accounts.Account.create({username: Username, email: Email, userPassword: UserPassword}).then(function(createAccount){
-                callback(null, createAccount)
+                callback([], createAccount)
             }).catch(function(errors){
-                callback(errors)
+                callback(["databaseError"], null)
             })
         }
-
     }
 }

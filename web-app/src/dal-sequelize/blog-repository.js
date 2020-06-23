@@ -12,7 +12,7 @@ module.exports = function({}){
                 callback([], allBlogposts)
 
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })  
         },
 
@@ -21,7 +21,7 @@ module.exports = function({}){
             blogposts.Blogpost.findByPk(blogId).then(function(Blogpost){
                 callback([], Blogpost)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         },
 
@@ -30,7 +30,7 @@ module.exports = function({}){
             blogposts.Blogpost.create({title: Title, content: Content, imageFile: ImageFile, posted: Posted, userId: UserId }).then(function(newBlogpost){
                 callback([], newBlogpost)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         },
 
@@ -40,7 +40,7 @@ module.exports = function({}){
             }).then(function(username){
                 callback([], username)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         }
     }

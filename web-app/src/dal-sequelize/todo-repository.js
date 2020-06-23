@@ -11,16 +11,16 @@ module.exports = function({}){
             }).then(function(getAllToDos){
                 callback([], getAllToDos)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         },
 
         createTodo: function(UserId, todo, callback){
             
             toDos.toDo.create({toDo: todo, userId: UserId}).then(function(newTodo){
-                callback(null, newTodo)
+                callback([], newTodo)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         },
 
@@ -29,7 +29,7 @@ module.exports = function({}){
             toDos.toDo.findByPk(todoId).then(function(todo){
                 callback([], todo)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         },
 
@@ -40,7 +40,7 @@ module.exports = function({}){
             }).then(function(deletedToDo){
                 callback([], deletedToDo)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         },
 
@@ -49,7 +49,7 @@ module.exports = function({}){
             toDos.toDo.update({toDo: newTodo}, {where: {todoId: todoID}}).then(function(updateTodo){
                 callback([], updateTodo)
             }).catch(function(errors){
-                callback(errors, [])
+                callback(["databaseError"], null)
             })
         }
     }
