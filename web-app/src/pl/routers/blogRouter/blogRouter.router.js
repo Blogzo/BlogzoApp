@@ -80,13 +80,15 @@ module.exports = function({blogManager}){
         const userId = request.session.userId
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
+        const username = request.session.username
+    
         if(!file){
             const error = new Error("please upload a file")
             error.httpStatusCode = 400
             return next(error)
         }
        
-        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, function(errors, blogId){
+        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, username, function(errors, blogId){
 
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
