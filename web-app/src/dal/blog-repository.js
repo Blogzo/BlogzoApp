@@ -61,23 +61,6 @@ module.exports = function({}){
                 }
             })
         },
-
-        getUsernamesById: function([userId], callback){
-            
-            const query = "SELECT username FROM accounts INNER JOIN blogposts On accouts.personId = blogposts.userId Where UserId = ?"
-            const values = [userId]
-           
-            for(i in userId){
-                db.query(query, values, function(errors, username){
-                    
-                    if(errors){
-                        callback(["databaseError:"], null)
-                    }else{
-                        callback([], username)
-                    }
-                })
-            }
-        }
     }
 }
 
