@@ -58,22 +58,22 @@ module.exports = function({accountRepository}){
             const saltrounds = 10
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
             
-            accountRepository.createAccount(username, email, hashedPassword, function(somethingWentWrong, account){
+            accountRepository.createAccount(username, email, hashedPassword, function(accountError, account){
 
-                if(somethingWentWrong){
-                    if(somethingWentWrong.errors[0].message.includes("username must be unique")){
+                if(accountError){
+                    if(accountError.errors[0].message.includes("username must be unique")){
                         const uniqueUsernameError = []
                         uniqueUsernameError.push("Username already exists!")
                         callback(uniqueUsernameError)
                         return
                     }
-                    if(somethingWentWrong.errors[0].message.includes("No a valid Email!")){
+                    if(accountError.errors[0].message.includes("No a valid Email!")){
                         const uniqueEmailError = []
                         uniqueEmailError.push("Not a valid Email!")
                         callback(uniqueEmailError)
                         return
                     }
-                    if(somethingWentWrong.errors[0].message.includes("email must be unique")){
+                    if(accountError.errors[0].message.includes("email must be unique")){
                         const uniqueEmailError = []
                         uniqueEmailError.push("Email already exists!")
                         callback(uniqueEmailError)
