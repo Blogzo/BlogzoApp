@@ -32,6 +32,21 @@ module.exports = function({}){
                     callback([], userPassword)
                 }
             })
+        },
+
+        getAccountId: function(username, callback){
+
+            const query = "SELECT accountId FROM accounts WHERE username = ?"
+            const value = [username]
+
+            db.query(query, value, function(errors, accountId){
+
+                if(errors){
+                    callback(["databaseError", null])
+                }else{
+                    callback([], accountId)
+                }
+            })
         }
     }
 }
