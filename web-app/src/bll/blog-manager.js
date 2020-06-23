@@ -1,5 +1,5 @@
 
-module.exports = function({blogRepository}){
+module.exports = function({blogRepository, accountRepository}){
 
     return {
 
@@ -17,7 +17,7 @@ module.exports = function({blogRepository}){
                 errors.push("Title to long!")
             }
             if(content.length > 100){
-                errors.push("Title to long!")
+                errors.push("Content to long!")
             }
             if(isLoggedIn == false){
                 errors.push("Need to be logged in!")
@@ -57,13 +57,17 @@ module.exports = function({blogRepository}){
             })
         },
 
-        createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, callback){
+        createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, username, callback){
             
             const errors = this.getValidationErrors(title, content, isLoggedIn)
-            
+            const accountId = accountRepository.getAccountId(username)
+
             if(errors.length > 0){
                 callback(errors)
                 return
+            }
+            else if(accountId != userId){
+                throw "Unauthorized!"
             }else{
                 blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
 
