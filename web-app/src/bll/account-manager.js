@@ -27,11 +27,13 @@ module.exports = function({accountRepository}){
 
         checkUserPassword: function(username, password, callback){
 
-            accountRepository.getUserPassword(username, function(errors, userPassword){
-
-                if(userPassword){
-                    if(bcrypt.compareSync(password, userPassword.dataValues.userPassword)){
-                        callback(null, userPassword)
+            accountRepository.getUserPassword(username, function(errors, account){
+                console.log("userPasswordBLL", account);
+                console.log(username, "UNBLL");
+                if(account.accountPassword){
+                    if(bcrypt.compareSync(password, account.accountPassword)){
+                        
+                        callback(null, account)
                     }else{
                         const errors = []
                         errors.push("Wrong password")
@@ -39,6 +41,8 @@ module.exports = function({accountRepository}){
                         return
                     }
                 }else{
+                    console.log("usernameBLL", username);
+                    
                     const errors = []
                     errors.push("Username do not exists")
                     callback(errors)
@@ -59,32 +63,20 @@ module.exports = function({accountRepository}){
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
             
             accountRepository.createAccount(username, email, hashedPassword, function(accountError, account){
-
-                if(accountError){
-                    if(accountError.errors[0].message.includes("username must be unique")){
-                        const uniqueUsernameError = []
-                        uniqueUsernameError.push("Username already exists!")
-                        callback(uniqueUsernameError)
-                        return
-                    }
-                    if(accountError.errors[0].message.includes("No a valid Email!")){
-                        const uniqueEmailError = []
-                        uniqueEmailError.push("Not a valid Email!")
-                        callback(uniqueEmailError)
-                        return
-                    }
-                    if(accountError.errors[0].message.includes("email must be unique")){
-                        const uniqueEmailError = []
-                        uniqueEmailError.push("Email already exists!")
-                        callback(uniqueEmailError)
-                        return
-                    }else{
-                        const databaseError = []
-                        databaseError.push("databaseError")
-                        callback(databaseError)
-                    }
+                console.log("BLLAccount", account);
+                console.log("errorBLL", accountError);
+                
+                if(accountError != null){
+                    console.log(accountError, "error>BLL");
+                    const databaseError = []
+                    databaseError.push("databaseError")
+                    callback(databaseError)
+                    return
+                    
                 }else{
-                    callback(null, account)
+                    console.log(account,"BLL");
+                    
+                    callback(null, account) 
                 }
             })
         }

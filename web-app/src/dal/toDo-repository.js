@@ -6,7 +6,7 @@ module.exports = function({}){
 
         getAllToDosForAccount: function(userId, callback){
 
-            const query = "SELECT * FROM todoList WHERE userId = ?"
+            const query = "SELECT * FROM todoItems WHERE userId = ?"
             const values = [userId]
            
             db.query(query, values, function(error, toDoList){
@@ -20,7 +20,7 @@ module.exports = function({}){
 
         createTodo: function(todo, userId, callback){
 
-            const query = "INSERT INTO todoList (todo, userId) VALUES (?,?)"
+            const query = "INSERT INTO todoItems (todo, accountId) VALUES (?,?)"
             const values = [todo, userId]
             
             db.query(query, values, function(error, newTodo){
@@ -34,7 +34,7 @@ module.exports = function({}){
 
         deleteTodo: function(todo, callback){
             
-            const query = "DELETE FROM todoList (todo) VALUES (?)"
+            const query = "DELETE FROM todoItems (todo) VALUES (?)"
             const values = [todo]
             
             db.query(query, values, function(error, deletedToDo){
@@ -48,7 +48,7 @@ module.exports = function({}){
         
         getToDoId: function(todoId, callback){
             
-            const query = "SELECT todo FROM todoList WHERE todoId = ?"
+            const query = "SELECT todo FROM todoItems WHERE todoId = ?"
             const values = [todoId]
             
             db.query(query, values, function(error, todo){
@@ -62,7 +62,7 @@ module.exports = function({}){
 
         updateTodo: function(todoId, todo, callback){
             
-            const query = "UPDATE todoLists SET todo = ? WHERE TodoId = ?"
+            const query = "UPDATE todoItems SET todo = ? WHERE TodoId = ?"
             const values = [todoId, todo]
             
             db.query(query, values, function(error, newTodo){

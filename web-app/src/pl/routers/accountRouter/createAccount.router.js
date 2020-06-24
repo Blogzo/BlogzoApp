@@ -19,30 +19,11 @@ module.exports = function({accountManager}){
            
         accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, account){
             
+            console.log(username, "username");
+            
             if(errors){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
-                }
-                //check SequelizeUniqueConstraintError
-                else if(errors.includes("Username already exists!")){
-                    uniqueError.push("Username already exists!")
-                    errors = uniqueError
-                    const model = {
-                        errors,
-                        username,
-                        email
-                    }
-                    response.render("create-account.hbs", model)
-                }
-                else if(errors.includes("Email already exists!")){
-                    uniqueError.push("Email already exists!")
-                    errors = uniqueError
-                    const model = {
-                        errors,
-                        username,
-                        email
-                    }
-                    response.render("create-account.hbs", model)
                 }
                 else if(errors.includes("Password do not match!")){
                     uniqueError.push("Password do not match!")
@@ -62,7 +43,9 @@ module.exports = function({accountManager}){
                     response.render("create-account.hbs", model)
                 }
             }else{
-                request.session.userId = account.dataValues.accountId
+                console.log("accountIdPL",account.accountId);
+                
+                request.session.userId = account.accountId
                 request.session.username = username
                 response.redirect("/login")
             }

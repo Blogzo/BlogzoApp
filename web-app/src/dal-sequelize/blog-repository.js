@@ -7,22 +7,18 @@ module.exports = function({}){
         getBlogposts: function(callback){
 
             blogposts.Blogpost.findAll({
-                include: [{ model: blogposts.Account, attributes: ['username']}],
-            }).then(function(allBlogposts){
-                callback([], allBlogposts)
-
-            }).catch(function(errors){
-                callback(["databaseError"], null)
-            })  
+                raw: true, 
+                include: [{ model: blogposts.Account, attributes: ['accountUsername']}],
+            })
+            .then(allBlogposts => callback([], allBlogposts))
+            .catch(errors => callback(["databaseError"], null))  
         },
 
         getBlogpostId: function(blogId, callback){
             
-            blogposts.Blogpost.findByPk(blogId).then(function(Blogpost){
-                callback([], Blogpost)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
-            })
+            blogposts.Blogpost.findByPk(blogId)
+            .then(Blogpost => callback([], Blogpost.dataValues))
+            .catch(errors => callback(["databaseError"], null))
         },
 
         createBlogpost: function(Title, Content, Posted, ImageFile, UserId, callback){
@@ -36,7 +32,7 @@ module.exports = function({}){
 
         getUsernameById: function(UserId, callback){
             
-            blogposts.Blogpost.findOne({where: {userId: UserId},include: [{ model: blogposts.Account, attributes: ['username'] }],
+            blogposts.Blogpost.findOne({where: {userId: UserId},include: [{ model: blogposts.Account, attributes: ['accountUsername'] }],
             }).then(function(username){
                 callback([], username)
             }).catch(function(errors){

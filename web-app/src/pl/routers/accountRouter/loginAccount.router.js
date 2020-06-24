@@ -15,10 +15,11 @@ module.exports = function({accountManager}){
 		const userPassword = request.body.password
 		
 		accountManager.checkUserPassword(username, userPassword, function(errors, account){
-
-			if(errors){
+			console.log("errorsInPL", errors);
+			console.log("accountInPL", account);
+			if(errors != null){
 				if(errors.includes("databaseError")){
-                    response.status(500).render("error500.hbs")
+					response.status(500).render("error500.hbs")
 				}else{
 					const model = {
 						errors: errors,
@@ -32,7 +33,9 @@ module.exports = function({accountManager}){
 			}else{
 				request.session.isLoggedIn = true
 				request.session.username = username
-				request.session.userId = account.dataValues.accountId
+				request.session.userId = account.accountId
+				console.log("IdPl", account.accountId);
+				
 				response.redirect("/blogposts")
 			}
 		})

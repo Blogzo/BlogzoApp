@@ -31,7 +31,7 @@ module.exports = function({toDoRepository}){
                 callback(errors, [])
                 return
             }else{
-                toDoRepository.getAllToDos(userId, function(errors, toDos){
+                toDoRepository.getAllToDosForAccount(userId, function(errors, toDos){
                     
                     callback(errors, toDos)
                 })
