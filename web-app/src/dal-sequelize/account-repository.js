@@ -6,22 +6,28 @@ module.exports = function({}){
 
         getUserPassword: function(Username, callback){
             
-            accounts.Account.findOne({
-                where: { username: Username }
-            }).then(function(getUserPassword){
-                callback([], getUserPassword)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
+            accounts.Account.findAll({
+                where: { accountUsername: Username }
             })
+            .then(accountPassword => callback([], accountPassword[0].dataValues))
+            .catch(errors => callback(["databaseError"], null))
         },
 
         createAccount: function(Username, Email, UserPassword, callback){
             
-            accounts.Account.create({username: Username, email: Email, userPassword: UserPassword}).then(function(createAccount){
-                callback([], createAccount)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
+            accounts.Account.create({
+                accountUsername: Username, accountEmail: Email, accountPassword: UserPassword
             })
+            .then(createAccount => callback(null, createAccount.dataValues))
+            .catch(error => callback(["databaseError"], null))
+        },
+
+        getAccountId: function(id, callback){
+            accounts.Account.findAll({
+                where: {accountId : id}
+            })
+            .then(userId => callback(null, userId[0].dataValues.accountId))
+            .catch(error => callback(["databaseError"], null))
         }
     }
 }

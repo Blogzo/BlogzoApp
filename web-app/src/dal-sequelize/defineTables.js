@@ -31,12 +31,12 @@ const Account = sequelize.define('accounts', {
     accountUsername: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        unique: true
+        
     },
     accountEmail: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        unique: true
+        
     },
     accountPassword: Sequelize.TEXT
 }, {

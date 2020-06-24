@@ -33,7 +33,7 @@ module.exports = function({}){
 
         getUsernameById: function(userId, callback){
 
-            const query = "SELECT username FROM accounts INNER JOIN blogposts ON accounts.personId = blogposts.userId WHERE userId = ?"
+            const query = "SELECT username FROM accounts INNER JOIN blogposts ON accounts.accountId = blogposts.accountId WHERE accountId = ?"
             const value = [userId]
             
             db.query(query, value, function(errors, username){

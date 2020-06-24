@@ -30,8 +30,11 @@ module.exports = function({blogRepository, accountRepository}){
         getAllBlogposts: function(callback){
 
             blogRepository.getBlogposts(function(errors, blogposts){
-
+                console.log("blogErrorsInBLL", errors);
+                console.log("BlogPostsBLL", blogposts);
+                  
                 callback(errors, blogposts)
+                  
             })
         },
 
@@ -44,6 +47,7 @@ module.exports = function({blogRepository, accountRepository}){
                 return
             }else{
                 blogRepository.getBlogpostId(blogId, function(errors, blogpost){
+                    console.log("blogpostBLL", blogpost);
                     
                     callback(errors, blogpost)
                 })
@@ -58,22 +62,26 @@ module.exports = function({blogRepository, accountRepository}){
         },
 
         createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, username, callback){
+            console.log("userIdInBLL", userId);
             
             const errors = this.getValidationErrors(title, content, isLoggedIn)
-            const accountId = accountRepository.getAccountId(username)
-
             if(errors.length > 0){
                 callback(errors)
                 return
-            }
-            else if(accountId != userId){
-                throw "Unauthorized!"
             }else{
-                blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
-
-                    callback(errors, blogpost)
+                accountRepository.getAccountId(userId, function(errors, accountId){
+                    console.log("accountIdBLL", accountId);
+                    
+                    if(accountId != userId){
+                        throw "unauthorized!"
+                    }else{
+                        blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
+    
+                            callback(errors, blogpost)
+                        }) 
+                    }    
                 })
-            }    
+            }
         }
     }
 }

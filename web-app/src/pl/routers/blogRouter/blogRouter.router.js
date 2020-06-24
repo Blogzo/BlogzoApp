@@ -7,8 +7,9 @@ module.exports = function({blogManager}){
     router.get("/", function(request, response){
         
         blogManager.getAllBlogposts(function(errors, blogposts){
-            
-            if(errors.length > 0){
+            console.log("blogErrorsInPl", errors);
+            console.log("blogpostsPL", blogposts)
+            if(errors != null){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
                 }else{
@@ -21,18 +22,15 @@ module.exports = function({blogManager}){
                 const model = {
                     blogposts  
                 }
-                response.render("blogposts.hbs", model) 
+                response.render("blogposts.hbs", { model }) 
             }
         })
     })
-
-    
 
     router.get("/create", function(request, response){
     
         response.render("create-blogpost.hbs")
     })
-    
     
     router.get("/:blogId", function(request, response){
     
@@ -40,7 +38,8 @@ module.exports = function({blogManager}){
         const isLoggedIn = request.session.isLoggedIn
         
         blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
-
+            console.log("blogpostPl", blogpost);
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
@@ -59,7 +58,7 @@ module.exports = function({blogManager}){
                     response.render("blogpost.hbs", model)   
                 }
             }else{
-                blogManager.getUsernameById(blogpost.userId, function(errors, username){
+                blogManager.getUsernameById(blogpost.accountId, function(errors, username){
                     const model = {
                         blogpost,
                         errors,
@@ -81,6 +80,8 @@ module.exports = function({blogManager}){
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
         const username = request.session.username
+        console.log("beforeUserId", userId);
+        
     
         if(!file){
             const error = new Error("please upload a file")
@@ -89,7 +90,7 @@ module.exports = function({blogManager}){
         }
        
         blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, username, function(errors, blogId){
-
+            console.log("userId", userId);
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
@@ -103,7 +104,7 @@ module.exports = function({blogManager}){
                     response.render("create-blogpost.hbs", model)
                 }     
             }else{
-                response.redirect("/blogposts/"+blogId.dataValues.blogId)
+                response.redirect("/blogposts/" + blogId)
             }
         })
     })
