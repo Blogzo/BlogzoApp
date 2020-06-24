@@ -2,8 +2,8 @@
 
 CREATE TABLE IF NOT EXISTS accounts (
     accountId INT NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    accountUsername VARCHAR(255) NOT NULL UNIQUE,
+    accountEmail VARCHAR(255) NOT NULL UNIQUE,
     accountPassword VARCHAR(255) NOT NULL,    
     CONSTRAINT account_id PRIMARY KEY (accountId)
 );
