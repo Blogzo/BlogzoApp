@@ -22,23 +22,23 @@ Blogpost.sync().then(() => {
 
 const Account = sequelize.define('accounts', {
     
-    personId: {
+    accountId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    username: {
+    accountUsername: {
         type: Sequelize.STRING(50),
         allowNull: false,
         unique: true
     },
-    email: {
+    accountEmail: {
         type: Sequelize.STRING(50),
         allowNull: false,
         unique: true
     },
-    userPassword: Sequelize.TEXT
+    accountPassword: Sequelize.TEXT
 }, {
     timestamps: false
 })
@@ -63,8 +63,8 @@ const toDo = sequelize.define('toDoLists', {
 toDo.sync().then(() => {
 })
 
-Blogpost.belongsTo(Account, {foreignKey: "userId", foreignKeyConstraint: true})
-toDo.belongsTo(Account, {foreignKey: "userId", foreignKeyConstraint: true})
+Blogpost.belongsTo(Account, {foreignKey: "accountId", foreignKeyConstraint: true})
+toDo.belongsTo(Account, {foreignKey: "accountId", foreignKeyConstraint: true})
 
 module.exports = {
 

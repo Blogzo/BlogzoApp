@@ -2,8 +2,8 @@
 
 CREATE TABLE IF NOT EXISTS accounts (
     accountId INT NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    accountUsername VARCHAR(255) NOT NULL UNIQUE,
+    accountEmail VARCHAR(255) NOT NULL UNIQUE,
     accountPassword VARCHAR(255) NOT NULL,    
     CONSTRAINT account_id PRIMARY KEY (accountId)
 );
@@ -14,15 +14,15 @@ CREATE TABLE IF NOT EXISTS blogposts (
     content VARCHAR(255) NOT NULL,
     posted VARCHAR(255) NOT NULL,
     imageFile VARCHAR(255) NOT NULL,
-    userId INT NOT NULL,
+    accountId INT NOT NULL,
     CONSTRAINT blog_id PRIMARY KEY (blogId),
-    CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(accountId)
+    CONSTRAINT id_fk FOREIGN KEY (accountId) REFERENCES accounts(accountId)
 );
 
-CREATE TABLE IF NOT EXISTS todoList (
+CREATE TABLE IF NOT EXISTS todoItems (
     todoId INT NOT NULL AUTO_INCREMENT,
     todo VARCHAR(255) NOT NULL,
     CONSTRAINT todo_id PRIMARY KEY (todoId),
-    userId INT NOT NULL,
-    CONSTRAINT id_fk FOREIGN KEY (userId) REFERENCES accounts(accountId)
+    accountId INT NOT NULL,
+    CONSTRAINT id_fk FOREIGN KEY (accountId) REFERENCES accounts(accountId)
 );
