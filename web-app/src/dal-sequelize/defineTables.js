@@ -46,7 +46,7 @@ const Account = sequelize.define('accounts', {
 Account.sync().then(() => {
 })
 
-const toDo = sequelize.define('toDoLists', {
+const toDo = sequelize.define('todoItems', {
     
     todoId: {
         type: Sequelize.INTEGER,
