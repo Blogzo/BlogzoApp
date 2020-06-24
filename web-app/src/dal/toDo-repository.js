@@ -32,10 +32,10 @@ module.exports = function({}){
             })
         },
 
-        deleteTodo: function(todo, callback){
+        deleteTodo: function(todoId, callback){
             
-            const query = "DELETE FROM todoList (todo) VALUES (?)"
-            const values = [todo]
+            const query = "DELETE FROM todoList WHERE todoId = ?"
+            const values = [todoId]
             
             db.query(query, values, function(error, deletedToDo){
                 if(error){
@@ -62,7 +62,7 @@ module.exports = function({}){
 
         updateTodo: function(todoId, todo, callback){
             
-            const query = "UPDATE todoLists SET todo = ? WHERE TodoId = ?"
+            const query = "UPDATE todoLists SET todo = ? WHERE todoId = ?"
             const values = [todoId, todo]
             
             db.query(query, values, function(error, newTodo){

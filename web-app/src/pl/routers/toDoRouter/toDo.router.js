@@ -58,12 +58,12 @@ module.exports = function({toDoManager}){
         })
     })
 
-    router.post("/deletePost", function(request, response){
+    router.post("/deleteTodo/:todoId", function(request, response){
         
-        const todo = request.body.todo
+        const todoId = request.params.todoId
         const isLoggedIn = request.session.isLoggedIn
 
-        toDoManager.deleteToDo(todo, isLoggedIn, function(errors, deletedToDo){
+        toDoManager.deleteToDo(todoId, isLoggedIn, function(errors, deletedToDo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){

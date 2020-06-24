@@ -8,49 +8,39 @@ module.exports = function({}){
             
             toDos.toDo.findAll({
                 where: {userId: UserId}
-            }).then(function(getAllToDos){
-                callback([], getAllToDos)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
             })
+            .then(getAllToDos => callback([], getAllToDos))
+            .catch(error => callback(["databaseError"], null)) 
         },
 
         createTodo: function(UserId, todo, callback){
             
-            toDos.toDo.create({toDo: todo, userId: UserId}).then(function(newTodo){
-                callback([], newTodo)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
-            })
+            toDos.toDo.create({toDo: todo, userId: UserId})
+            .then(newTodo => callback([], newTodo))
+            .catch(errors => callback(["databaseError"], null))
         },
 
         getToDoId: function(todoId, callback){
             
-            toDos.toDo.findByPk(todoId).then(function(todo){
-                callback([], todo)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
-            })
+            toDos.toDo.findByPk(todoId)
+            .then(todo => callback([], todo))
+            .catch(errors => callback(["databaseError"], null))
         },
 
         deleteTodo: function(todoID, callback){
             
             toDos.toDo.destroy({
                 where: { todoId: todoID }
-            }).then(function(deletedToDo){
-                callback([], deletedToDo)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
             })
+            .then(deletedToDo => callback([], deletedToDo))
+            .catch(errors => callback(["databseError"], null))
         },
 
         updateTodo: function(todoID, newTodo, callback){
             
-            toDos.toDo.update({toDo: newTodo}, {where: {todoId: todoID}}).then(function(updateTodo){
-                callback([], updateTodo)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
-            })
+            toDos.toDo.update({toDo: newTodo}, {where: {todoId: todoID}})
+            .then(updateTodo => callback([], this.updateTodo))
+            .catch(errors => callback(["databaseError"], null))
         }
     }
 }
