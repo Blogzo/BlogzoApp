@@ -10,7 +10,7 @@ module.exports = function({toDoManager}){
         const userId = request.session.userId
         toDoManager.getAllToDosForAccount(userId, isLoggedIn, function(errors, toDos){
             
-            if(errors.length){
+            if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
                 }

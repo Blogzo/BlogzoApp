@@ -13,7 +13,7 @@ const redisStore = require('connect-redis')(expressSession)
 
 const app = express()
 
-const blogRepository = require('./dal-sequelize/blog-repository')
+const blogRepository = require('./dal/blog-repository')
 const blogManager = require('./bll/blog-manager')
 const blogRouter = require('./pl/routers/blogRouter/blogRouter.router')
 
@@ -21,7 +21,7 @@ const toDoRepository = require('./dal-sequelize/todo-repository')
 const toDoManager = require('./bll/toDo-manager')
 const toDoRouter = require('./pl/routers/toDoRouter/toDo.router')
 
-const accountRepository = require('./dal/account-repository')
+const accountRepository = require('./dal-sequelize/account-repository')
 const accountManager = require('./bll/account-manager')
 const createAccountRouter = require('./pl/routers/accountRouter/createAccount.router')
 const loginRouter = require('./pl/routers/accountRouter/loginAccount.router')

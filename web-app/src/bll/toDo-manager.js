@@ -40,9 +40,7 @@ module.exports = function({toDoRepository}){
                         console.log("here :(");
                         
                         callback(["databaseError"], null)
-                    }else{
-                        console.log("here");
-                        
+                    }else{                        
                         callback([], toDos)
                     }
                     

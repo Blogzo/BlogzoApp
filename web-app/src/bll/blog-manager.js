@@ -77,12 +77,7 @@ module.exports = function({blogRepository, accountRepository}){
                         throw "unauthorized!"
                     }else{
                         blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
-                            if(errors != null){
-                                callback(["databaseError"], null)
-                            }else{
-                                callback(null, blogpost)
-                            }
-                            
+                            callback(errors, blogpost)
                         }) 
                     }    
                 })
