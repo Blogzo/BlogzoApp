@@ -33,13 +33,13 @@
 {{#if blogposts.length}}
     {{#each blogposts}}
     <div class="container card mb-4 border">
-        <img class="card-img-top" src="/blogpost-img/{{blogposts.imageFile}}" width="750" height="600" alt="Image not found">
+        <img class="card-img-top" src="/blogpost-img/{{imageFile}}" width="750" height="600" alt="Image not found">
         <div class="card-body">
-            <h2 class="card-title">{{blogposts.title}}</h2>
-            <a href="/blogposts/{{blogposts.blogId}}" class="btn btn-primary">Read more &rarr;</a>
+            <h2 class="card-title">{{title}}</h2>
+            <a href="/blogposts/{{blogId}}" class="btn btn-primary">Read more &rarr;</a>
         </div>
         <div class="card-footer text-muted">
-            Posted on {{blogposts.posted}}, by {{account.accountUsername}} 
+            Posted on {{posted}}, by {{account.accountUsername}} 
         </div>
     </div>
     {{/each}}

@@ -27,13 +27,25 @@ module.exports = function({toDoRepository}){
             
             const errors = this.getValidationErrors(0, isLoggedIn)
             
-            if(errors.length > 0){
-                callback(errors, [])
+            if(errors.length){
+                console.log("error here");
+                
+                callback(["databaseError"], null)
                 return
             }else{
                 toDoRepository.getAllToDosForAccount(userId, function(errors, toDos){
+                    console.log("errorsInBLL", errors);
+                    console.log("todosBLL", toDos);
+                    if(errors.length > 0){
+                        console.log("here :(");
+                        
+                        callback(["databaseError"], null)
+                    }else{
+                        console.log("here");
+                        
+                        callback([], toDos)
+                    }
                     
-                    callback(errors, toDos)
                 })
             }
         },

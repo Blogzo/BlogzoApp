@@ -9,20 +9,20 @@ module.exports = function({blogManager}){
         blogManager.getAllBlogposts(function(errors, blogposts){
             console.log("blogErrorsInPl", errors);
             console.log("blogpostsPL", blogposts)
-            if(errors != null){
+            if(errors.length){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
                 }else{
                     const model = {
                         errors
                     }
-                    response.render("blogposts.hbs", { model })
+                    response.render("blogposts.hbs", model)
                 }
             }else{
                 const model = {
                     blogposts  
                 }
-                response.render("blogposts.hbs", { model }) 
+                response.render("blogposts.hbs", model) 
             }
         })
     })
@@ -59,6 +59,9 @@ module.exports = function({blogManager}){
                 }
             }else{
                 blogManager.getUsernameById(blogpost.accountId, function(errors, username){
+                    console.log("blogpost.accountId", blogpost.accountId)
+                    console.log("UsernameInPL", username);
+                    
                     const model = {
                         blogpost,
                         errors,
@@ -89,9 +92,11 @@ module.exports = function({blogManager}){
             return next(error)
         }
        
-        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, username, function(errors, blogId){
-            console.log("userId", userId);
-            if(errors.length > 0){
+        blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, username, function(errors, blogpost){
+            console.log("userIdPL", userId);
+            console.log("beforeLogPL", blogpost);
+            
+            if(errors != null){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
                 }
@@ -104,7 +109,9 @@ module.exports = function({blogManager}){
                     response.render("create-blogpost.hbs", model)
                 }     
             }else{
-                response.redirect("/blogposts/" + blogId)
+                response.redirect("/blogposts/" + blogpost.blogId)
+                console.log("blogIdPl", blogpost.blogId);
+                
             }
         })
     })

@@ -47,7 +47,7 @@ module.exports = function({blogRepository, accountRepository}){
                 return
             }else{
                 blogRepository.getBlogpostId(blogId, function(errors, blogpost){
-                    console.log("blogpostBLL", blogpost);
+                    console.log("blogpostBLL", blogpost.accountId);
                     
                     callback(errors, blogpost)
                 })
@@ -56,7 +56,8 @@ module.exports = function({blogRepository, accountRepository}){
 
         getUsernameById: function(userId, callback){
             blogRepository.getUsernameById(userId, function(errors, username){
-
+                console.log("UsernameBLL", username);
+                
                 callback(errors, username)
             })
         },
@@ -76,8 +77,12 @@ module.exports = function({blogRepository, accountRepository}){
                         throw "unauthorized!"
                     }else{
                         blogRepository.createBlogpost(title, content, posted, imageFile, userId, function(errors, blogpost){
-    
-                            callback(errors, blogpost)
+                            if(errors != null){
+                                callback(["databaseError"], null)
+                            }else{
+                                callback(null, blogpost)
+                            }
+                            
                         }) 
                     }    
                 })
