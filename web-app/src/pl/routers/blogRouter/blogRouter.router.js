@@ -96,7 +96,7 @@ module.exports = function({blogManager}){
             console.log("userIdPL", userId);
             console.log("beforeLogPL", blogpost);
             
-            if(errors != null){
+            if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
                 }
@@ -109,8 +109,8 @@ module.exports = function({blogManager}){
                     response.render("create-blogpost.hbs", model)
                 }     
             }else{
-                response.redirect("/blogposts/" + blogpost.blogId)
-                console.log("blogIdPl", blogpost.blogId);
+                response.redirect("/blogposts/" + blogpost)
+                console.log("blogIdPl", blogpost);
                 
             }
         })

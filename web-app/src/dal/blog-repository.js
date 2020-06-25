@@ -47,17 +47,21 @@ module.exports = function({}){
         },
 
         
-        createBlogpost: function(title, content, posted, imageFile, userId, callback){
+        createBlogpost: function(title, content, posted, imageFile, accountId, callback){
 
-            const query = "INSERT INTO blogposts (title, content, posted, imageFile, userId) VALUES (?, ?, ?, ?, ?)"
-            const values = [title, content, posted, imageFile, userId]
+            const query = "INSERT INTO blogposts (title, content, posted, imageFile, accountId) VALUES (?, ?, ?, ?, ?)"
+            const values = [title, content, posted, imageFile, accountId]
             
-            db.query(query, values, function(errors, blogpost){
+            db.query(query, values, function(errors, status){
+                console.log("DAL");
+                
                 
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
-                    callback([], blogpost.insertId)
+                    console.log("BlogpostDAL",status.insertId);
+                    
+                    callback([], status.insertId)
                 }
             })
         },

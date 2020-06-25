@@ -13,7 +13,7 @@ const redisStore = require('connect-redis')(expressSession)
 
 const app = express()
 
-const blogRepository = require('./dal-sequelize/blog-repository')
+const blogRepository = require('./dal/blog-repository')
 const blogManager = require('./bll/blog-manager')
 const blogRouter = require('./pl/routers/blogRouter/blogRouter.router')
 
