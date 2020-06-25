@@ -23,12 +23,12 @@ module.exports = function({}){
             .catch(error => callback(["databaseError"], null))
         },
 
-        getAccountId: function(id, callback){
+        getAccountId: function(username, callback){
             accounts.Account.findAll({
-                where: {accountId : id}
+                where: {accountUsername : username}
             })
             .then(account => callback([], account[0].dataValues.accountId))
-            .catch(error => callback(["databaseError"], null))
+            .catch(error => callback([error], null))
         }
     }
 }

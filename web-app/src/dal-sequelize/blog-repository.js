@@ -13,7 +13,7 @@ module.exports = function({}){
             .catch(errors => callback(["databaseError"], null))  
         },
 
-        getBlogpostId: function(blogId, callback){
+        getBlogpostById: function(blogId, callback){
             
             blogposts.Blogpost.findByPk(blogId)
             .then(Blogpost => callback([], Blogpost.dataValues))
@@ -23,9 +23,9 @@ module.exports = function({}){
         createBlogpost: function(Title, Content, Posted, ImageFile, UserId, callback){
 
             blogposts.Blogpost.create({
-                title: Title, content: Content, imageFile: ImageFile, posted: Posted, userId: UserId 
+                title: Title, content: Content, imageFile: ImageFile, posted: Posted, accountId: UserId 
             })
-            .then(newBlogpost => callback(null, newBlogpost.dataValues))
+            .then(newBlogpost => callback([], newBlogpost.dataValues.blogId))
             .catch(errors => callback(["databaseError"], null))
             
         }
