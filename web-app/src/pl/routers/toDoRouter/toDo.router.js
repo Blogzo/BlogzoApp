@@ -10,9 +10,9 @@ module.exports = function({toDoManager}){
         const userId = request.session.userId
         toDoManager.getAllToDosForAccount(userId, isLoggedIn, function(errors, toDos){
             
-            if(errors.length > 0){
+            if(errors.length){
                 if(errors.includes("databaseError")){
-                    response.status(500).render("errors.hbs")
+                    response.status(500).render("error500.hbs")
                 }
                 else if(errors.includes("Need to be logged in!")){
                     response.status(401).render("unauthorized401.hbs")

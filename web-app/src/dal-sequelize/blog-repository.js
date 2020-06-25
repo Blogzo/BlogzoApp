@@ -22,22 +22,24 @@ module.exports = function({}){
         },
 
         createBlogpost: function(Title, Content, Posted, ImageFile, UserId, callback){
-            
-            blogposts.Blogpost.create({title: Title, content: Content, imageFile: ImageFile, posted: Posted, userId: UserId }).then(function(newBlogpost){
-                callback([], newBlogpost)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
+
+            blogposts.Blogpost.create({
+                title: Title, content: Content, imageFile: ImageFile, posted: Posted, userId: UserId 
             })
+            .then(newBlogpost => callback(null, newBlogpost.dataValues))
+            .catch(errors => callback(["databaseError"], null))
+            
         },
 
         getUsernameById: function(UserId, callback){
             
-            blogposts.Blogpost.findOne({where: {userId: UserId},include: [{ model: blogposts.Account, attributes: ['accountUsername'] }],
-            }).then(function(username){
-                callback([], username)
-            }).catch(function(errors){
-                callback(["databaseError"], null)
+            blogposts.Blogpost.findOne({
+                where: {userId: UserId},
+                include: [{ model: blogposts.Account, 
+                attributes: ['accountUsername'] }],
             })
+            .then(username => callback(null, username[0].dataValues))
+            .catch(errors => callback(["databaseError"], null))
         }
     }
 }

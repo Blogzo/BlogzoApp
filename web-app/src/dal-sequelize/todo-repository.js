@@ -7,7 +7,8 @@ module.exports = function({}){
         getAllToDosForAccount: function(UserId, callback){
             
             toDos.toDo.findAll({
-                where: {userId: UserId}
+                raw: true,
+                where: {accountId: UserId}
             })
             .then(getAllToDos => callback([], getAllToDos))
             .catch(error => callback(["databaseError"], null)) 
@@ -15,8 +16,8 @@ module.exports = function({}){
 
         createTodo: function(UserId, todo, callback){
             
-            toDos.toDo.create({toDo: todo, userId: UserId})
-            .then(newTodo => callback([], newTodo))
+            toDos.toDo.create({toDo: todo, accountId: UserId})
+            .then(newTodo => callback(null, newTodo))
             .catch(errors => callback(["databaseError"], null))
         },
 
