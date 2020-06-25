@@ -4,18 +4,18 @@ module.exports = function({}){
 
     return {
 
-        createAccount: function(username, email, userPassword, callback){
+        createAccount: function(accountUsername, accountEmail, userPassword, callback){
 
             const query = "INSERT INTO accounts (accountUsername, accountEmail, accountPassword) VALUES (?, ?, ?)"
-            const values = [username, email, userPassword]
-            console.log("jag är här");
+            const values = [accountUsername, accountEmail, userPassword]
             db.query(query, values, function(errors, results){
                 
                 if(errors){
-                    console.log(errors);
+                    console.log("errorsDAL", errors)
                     callback(["databaseError"], null)
                 }else{
-                    callback([], results.insertId)
+                    console.log("resultDAL", results)
+                    callback(null, results.insertId)
                 }
             })
         },
