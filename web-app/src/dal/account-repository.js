@@ -15,7 +15,7 @@ module.exports = function({}){
                     callback(["databaseError"], null)
                 }else{
                     console.log("resultDAL", results)
-                    callback(null, results.insertId)
+                    callback([], results.insertId)
                 }
             })
         },
@@ -24,12 +24,14 @@ module.exports = function({}){
 
             const query = "SELECT accountPassword FROM accounts WHERE accountUsername = ?"
             const value = [username]
+            console.log("DAL");
             
             db.query(query, value, function(errors, userPassword){
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
-                    callback([], userPassword)
+                    console.log("userPasswordDAL", userPassword[0].accountPassword);
+                    callback([], userPassword[0].accountPassword)
                 }
             })
         },

@@ -17,7 +17,7 @@ module.exports = function({}){
         createTodo: function(UserId, todo, callback){
             
             toDos.toDo.create({toDo: todo, accountId: UserId})
-            .then(newTodo => callback(null, newTodo))
+            .then(newTodo => callback([], newTodo))
             .catch(errors => callback(["databaseError"], null))
         },
 

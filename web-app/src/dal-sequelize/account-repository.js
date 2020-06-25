@@ -9,16 +9,17 @@ module.exports = function({}){
             accounts.Account.findAll({
                 where: { accountUsername: Username }
             })
-            .then(accountPassword => callback([], accountPassword[0].dataValues))
+            .then(account => callback([], account[0].dataValues.accountPassword))
             .catch(errors => callback(["databaseError"], null))
         },
 
         createAccount: function(Username, Email, UserPassword, callback){
+            console.log("Sequelize");
             
             accounts.Account.create({
                 accountUsername: Username, accountEmail: Email, accountPassword: UserPassword
             })
-            .then(createAccount => callback(null, createAccount.dataValues))
+            .then(createAccount => callback([], createAccount.dataValues.accountId))
             .catch(error => callback(["databaseError"], null))
         },
 
@@ -26,7 +27,7 @@ module.exports = function({}){
             accounts.Account.findAll({
                 where: {accountId : id}
             })
-            .then(userId => callback(null, userId[0].dataValues.accountId))
+            .then(account => callback([], account[0].dataValues.accountId))
             .catch(error => callback(["databaseError"], null))
         }
     }

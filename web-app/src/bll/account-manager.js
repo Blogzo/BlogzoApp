@@ -27,13 +27,12 @@ module.exports = function({accountRepository}){
 
         checkUserPassword: function(username, password, callback){
 
-            accountRepository.getUserPassword(username, function(errors, account){
-                console.log("userPasswordBLL", account);
-                console.log(username, "UNBLL");
-                if(account.accountPassword){
-                    if(bcrypt.compareSync(password, account.accountPassword)){
+            accountRepository.getUserPassword(username, function(errors, accountPassword){
+                console.log("userPasswordBLL", accountPassword);
+                if(accountPassword){
+                    if(bcrypt.compareSync(password, accountPassword)){
                         
-                        callback(null, account)
+                        callback(null, accountPassword)
                     }else{
                         const errors = []
                         errors.push("Wrong password")
@@ -41,8 +40,6 @@ module.exports = function({accountRepository}){
                         return
                     }
                 }else{
-                    console.log("usernameBLL", username);
-                    
                     const errors = []
                     errors.push("Username do not exists")
                     callback(errors)
@@ -62,21 +59,21 @@ module.exports = function({accountRepository}){
             const saltrounds = 10
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
             
-            accountRepository.createAccount(username, email, hashedPassword, function(accountError, account){
-                console.log("BLLAccount", account);
-                console.log("errorBLL", accountError);
+            accountRepository.createAccount(username, email, hashedPassword, function(error, accountId){
+                console.log("BLLAccount", accountId);
+                console.log("errorBLL", error);
                 
-                if(accountError != null){
-                    console.log(accountError, "error>BLL");
+                if(error.length > 0){
+                    console.log(error, "error>BLL");
                     const databaseError = []
                     databaseError.push("databaseError")
                     callback(databaseError)
                     return
                     
                 }else{
-                    console.log(account,"BLL");
+                    console.log(accountId,"BLL");
                     
-                    callback(null, account) 
+                    callback(null, accountId) 
                 }
             })
         }
