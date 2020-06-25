@@ -9,7 +9,7 @@ module.exports = function({}){
             accounts.Account.findAll({
                 where: { accountUsername: Username }
             })
-            .then(account => callback([], account[0].dataValues.accountPassword))
+            .then(account => callback([], account[0].dataValues))
             .catch(errors => callback(["databaseError"], null))
         },
 

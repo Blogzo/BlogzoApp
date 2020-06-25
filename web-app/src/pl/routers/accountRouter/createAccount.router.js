@@ -43,9 +43,9 @@ module.exports = function({accountManager}){
                     response.render("create-account.hbs", model)
                 }
             }else{
-                console.log("accountIdPL", accountId);
-                
+                console.log("accountIdCreateAccount", accountId);
                 request.session.userId = accountId
+                console.log("userIdCreateAccount", request.session.userId);
                 request.session.username = username
                 response.redirect("/login")
             }

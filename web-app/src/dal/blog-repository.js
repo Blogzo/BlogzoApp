@@ -9,6 +9,8 @@ module.exports = function({}){
             const query = "SELECT * FROM blogposts"
            
             db.query(query, function(errors, blogposts){
+                console.log("blogpostsDAL", blogposts);
+                
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
@@ -23,6 +25,8 @@ module.exports = function({}){
             const value = [blogId]
            
             db.query(query, value, function(errors, blogpost){
+                console.log("getBlogpostIdDAL", blogpost);
+                
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
@@ -31,22 +35,6 @@ module.exports = function({}){
             })
         },
 
-        getUsernameById: function(userId, callback){
-
-            const query = "SELECT username FROM accounts INNER JOIN blogposts ON accounts.accountId = blogposts.accountId WHERE accountId = ?"
-            const value = [userId]
-            
-            db.query(query, value, function(errors, username){
-                
-                if(errors){
-                    callback(["databaseError"], null)
-                }else{
-                    callback([], username)
-                }
-            })
-        },
-
-        
         createBlogpost: function(title, content, posted, imageFile, accountId, callback){
 
             const query = "INSERT INTO blogposts (title, content, posted, imageFile, accountId) VALUES (?, ?, ?, ?, ?)"
@@ -59,7 +47,7 @@ module.exports = function({}){
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
-                    console.log("BlogpostDAL",status.insertId);
+                    console.log("BlogpostDAL", status.insertId);
                     
                     callback([], status.insertId)
                 }

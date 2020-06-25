@@ -14,7 +14,7 @@ module.exports = function({accountManager}){
 		const username = request.body.username
 		const userPassword = request.body.password
 		
-		accountManager.checkUserPassword(username, userPassword, function(errors, account){
+		accountManager.getLoginInformation(username, userPassword, function(errors, account){
 			console.log("errorsInPL", errors);
 			console.log("accountInPL", account);
 			if(errors != null){
@@ -34,7 +34,9 @@ module.exports = function({accountManager}){
 				request.session.isLoggedIn = true
 				request.session.username = username
 				request.session.userId = account.accountId
-				console.log("IdPl", account.accountId);
+				console.log("accountIdLogin", account.accountId);
+				console.log("userIdLogin", request.session.userId);
+
 				
 				response.redirect("/blogposts")
 			}

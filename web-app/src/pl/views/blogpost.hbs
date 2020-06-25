@@ -15,20 +15,19 @@
     <p>{{this}}</p>
 {{/if}}
 
-{{#if blogpost}}
-    <h1 style="text-align: center;"><b>Blogpost</b></h1>
-    <div class="container card mb-4 p-1">
-        <img class="card-img-top" src="/blogpost-img/{{imageFile}}" alt="Card image cap">
+{{#if blogpost.length}}
+    {{#each blogpost}}
+    <div class="container card mb-4 border">
+        <img class="card-img-top" src="/blogpost-img/{{imageFile}}" width="750" height="600" alt="Image not found">
         <div class="card-body">
             <h2 class="card-title">{{title}}</h2>
-            <p class="card-text">                
-                {{content}}
-            </p>
+            <a href="/blogposts/{{blogId}}" class="btn btn-primary">Read more &rarr;</a>
         </div>
         <div class="card-footer text-muted">
-            Posted on {{posted}}, by {{username.account.username}}
+            Posted on {{posted}}
         </div>
     </div>
+    {{/each}}
 {{else}}
     <p>No blogpost with that id!</p>
 {{/if}}

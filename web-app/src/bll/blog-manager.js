@@ -47,7 +47,7 @@ module.exports = function({blogRepository, accountRepository}){
                 return
             }else{
                 blogRepository.getBlogpostId(blogId, function(errors, blogpost){
-                    console.log("blogpostBLL", blogpost.accountId);
+                    console.log("getBlogpostIdBLL", blogpost);
                     
                     callback(errors, blogpost)
                 })
@@ -72,7 +72,7 @@ module.exports = function({blogRepository, accountRepository}){
             }else{
                 accountRepository.getAccountId(userId, function(errors, accountId){
                     console.log("accountIdBLL", accountId);
-                    
+                    console.log("userIdBLL", userId);
                     if(accountId != userId){
                         throw "unauthorized!"
                     }else{

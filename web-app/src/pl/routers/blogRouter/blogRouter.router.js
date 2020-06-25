@@ -38,7 +38,7 @@ module.exports = function({blogManager}){
         const isLoggedIn = request.session.isLoggedIn
         
         blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
-            console.log("blogpostPl", blogpost);
+            console.log("getBlogpostIdPL", blogpost);
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -58,17 +58,12 @@ module.exports = function({blogManager}){
                     response.render("blogpost.hbs", model)   
                 }
             }else{
-                blogManager.getUsernameById(blogpost.accountId, function(errors, username){
-                    console.log("blogpost.accountId", blogpost.accountId)
-                    console.log("UsernameInPL", username);
-                    
-                    const model = {
-                        blogpost,
-                        errors,
-                        username
-                    }
-                    response.render("blogpost.hbs", model)
-                })    
+                console.log("Inside else");
+                
+                const model = {
+                    blogpost
+                }
+                response.render("blogpost.hbs", model)
             }
         })
     })
@@ -83,7 +78,8 @@ module.exports = function({blogManager}){
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
         const username = request.session.username
-        console.log("beforeUserId", userId);
+        console.log("userIdPL", userId);
+        
         
     
         if(!file){
@@ -93,8 +89,6 @@ module.exports = function({blogManager}){
         }
        
         blogManager.createBlogpost(title, content, posted, file, userId, isLoggedIn, username, function(errors, blogpost){
-            console.log("userIdPL", userId);
-            console.log("beforeLogPL", blogpost);
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -110,7 +104,6 @@ module.exports = function({blogManager}){
                 }     
             }else{
                 response.redirect("/blogposts/" + blogpost)
-                console.log("blogIdPl", blogpost);
                 
             }
         })

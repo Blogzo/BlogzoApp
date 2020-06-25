@@ -20,9 +20,9 @@ module.exports = function({}){
             })
         },
 
-        getUserPassword: function(username, callback){
+        getLoginInformation: function(username, callback){
 
-            const query = "SELECT accountPassword FROM accounts WHERE accountUsername = ?"
+            const query = "SELECT accountPassword, accountId FROM accounts WHERE accountUsername = ?"
             const value = [username]
             console.log("DAL");
             
@@ -30,8 +30,8 @@ module.exports = function({}){
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
-                    console.log("userPasswordDAL", userPassword[0].accountPassword);
-                    callback([], userPassword[0].accountPassword)
+                    console.log("userPasswordDAL", userPassword);
+                    callback([], userPassword[0])
                 }
             })
         },

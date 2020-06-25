@@ -7,8 +7,7 @@ module.exports = function({}){
         getBlogposts: function(callback){
 
             blogposts.Blogpost.findAll({
-                raw: true, 
-                include: [{ model: blogposts.Account, attributes: ['accountUsername']}],
+                raw: true
             })
             .then(allBlogposts => callback([], allBlogposts))
             .catch(errors => callback(["databaseError"], null))  
@@ -29,17 +28,6 @@ module.exports = function({}){
             .then(newBlogpost => callback(null, newBlogpost.dataValues))
             .catch(errors => callback(["databaseError"], null))
             
-        },
-
-        getUsernameById: function(UserId, callback){
-            
-            blogposts.Blogpost.findOne({
-                where: {userId: UserId},
-                include: [{ model: blogposts.Account, 
-                attributes: ['accountUsername'] }],
-            })
-            .then(username => callback(null, username[0].dataValues))
-            .catch(errors => callback(["databaseError"], null))
         }
     }
 }

@@ -25,14 +25,14 @@ module.exports = function({accountRepository}){
             return errors
         },
 
-        checkUserPassword: function(username, password, callback){
+        getLoginInformation: function(username, password, callback){
 
-            accountRepository.getUserPassword(username, function(errors, accountPassword){
-                console.log("userPasswordBLL", accountPassword);
-                if(accountPassword){
-                    if(bcrypt.compareSync(password, accountPassword)){
+            accountRepository.getLoginInformation(username, function(errors, account){
+                console.log("userPasswordBLL", account);
+                if(account){
+                    if(bcrypt.compareSync(password, account.accountPassword)){
                         
-                        callback(null, accountPassword)
+                        callback(null, account)
                     }else{
                         const errors = []
                         errors.push("Wrong password")
