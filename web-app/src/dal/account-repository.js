@@ -42,11 +42,12 @@ module.exports = function({}){
             const value = [username]
 
             db.query(query, value, function(errors, accountId){
-
+                console.log("accountIdSEQ", accountId[0].accountId);
+                   
                 if(errors){
                     callback(["databaseError", null])
                 }else{
-                    callback([], accountId)
+                    callback([], accountId[0].accountId)
                 }
             })
         }

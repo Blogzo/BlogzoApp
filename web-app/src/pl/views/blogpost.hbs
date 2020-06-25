@@ -15,19 +15,19 @@
     <p>{{this}}</p>
 {{/if}}
 
-{{#if blogpost.length}}
-    {{#each blogpost}}
+{{#if blogpost}}
     <div class="container card mb-4 border">
-        <img class="card-img-top" src="/blogpost-img/{{imageFile}}" width="750" height="600" alt="Image not found">
+        <img class="card-img-top" src="/blogpost-img/{{blogpost.imageFile}}" width="750" height="600" alt="Image not found">
         <div class="card-body">
-            <h2 class="card-title">{{title}}</h2>
-            <a href="/blogposts/{{blogId}}" class="btn btn-primary">Read more &rarr;</a>
+            <h2 class="card-title">{{blogpost.title}}</h2>
+            <p class="card-text">
+                {{blogpost.content}}
+            </p>
         </div>
         <div class="card-footer text-muted">
-            Posted on {{posted}}
+            Posted on {{blogpost.posted}}
         </div>
     </div>
-    {{/each}}
 {{else}}
     <p>No blogpost with that id!</p>
 {{/if}}

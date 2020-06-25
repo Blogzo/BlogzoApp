@@ -37,7 +37,7 @@ module.exports = function({blogManager}){
         const blogId = request.params.blogId
         const isLoggedIn = request.session.isLoggedIn
         
-        blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
+        blogManager.getBlogpostById(blogId, isLoggedIn, function(errors, blogpost){
             console.log("getBlogpostIdPL", blogpost);
             
             if(errors.length > 0){
@@ -61,8 +61,10 @@ module.exports = function({blogManager}){
                 console.log("Inside else");
                 
                 const model = {
-                    blogpost
+                    blogpost: blogpost
                 }
+                console.log("blogpostModelPL", model);
+                
                 response.render("blogpost.hbs", model)
             }
         })

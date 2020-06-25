@@ -32,11 +32,8 @@ module.exports = function({toDoRepository}){
                 return
             }else{
                 toDoRepository.getAllToDosForAccount(userId, function(errors, toDos){
-                    if(errors.length > 0){
-                        callback(["databaseError"], null)
-                    }else{                        
-                        callback([], toDos)
-                    }
+                   
+                    callback(errors, toDos)
                     console.log("errorsInBLL", errors);
                     console.log("todosBLL", toDos);
                 })

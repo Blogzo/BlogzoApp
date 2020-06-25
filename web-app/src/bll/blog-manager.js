@@ -38,7 +38,7 @@ module.exports = function({blogRepository, accountRepository}){
             })
         },
 
-        getBlogpostId: function(blogId, isLoggedIn, callback){
+        getBlogpostById: function(blogId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(0, 0, isLoggedIn)
             
@@ -46,7 +46,7 @@ module.exports = function({blogRepository, accountRepository}){
                 callback(errors)
                 return
             }else{
-                blogRepository.getBlogpostId(blogId, function(errors, blogpost){
+                blogRepository.getBlogpostById(blogId, function(errors, blogpost){
                     console.log("getBlogpostIdBLL", blogpost);
                     
                     callback(errors, blogpost)
@@ -70,7 +70,7 @@ module.exports = function({blogRepository, accountRepository}){
                 callback(errors)
                 return
             }else{
-                accountRepository.getAccountId(userId, function(errors, accountId){
+                accountRepository.getAccountId(username, function(errors, accountId){
                     console.log("accountIdBLL", accountId);
                     console.log("userIdBLL", userId);
                     if(accountId != userId){

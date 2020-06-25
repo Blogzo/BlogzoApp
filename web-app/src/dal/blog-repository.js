@@ -19,7 +19,7 @@ module.exports = function({}){
             })
         },
 
-        getBlogpostId: function(blogId, callback){
+        getBlogpostById: function(blogId, callback){
 
             const query = "SELECT * FROM blogposts WHERE blogId = ?"
             const value = [blogId]

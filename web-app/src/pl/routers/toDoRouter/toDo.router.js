@@ -39,7 +39,7 @@ module.exports = function({toDoManager}){
         
         toDoManager.createTodo(userId, todo, isLoggedIn, function(errors, newTodo){
             
-            if(errors){
+            if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
                 }

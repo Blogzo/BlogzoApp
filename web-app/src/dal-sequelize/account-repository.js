@@ -4,7 +4,7 @@ module.exports = function({}){
 
     return {
 
-        getUserPassword: function(Username, callback){
+        getLoginInformation: function(Username, callback){
             
             accounts.Account.findAll({
                 where: { accountUsername: Username }
