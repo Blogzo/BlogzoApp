@@ -31,9 +31,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         
         const isLoggedIn = true
         const accountId = request.params.accountId
-        console.log("accountIdRESTAPI", accountId);
         
-
         toDoManager.getAllToDosForAccount(accountId, isLoggedIn, function(errors, toDos){
             
             if(errors.length > 0){
@@ -44,8 +42,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(401).end()   
                 }
             }else{
-                console.log("toDos", toDos);
-                
                 response.status(200).json(toDos)
             }
         })
@@ -57,14 +53,9 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const todoId = request.params.todoId
         const userId = request.body.accountId
         const accountUsername = request.body.accountUsername
-        console.log("accountusernameUpdateREST", accountUsername);
-        console.log("todoIdUpdateREST", todoId);
-        console.log("userIdUpdateREST", userId);
-        
         const isLoggedIn = true
         
-        toDoManager.updateTodo(userId, todoId, todo, accountUsername, isLoggedIn, function(errors, newTodo){
-            console.log("newTodoUpdateREST", newTodo);
+        toDoManager.updateTodo(todoId, userId, todo, accountUsername, isLoggedIn, function(errors, newTodo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -110,9 +101,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const todo = request.body.todo
         const userId = request.body.userId
         const accountUsername = request.body.accountUsername
-        console.log("userIdREST", userId);
-        console.log("accountUsernameREST", accountUsername);
-        
         
         toDoManager.createTodo(userId, todo, accountUsername, function(errors, newTodo){
             
@@ -135,8 +123,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.delete("/toDoItems/:todoId", authorization, function(request, response){
         
         const todoId = request.params.todoId
-        console.log("todoIdDeleteREST", todoId);
-        
         const isLoggedIn = true
         
         toDoManager.deleteTodo(todoId, isLoggedIn, function(errors, deletedToDo){
@@ -207,7 +193,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         }
 
         accountManager.getLoginInformation(username, userPassword, function(errors, account){
-            if(errors){
+            if(errors.length > 0){
                 if(errors.includes('DatabaseError')){
                     response.status(500).end()
                 }
@@ -266,8 +252,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(401).end()
                 }
             }else{
-                console.log("blogpostREST", blogpost);
-                
                 const model = {
                     blogpost
                 }

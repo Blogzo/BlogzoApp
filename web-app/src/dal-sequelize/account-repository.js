@@ -14,7 +14,6 @@ module.exports = function({}){
         },
 
         createAccount: function(Username, Email, UserPassword, callback){
-            console.log("Sequelize");
             
             accounts.Account.create({
                 accountUsername: Username, accountEmail: Email, accountPassword: UserPassword
@@ -24,11 +23,12 @@ module.exports = function({}){
         },
 
         getAccountId: function(username, callback){
+            
             accounts.Account.findAll({
                 where: {accountUsername : username}
             })
             .then(account => callback([], account[0].dataValues.accountId))
-            .catch(error => callback([error], null))
+            .catch(error => callback(["databaseError"], null))
         }
     }
 }

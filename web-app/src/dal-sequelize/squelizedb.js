@@ -12,27 +12,27 @@ const sequelize = new Sequelize({
     username: USERNAME,
 
     pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
+      max: 5,
+      min: 0,
+      idle: 10000
     }
 })
 
 function connection(sqlizeObj, isConnected){
     
   if(!isConnected){
-      setTimeout(function(){
-        sqlizeObj.authenticate().then(()=>{
-          sqlizeObj.sync()
-          console.log('Connection has been established successfully.')
-          return
-        })
-        .catch(error =>{
-          connection(sqlizeObj,false)
-          //console.error('Unable to connect to the database:', error)
-        })
-      }) 
-    }
+    setTimeout(function(){
+      sqlizeObj.authenticate().then(()=>{
+        sqlizeObj.sync()
+        console.log('Connection has been established successfully.')
+        return
+      })
+      .catch(error =>{
+        connection(sqlizeObj,false)
+        console.error('Unable to connect to the database:', error)
+      })
+    }) 
+  }
 }
    
 connection(sequelize, false)

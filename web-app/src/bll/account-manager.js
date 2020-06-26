@@ -28,11 +28,11 @@ module.exports = function({accountRepository}){
         getLoginInformation: function(username, password, callback){
 
             accountRepository.getLoginInformation(username, function(errors, account){
-                console.log("userPasswordBLL", account);
+
                 if(account){
                     if(bcrypt.compareSync(password, account.accountPassword)){
                         
-                        callback(null, account)
+                        callback([], account)
                     }else{
                         const errors = []
                         errors.push("Wrong password")
@@ -60,19 +60,13 @@ module.exports = function({accountRepository}){
             const hashedPassword = bcrypt.hashSync(userPassword, saltrounds)
             
             accountRepository.createAccount(username, email, hashedPassword, function(error, accountId){
-                console.log("BLLAccount", accountId);
-                console.log("errorBLL", error);
-                
+               
                 if(error.length > 0){
-                    console.log(error, "error>BLL");
                     const databaseError = []
                     databaseError.push("databaseError")
                     callback(databaseError)
                     return
-                    
-                }else{
-                    console.log(accountId,"BLL");
-                    
+                }else{                    
                     callback(null, accountId) 
                 }
             })

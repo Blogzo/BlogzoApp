@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     
-    //error handling done
     document.querySelector("#create-account-page form").addEventListener("submit", function (event) {
 
         event.preventDefault()
-        console.log("create account");
-        
         const username = document.querySelector("#create-account-page .username").value
         const email = document.querySelector("#create-account-page .email").value
         const userPassword = document.querySelector("#create-account-page .userPassword").value
@@ -42,16 +39,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }).catch(function(errors) {
             const url = "/error-page"
             changeToPage(url)
-            
         })
     })
 
     document.querySelector("#create-todo-page form").addEventListener("submit", function (event) {
         
         event.preventDefault()
-        console.log("Inside create todo");
-        console.log("username", localStorage.accountUsername);
-        
         
         const todo = document.querySelector("#create-todo-page .todo").value
         const userId = localStorage.accountId
@@ -61,8 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
             userId,
             accountUsername   
         }
-        console.log("newtodo", newToDo);
-        
+
         fetch(
             "http://localhost:8080/restAPI/toDoItems", {
             method: "POST",
@@ -73,12 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify(newToDo)
         }
         ).then(function(response) {
-            console.log("Inside response");
             
             const statusCode = response.status
             if (statusCode == 201) {
-                console.log("201");
-                
                 const url = "/toDoItems"
                 changeToPage(url)
             }else if(statusCode == 401){
@@ -135,10 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const todoId = url.split("/")[2]
         const accountUsername = localStorage.accountUsername
         const accountId = localStorage.accountId
-        console.log("accountIdUpdate", accountId);
-        console.log("accountUsernameUpdate", accountUsername);
-        console.log("todoIdUPDATE", todoId);
-        
         
         const newToDo = {
             todo,
@@ -172,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
             changeToPage(url)
         })
     })
-    //error handling done
+
     document.querySelector("#login-page form").addEventListener("submit", function (event) {
 
         event.preventDefault()
@@ -185,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
             Username: username,
             userPassword: password
         }
+
         fetch(
             
             "http://localhost:8080/restAPI/login", {
@@ -210,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeToPage(url)
             }
         }).then(function(body){
-            console.log("body", body);
             
             if(body.errors){
                 const error = document.querySelector("#login-page p")
@@ -219,11 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 login(body.access_token)
                 localStorage.accountId = body.id_token.accountId
                 localStorage.accountUsername = body.id_token.accountUsername
-                console.log("accountId", body.id_token.accountId);
-                console.log("username", localStorage.accountUsername);
-                
-                
-                
                 const url = "/"
                 changeToPage(url)
             }
@@ -301,7 +281,6 @@ function fetchBlogpost(blogId) {
         image.innerText = blogpost.blogpost.imageFile
 
     }).catch(function (error) {
-        console.log("error", error);
         const url = "/error-page"
         changeToPage(url)
     })
@@ -328,7 +307,6 @@ function fetchAllToDoItems() {
             changeToPage(url)
         }
     }).then(function(toDoItems){
-        console.log("todoItems", toDoItems);
         
         const ul = document.querySelector("#toDoItems-page ul")
         ul.innerText = ""
@@ -366,8 +344,6 @@ function fetchToDo(todoId) {
             changeToPage(url)
         }
     }).then(function (todo) {
-        console.log("todo", todo);
-        
         const toDo = document.querySelector("#toDoItem-page .toDo")
         toDo.innerText = todo.todo
     }).catch(function (error) {

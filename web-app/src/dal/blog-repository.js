@@ -9,7 +9,6 @@ module.exports = function({}){
             const query = "SELECT * FROM blogposts"
            
             db.query(query, function(errors, blogposts){
-                console.log("blogpostsDAL", blogposts);
                 
                 if(errors){
                     callback(["databaseError"], null)
@@ -25,7 +24,6 @@ module.exports = function({}){
             const value = [blogId]
            
             db.query(query, value, function(errors, blogpost){
-                console.log("getBlogpostIdDAL", blogpost);
                 
                 if(errors){
                     callback(["databaseError"], null)
@@ -41,14 +39,10 @@ module.exports = function({}){
             const values = [title, content, posted, imageFile, accountId]
             
             db.query(query, values, function(errors, status){
-                console.log("DAL");
-                
                 
                 if(errors){
                     callback(["databaseError"], null)
                 }else{
-                    console.log("BlogpostDAL", status.insertId);
-                    
                     callback([], status.insertId)
                 }
             })

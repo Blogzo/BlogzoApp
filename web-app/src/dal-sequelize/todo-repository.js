@@ -40,7 +40,7 @@ module.exports = function({}){
         updateTodo: function(todoID, newTodo, callback){
             
             toDos.toDo.update({todo: newTodo}, {where: {todoId: todoID}})
-            .then(updateTodo => callback([], this.updateTodo))
+            .then(updateTodo => callback([], updateTodo))
             .catch(errors => callback(["databaseError"], null))
         }
     }

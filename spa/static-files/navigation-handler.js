@@ -18,8 +18,6 @@ document.addEventListener("DOMContentLoaded", function(){
 			goToPage(url)
 		}
     })
-    
-    
 })
 
 window.addEventListener("popstate", function(event){

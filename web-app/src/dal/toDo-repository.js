@@ -10,6 +10,7 @@ module.exports = function({}){
             const values = [userId]
            
             db.query(query, values, function(error, toDoList){
+                
                 if(error){
                     callback(["databaseError"], null)
                 }else{
@@ -24,6 +25,7 @@ module.exports = function({}){
             const values = [todo, userId]
             
             db.query(query, values, function(error, newTodo){
+                
                 if(error){
                     callback(["databaseError"], null)
                 }else{
@@ -38,6 +40,7 @@ module.exports = function({}){
             const values = [todo]
             
             db.query(query, values, function(error, deletedToDo){
+                
                 if(error){
                     callback(["databaseError"], null)
                 }else{
@@ -52,6 +55,7 @@ module.exports = function({}){
             const values = [todoId]
             
             db.query(query, values, function(error, todo){
+               
                 if(error){
                     callback(["databaseError"], null)
                 }else{
@@ -66,6 +70,7 @@ module.exports = function({}){
             const values = [todoId, todo]
             
             db.query(query, values, function(error, newTodo){
+                
                 if(error){
                     callback(["databaseError"], null)
                 }else{

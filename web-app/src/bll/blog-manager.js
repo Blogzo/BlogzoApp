@@ -30,8 +30,6 @@ module.exports = function({blogRepository, accountRepository}){
         getAllBlogposts: function(callback){
 
             blogRepository.getBlogposts(function(errors, blogposts){
-                console.log("blogErrorsInBLL", errors);
-                console.log("BlogPostsBLL", blogposts);
                   
                 callback(errors, blogposts)
                   
@@ -47,7 +45,6 @@ module.exports = function({blogRepository, accountRepository}){
                 return
             }else{
                 blogRepository.getBlogpostById(blogId, function(errors, blogpost){
-                    console.log("getBlogpostIdBLL", blogpost);
                     
                     callback(errors, blogpost)
                 })
@@ -55,7 +52,6 @@ module.exports = function({blogRepository, accountRepository}){
         },
 
         createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, username, callback){
-            console.log("userIdInBLL", userId);
             
             const errors = this.getValidationErrors(title, content, isLoggedIn)
             if(errors.length > 0){
@@ -63,9 +59,6 @@ module.exports = function({blogRepository, accountRepository}){
                 return
             }else{
                 accountRepository.getAccountId(username, function(errors, accountId){
-                    console.log("accountIdBLL", accountId);
-                    console.log("userIdBLL", userId);
-                    console.log("errorBLL",errors);
                     
                     if(accountId != userId){
                         throw "unauthorized!"

@@ -7,10 +7,7 @@ module.exports = function({toDoRepository, accountRepository}){
 
             const errors = []
 
-            if(name.length == 0){
-                errors.push("Need to write something!")
-            }
-            else if(name.length < 5){
+            if(name.length < 5){
                 errors.push("Name to short!")
             }
             else if(name.length > 20){
@@ -34,8 +31,6 @@ module.exports = function({toDoRepository, accountRepository}){
                 toDoRepository.getAllToDosForAccount(accountId, function(errors, toDos){
                    
                     callback(errors, toDos)
-                    console.log("errorsInBLL", errors);
-                    console.log("todosBLL", toDos);
                 })
             }
         },
@@ -56,28 +51,20 @@ module.exports = function({toDoRepository, accountRepository}){
         },
 
         createTodo: function(userId, newTodo, accountUsername, isLoggedIn, callback){
-
+            
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])
                 return
-            }else{
-                console.log("accountUsernameBLL", accountUsername);
-                
+            }else{                
                 accountRepository.getAccountId(accountUsername, function(errors, accountId){
-                    console.log("accountIdBLL", accountId);
-                    console.log("userIdBLL", userId);
-                    console.log("errorBLL", errors);
         
                     if(accountId != userId){
                         const error = ["Unauthorized"]
                         callback(error)
                     }else{
                         toDoRepository.createTodo(accountId, newTodo, function(errors, todo){
-                            console.log("todoBLL", todo);
-                            console.log("errorCreateTodoBLL", errors);
-                            
                             callback(errors, todo)
                         })
                     }
@@ -108,10 +95,7 @@ module.exports = function({toDoRepository, accountRepository}){
                 callback(errors, [])
             }else{
                 accountRepository.getAccountId(accountUsername, function(errors, accountId){
-                    console.log("accountIdBLL", accountId);
-                    console.log("userIdBLL", userId);
-                    console.log("errorBLL", errors);
-                    
+            
                     if(accountId != userId){
                         const error = ["Unauthorized"]
                         callback(error)

@@ -19,8 +19,6 @@ module.exports = function({accountManager}){
            
         accountManager.createAccount(username, email, userPassword, userPassword2, function(errors, accountId){
             
-            console.log(username, "username");
-            
             if(errors){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
@@ -43,9 +41,7 @@ module.exports = function({accountManager}){
                     response.render("create-account.hbs", model)
                 }
             }else{
-                console.log("accountIdCreateAccount", accountId);
                 request.session.userId = accountId
-                console.log("userIdCreateAccount", request.session.userId);
                 request.session.username = username
                 response.redirect("/login")
             }

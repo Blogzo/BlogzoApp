@@ -7,9 +7,8 @@ module.exports = function({blogManager}){
     router.get("/", function(request, response){
         
         blogManager.getAllBlogposts(function(errors, blogposts){
-            console.log("blogErrorsInPl", errors);
-            console.log("blogpostsPL", blogposts)
-            if(errors.length){
+           
+            if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("error500.hbs")
                 }else{
@@ -38,7 +37,6 @@ module.exports = function({blogManager}){
         const isLoggedIn = request.session.isLoggedIn
         
         blogManager.getBlogpostById(blogId, isLoggedIn, function(errors, blogpost){
-            console.log("getBlogpostIdPL", blogpost);
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -57,14 +55,10 @@ module.exports = function({blogManager}){
                     }
                     response.render("blogpost.hbs", model)   
                 }
-            }else{
-                console.log("Inside else");
-                
+            }else{                
                 const model = {
                     blogpost: blogpost
                 }
-                console.log("blogpostModelPL", model);
-                
                 response.render("blogpost.hbs", model)
             }
         })
@@ -80,10 +74,7 @@ module.exports = function({blogManager}){
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
         const username = request.session.username
-        console.log("userIdPL", userId);
         
-        
-    
         if(!file){
             const error = new Error("please upload a file")
             error.httpStatusCode = 400

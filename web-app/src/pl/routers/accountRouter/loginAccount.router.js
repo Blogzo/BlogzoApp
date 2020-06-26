@@ -15,9 +15,8 @@ module.exports = function({accountManager}){
 		const userPassword = request.body.password
 		
 		accountManager.getLoginInformation(username, userPassword, function(errors, account){
-			console.log("errorsInPL", errors);
-			console.log("accountInPL", account);
-			if(errors != null){
+			
+			if(errors.length > 0){
 				if(errors.includes("databaseError")){
 					response.status(500).render("error500.hbs")
 				}else{
@@ -32,12 +31,8 @@ module.exports = function({accountManager}){
 				response.status(404).render("notFound.hbs")
 			}else{
 				request.session.isLoggedIn = true
-				request.session.username = username
+				request.session.accountUsername = username
 				request.session.userId = account.accountId
-				console.log("accountIdLogin", account.accountId);
-				console.log("userIdLogin", request.session.userId);
-
-				
 				response.redirect("/blogposts")
 			}
 		})
