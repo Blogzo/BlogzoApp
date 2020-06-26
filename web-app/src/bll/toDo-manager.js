@@ -1,5 +1,5 @@
 
-module.exports = function({toDoRepository}){
+module.exports = function({toDoRepository, accountRepository}){
 
     return {
 
@@ -23,7 +23,7 @@ module.exports = function({toDoRepository}){
 
         },
 
-        getAllToDosForAccount: function(userId, isLoggedIn, callback){
+        getAllToDosForAccount: function(accountId, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(0, isLoggedIn)
             
@@ -31,7 +31,7 @@ module.exports = function({toDoRepository}){
                 callback(errors)
                 return
             }else{
-                toDoRepository.getAllToDosForAccount(userId, function(errors, toDos){
+                toDoRepository.getAllToDosForAccount(accountId, function(errors, toDos){
                    
                     callback(errors, toDos)
                     console.log("errorsInBLL", errors);
@@ -55,7 +55,7 @@ module.exports = function({toDoRepository}){
             }   
         },
 
-        createTodo: function(userId, newTodo, isLoggedIn, callback){
+        createTodo: function(userId, newTodo, accountUsername, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(newTodo, isLoggedIn)
             
@@ -63,38 +63,76 @@ module.exports = function({toDoRepository}){
                 callback(errors, [])
                 return
             }else{
-                toDoRepository.createTodo(userId, newTodo, function(errors, todo){
-                    
-                    callback(errors, todo)
+                console.log("accountUsernameBLL", accountUsername);
+                
+                accountRepository.getAccountId(accountUsername, function(errors, accountId){
+                    console.log("accountIdBLL", accountId);
+                    console.log("userIdBLL", userId);
+                    console.log("errorBLL", errors);
+        
+                    if(accountId != userId){
+                        const error = ["Unauthorized"]
+                        callback(error)
+                    }else{
+                        toDoRepository.createTodo(accountId, newTodo, function(errors, todo){
+                            console.log("todoBLL", todo);
+                            console.log("errorCreateTodoBLL", errors);
+                            
+                            callback(errors, todo)
+                        })
+                    }
                 })
             }
         },
 
-        deleteTodo: function(todoId, isLoggedIn, callback){
+        deleteTodo: function(userId, todoId, accountUsername, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(0, isLoggedIn)
+            console.log("accountusernameBLL", accountUsername);
             
             if(errors.length > 0){
                 callback(errors, [])
                 return
             }else{
-                toDoRepository.deleteTodo(todoId, function(errors, todo){
+                accountRepository.getAccountId(accountUsername, function(errors, accountId){
+                    console.log("accountIdBLL", accountId);
+                    console.log("userIdBLL", userId);
+                    console.log("errorBLL", errors);
                     
-                    callback(errors, todo)
+                    if(accountId != userId){
+                        const error = ["Unauthorized"]
+                        callback(error)
+                    }else{
+                        toDoRepository.deleteTodo(todoId, function(errors, todo){
+                    
+                            callback(errors, todo)
+                        })
+                    }
                 })
             }
         },
 
-        updateTodo: function(todoId, updateTodo, isLoggedIn, callback){
+        updateTodo: function(todoId, userId, updateTodo, accountUsername, isLoggedIn, callback){
             
             const errors = this.getValidationErrors(updateTodo, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])
             }else{
-                toDoRepository.updateTodo(todoId, updateTodo, function(errors, todo){
+                accountRepository.getAccountId(accountUsername, function(errors, accountId){
+                    console.log("accountIdBLL", accountId);
+                    console.log("userIdBLL", userId);
+                    console.log("errorBLL", errors);
                     
-                    callback(errors, todo)
+                    if(accountId != userId){
+                        const error = ["Unauthorized"]
+                        callback(error)
+                    }else{
+                        toDoRepository.updateTodo(todoId, updateTodo, function(errors, todo){
+                    
+                            callback(errors, todo)
+                        })
+                    }
                 })
             }
         }

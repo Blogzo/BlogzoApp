@@ -54,7 +54,7 @@ const toDo = sequelize.define('todoItems', {
         autoIncrement: true,
         allowNull: false
     },
-    toDo:{type: Sequelize.TEXT
+    todo:{type: Sequelize.TEXT
     }
 }, {
     timestamps: false

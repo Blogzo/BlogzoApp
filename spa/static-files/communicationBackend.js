@@ -48,16 +48,22 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#create-todo-page form").addEventListener("submit", function (event) {
         
         event.preventDefault()
-
+        console.log("Inside create todo");
+        console.log("username", localStorage.accountUsername);
+        
+        
         const todo = document.querySelector("#create-todo-page .todo").value
-        const userId = localStorage.userId
+        const userId = localStorage.accountId
+        const accountUsername = localStorage.accountUsername
         const newToDo = {
             todo,
-            userId   
+            userId,
+            accountUsername   
         }
+        console.log("newtodo", newToDo);
         
         fetch(
-            "http://localhost:8080/restAPI/toDoLists", {
+            "http://localhost:8080/restAPI/toDoItems", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -66,9 +72,13 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify(newToDo)
         }
         ).then(function(response) {
+            console.log("Inside response");
+            
             const statusCode = response.status
             if (statusCode == 201) {
-                const url = "/toDolists"
+                console.log("201");
+                
+                const url = "/toDoItems"
                 changeToPage(url)
             }else if(statusCode == 401){
                 const url = "/unauthorized-page"
@@ -83,15 +93,17 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     })
 
-    document.querySelector("#toDoList-page form").addEventListener("submit", function (event) {
+    document.querySelector("#toDoItem-page form").addEventListener("submit", function (event) {
         
         event.preventDefault()
 
         const url = location.pathname
         const todoId = url.split("/")[2]
-
+        const accountUsername = localStorage.accountUsername
+        console.log("usernameinDeleteTodo", accountUsername);
+        
         fetch(
-            "http://localhost:8080/restAPI/toDoLists/" + todoId, {
+            "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId + "/" + todoId, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json",
@@ -101,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ).then(function (response) {
             const statuscode = response.status
             if (statuscode == 204) {
-                const url = "/toDoLists"
+                const url = "/toDoItems"
                 changeToPage(url)
             }else if(statuscode == 401){
                 const url = "/unauthorized-page"
@@ -122,13 +134,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const todo = document.querySelector("#update-todo-page .newTodo").value
         const url = location.pathname
         const todoId = url.split("/")[2]
+        const accountUsername = localStorage.accountUsername
+        console.log("accountUsernameUpdate", accountUsername);
+        console.log("todoIdUPDATE", todoId);
+        
         
         const newToDo = {
-            todo
+            todo,
+            accountUsername
         }    
     
         fetch(
-            "http://localhost:8080/restAPI/toDoLists/" + localStorage.userId + "/" + todoId, {
+            "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId + "/" + todoId, {
             method: "PUT",
             headers: {
                 "Content-type": "Application/json",
@@ -139,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ).then(function (response) {
             const statuscode = response.status
             if (statuscode == 204) {
-                const url = "/toDoLists"
+                const url = "/toDoItems"
                 changeToPage(url)
             }else if(statuscode == 401){
                 const url = "/unauthorized-page"
@@ -191,22 +208,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 changeToPage(url)
             }
         }).then(function(body){
+            console.log("body", body);
+            
             if(body.errors){
                 const error = document.querySelector("#login-page p")
                 error.innerText = body.errors
             }else{
                 login(body.access_token)
-                localStorage.userId = body.id_token.userId
+                localStorage.accountId = body.id_token.accountId
+                localStorage.accountUsername = body.id_token.accountUsername
+                console.log("accountId", body.id_token.accountId);
+                console.log("username", localStorage.accountUsername);
+                
+                
+                
                 const url = "/"
                 changeToPage(url)
             }
         }).catch(function(error){
+            
             const url = "/error-page"
             changeToPage(url)
         })
     })
     
-    document.querySelector("#toDoList-page form button").addEventListener("click", function (event) {
+    document.querySelector("#toDoItem-page form button").addEventListener("click", function (event) {
         
         event.preventDefault()
         const url = "/update-todo"
@@ -266,25 +292,24 @@ function fetchBlogpost(blogId) {
         const content = document.querySelector("#blogpost-page .content")
         const posted = document.querySelector("#blogpost-page .posted")
         const image = document.querySelector("#blogpost-page .image")
-        const user = document.querySelector("#blogpost-page .user")
 
         title.innerText = blogpost.blogpost.title
         content.innerText = blogpost.blogpost.content
         posted.innerText = blogpost.blogpost.posted
         image.innerText = blogpost.blogpost.imageFile
-        user.innerText = blogpost.account.account.username
 
     }).catch(function (error) {
+        console.log("error", error);
         const url = "/error-page"
         changeToPage(url)
     })
 }
 
 
-function fetchAllToDoLists() {
+function fetchAllToDoItems() {
     
     fetch(
-        "http://localhost:8080/restAPI/toDoLists/" + localStorage.userId, {
+        "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId, {
             headers: {
                 "Authorization": "Bearer " + localStorage.accessToken
             }
@@ -300,14 +325,16 @@ function fetchAllToDoLists() {
             const url = "/error-page"
             changeToPage(url)
         }
-    }).then(function(toDoLists){
-        const ul = document.querySelector("#toDoLists-page ul")
+    }).then(function(toDoItems){
+        console.log("todoItems", toDoItems);
+        
+        const ul = document.querySelector("#toDoItems-page ul")
         ul.innerText = ""
-        for (const toDo in toDoLists) {
+        for (const toDo in toDoItems) {
             const li = document.createElement("li")
             const a = document.createElement("a")
-            a.innerText = toDoLists[toDo].toDo
-            a.setAttribute("href", '/toDoLists/' + toDoLists[toDo].todoId)
+            a.innerText = toDoItems[toDo].todo
+            a.setAttribute("href", '/toDoItems/' + toDoItems[toDo].todoId)
             li.appendChild(a)
             ul.append(li)
         }
@@ -320,7 +347,7 @@ function fetchAllToDoLists() {
 function fetchToDo(todoId) {
 
     fetch(
-        "http://localhost:8080/restAPI/toDoLists/" + localStorage.userId + "/" + todoId, {
+        "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId + "/" + todoId, {
             headers: {
                 "Authorization": "Bearer " + localStorage.accessToken
             }
@@ -337,9 +364,10 @@ function fetchToDo(todoId) {
             changeToPage(url)
         }
     }).then(function (todo) {
-
-        const toDo = document.querySelector("#toDoList-page .toDo")
-        toDo.innerText = todo.toDo
+        console.log("todo", todo);
+        
+        const toDo = document.querySelector("#toDoItem-page .toDo")
+        toDo.innerText = todo.todo
     }).catch(function (error) {
         const url = "/error-page"
         changeToPage(url)

@@ -27,12 +27,14 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         }
     }
 
-    router.get("/toDoLists/:userId", authorization, function(request, response){
+    router.get("/toDoItems/:accountId", authorization, function(request, response){
         
         const isLoggedIn = true
-        const userId = request.params.userId
+        const accountId = request.params.accountId
+        console.log("accountIdRESTAPI", accountId);
+        
 
-        toDoManager.getAllToDos(userId, isLoggedIn, function(errors, toDos){
+        toDoManager.getAllToDosForAccount(accountId, isLoggedIn, function(errors, toDos){
             
             if(errors.length > 0){
                 if(errors.includes("databaseErrors")){
@@ -42,18 +44,27 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(401).end()   
                 }
             }else{
+                console.log("toDos", toDos);
+                
                 response.status(200).json(toDos)
             }
         })
     })
 
-    router.put("/toDoLists/:userId/:todoId", authorization, function(request, response){
+    router.put("/toDoItems/:userId/:todoId", authorization, function(request, response){
         
         const todo = request.body.todo
         const todoId = request.params.todoId
+        const userId = request.params.userId
+        const accountUsername = request.body.accountUsername
+        console.log("accountusernameUpdateREST", accountUsername);
+        console.log("todoIdUpdateREST", todoId);
+        console.log("userIdUpdateREST", userId);
+        
         const isLoggedIn = true
         
-        toDoManager.updateTodo(todoId, todo, isLoggedIn, function(errors, newTodo){
+        toDoManager.updateTodo(userId, todoId, todo, accountUsername, isLoggedIn, function(errors, newTodo){
+            console.log("newTodoUpdateREST", newTodo);
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -74,7 +85,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.get("/toDoLists/:userId/:todoId", authorization, function(request, response){
+    router.get("/toDoItems/:userId/:todoId", authorization, function(request, response){
         
         const todoId = request.params.todoId  
         const isLoggedIn = true
@@ -94,12 +105,16 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.post("/toDoLists", authorization, function(request, response){
+    router.post("/toDoItems", authorization, function(request, response){
 
         const todo = request.body.todo
         const userId = request.body.userId
+        const accountUsername = request.body.accountUsername
+        console.log("userIdREST", userId);
+        console.log("accountUsernameREST", accountUsername);
         
-        toDoManager.createTodo(userId, todo, function(errors, newTodo){
+        
+        toDoManager.createTodo(userId, todo, accountUsername, function(errors, newTodo){
             
             if(errors){
                 if (errors.includes("databaseError")){
@@ -111,18 +126,22 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(400).json(errors)
                 }
             }else{
-                response.setHeader("Location", "/toDoLists/"+newTodo)
+                response.setHeader("Location", "/toDoItems/"+newTodo)
                 response.status(201).end()
             }
         })
     })
 
-    router.delete("/toDoLists/:todoId", authorization, function(request, response){
+    router.delete("/toDoItems/:userId/:todoId", authorization, function(request, response){
         
         const todoId = request.params.todoId
+        const userId = request.params.userId
+        console.log("todoIdDeleteREST", todoId);
+        console.log("userIdDeleteREST", userId);
+        
         const isLoggedIn = true
         
-        toDoManager.deleteTodo(todoId, isLoggedIn, function(errors, deletedToDo){
+        toDoManager.deleteTodo(todoId, userId, isLoggedIn, function(errors, deletedToDo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -189,7 +208,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             return
         }
 
-        accountManager.getUserPassword(username, userPassword, function(errors, account){
+        accountManager.getLoginInformation(username, userPassword, function(errors, account){
             if(errors){
                 if(errors.includes('DatabaseError')){
                     response.status(500).end()
@@ -204,7 +223,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             else if(!account){
                 response.status(404).end()
             }else {
-                const payload = {userId: account.personId, "username": username, "password": userPassword}
+                const payload = {accountId: account.accountId, "accountUsername": username, "accountPassword": userPassword}
                 jwt.sign(payload, serverSecret, function(error, result){
                     
                     if(error){
@@ -239,7 +258,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const blogId = request.params.blogId  
         const isLoggedIn = true
         
-        blogManager.getBlogpostId(blogId, isLoggedIn, function(errors, blogpost){
+        blogManager.getBlogpostById(blogId, isLoggedIn, function(errors, blogpost){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -249,20 +268,12 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(401).end()
                 }
             }else{
-                blogManager.getUsernameById(blogpost.userId, function(errors, account){
-                    
-                    if(errors.length > 0){
-                        if(errors.includes("databaseError")){
-                            response.status(500).end()
-                        }
-                    }else{
-                        const model = {
-                            blogpost,
-                            account
-                        }
-                        response.status(200).json(model)
-                    }
-                })
+                console.log("blogpostREST", blogpost);
+                
+                const model = {
+                    blogpost
+                }
+                response.status(200).json(model)
             }
         })
     })

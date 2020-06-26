@@ -43,7 +43,7 @@ module.exports = function({toDoManager}){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")
                 }
-                else if(errors.includes("Need to be logged in!")){
+                else if(errors.includes("Need to be logged in!") || errors.includes("Unauthorized")){
                     response.status(401).render("unauthorized401.hbs")
                 }else{
                     const model = {

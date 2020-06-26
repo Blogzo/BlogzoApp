@@ -49,9 +49,9 @@ function changeToPage(url){
     }else if(url == "/blogposts"){
         document.getElementById("blogposts-page").classList.add("current-page")
         fetchAllBlogposts()
-    }else if(url == "/toDoLists"){
-        document.getElementById("toDoLists-page").classList.add("current-page")
-        fetchAllToDoLists()
+    }else if(url == "/toDoItems"){
+        document.getElementById("toDoItems-page").classList.add("current-page")
+        fetchAllToDoItems()
     }else if(url == "/update-todo"){
         document.getElementById("update-todo-page").classList.add("current-page")
     }else if(url == "/create-account"){
@@ -62,12 +62,12 @@ function changeToPage(url){
         document.getElementById("blogpost-page").classList.add("current-page")
         const blogId = url.split("/")[2]
         fetchBlogpost(blogId)
-    }else if(new RegExp("^/toDoLists/[0-9]+$").test(url)){
-        document.getElementById("toDoList-page").classList.add("current-page")
+    }else if(new RegExp("^/toDoItems/[0-9]+$").test(url)){
+        document.getElementById("toDoItem-page").classList.add("current-page")
         const todoId = url.split("/")[2]
         fetchToDo(todoId)
-    }else if(url == "/toDoLists"){
-        document.getElementById("toDoLists-page").classList.add("current-page")
+    }else if(url == "/toDoItems"){
+        document.getElementById("toDoItems-page").classList.add("current-page")
     }else if(url == "/logout"){
         logout()
     }else if(url == "/create-todo"){

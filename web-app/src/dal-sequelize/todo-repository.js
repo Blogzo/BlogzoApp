@@ -14,9 +14,9 @@ module.exports = function({}){
             .catch(error => callback(["databaseError"], null)) 
         },
 
-        createTodo: function(UserId, todo, callback){
+        createTodo: function(UserId, toDo, callback){
             
-            toDos.toDo.create({toDo: todo, accountId: UserId})
+            toDos.toDo.create({accountId: UserId, todo : toDo})
             .then(newTodo => callback([], newTodo))
             .catch(errors => callback(["databaseError"], null))
         },
@@ -39,7 +39,7 @@ module.exports = function({}){
 
         updateTodo: function(todoID, newTodo, callback){
             
-            toDos.toDo.update({toDo: newTodo}, {where: {todoId: todoID}})
+            toDos.toDo.update({todo: newTodo}, {where: {todoId: todoID}})
             .then(updateTodo => callback([], this.updateTodo))
             .catch(errors => callback(["databaseError"], null))
         }
