@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#create-account-page form").addEventListener("submit", function (event) {
 
         event.preventDefault()
-
+        console.log("create account");
+        
         const username = document.querySelector("#create-account-page .username").value
         const email = document.querySelector("#create-account-page .email").value
         const userPassword = document.querySelector("#create-account-page .userPassword").value
@@ -99,11 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const url = location.pathname
         const todoId = url.split("/")[2]
-        const accountUsername = localStorage.accountUsername
-        console.log("usernameinDeleteTodo", accountUsername);
         
         fetch(
-            "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId + "/" + todoId, {
+            "http://localhost:8080/restAPI/toDoItems/" + todoId, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json",
@@ -135,17 +134,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const url = location.pathname
         const todoId = url.split("/")[2]
         const accountUsername = localStorage.accountUsername
+        const accountId = localStorage.accountId
+        console.log("accountIdUpdate", accountId);
         console.log("accountUsernameUpdate", accountUsername);
         console.log("todoIdUPDATE", todoId);
         
         
         const newToDo = {
             todo,
+            accountId,
             accountUsername
         }    
     
         fetch(
-            "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId + "/" + todoId, {
+            "http://localhost:8080/restAPI/toDoItems/" + todoId, {
             method: "PUT",
             headers: {
                 "Content-type": "Application/json",

@@ -85,29 +85,17 @@ module.exports = function({toDoRepository, accountRepository}){
             }
         },
 
-        deleteTodo: function(userId, todoId, accountUsername, isLoggedIn, callback){
+        deleteTodo: function(todoId, isLoggedIn, callback){
 
             const errors = this.getValidationErrors(0, isLoggedIn)
-            console.log("accountusernameBLL", accountUsername);
             
             if(errors.length > 0){
                 callback(errors, [])
                 return
-            }else{
-                accountRepository.getAccountId(accountUsername, function(errors, accountId){
-                    console.log("accountIdBLL", accountId);
-                    console.log("userIdBLL", userId);
-                    console.log("errorBLL", errors);
-                    
-                    if(accountId != userId){
-                        const error = ["Unauthorized"]
-                        callback(error)
-                    }else{
-                        toDoRepository.deleteTodo(todoId, function(errors, todo){
-                    
-                            callback(errors, todo)
-                        })
-                    }
+            }else{  
+                toDoRepository.deleteTodo(todoId, function(errors, todo){
+            
+                    callback(errors, todo)
                 })
             }
         },

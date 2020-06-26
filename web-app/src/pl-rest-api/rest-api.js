@@ -51,11 +51,11 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.put("/toDoItems/:userId/:todoId", authorization, function(request, response){
+    router.put("/toDoItems/:todoId", authorization, function(request, response){
         
         const todo = request.body.todo
         const todoId = request.params.todoId
-        const userId = request.params.userId
+        const userId = request.body.accountId
         const accountUsername = request.body.accountUsername
         console.log("accountusernameUpdateREST", accountUsername);
         console.log("todoIdUpdateREST", todoId);
@@ -132,16 +132,14 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.delete("/toDoItems/:userId/:todoId", authorization, function(request, response){
+    router.delete("/toDoItems/:todoId", authorization, function(request, response){
         
         const todoId = request.params.todoId
-        const userId = request.params.userId
         console.log("todoIdDeleteREST", todoId);
-        console.log("userIdDeleteREST", userId);
         
         const isLoggedIn = true
         
-        toDoManager.deleteTodo(todoId, userId, isLoggedIn, function(errors, deletedToDo){
+        toDoManager.deleteTodo(todoId, isLoggedIn, function(errors, deletedToDo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
