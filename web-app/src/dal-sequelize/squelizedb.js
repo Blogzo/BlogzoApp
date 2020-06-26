@@ -29,7 +29,6 @@ function connection(sqlizeObj, isConnected){
       })
       .catch(error =>{
         connection(sqlizeObj,false)
-        console.error('Unable to connect to the database:', error)
       })
     }) 
   }
