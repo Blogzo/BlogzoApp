@@ -49,7 +49,7 @@ module.exports = function({}){
             })
         },
         
-        getToDoId: function(todoId, callback){
+        getToDoItem: function(todoId, callback){
             
             const query = "SELECT todo FROM todoItems WHERE todoId = ?"
             const values = [todoId]

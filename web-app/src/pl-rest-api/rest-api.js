@@ -81,7 +81,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const todoId = request.params.todoId  
         const isLoggedIn = true
         
-        toDoManager.getToDoId(todoId, isLoggedIn, function(errors, todo){
+        toDoManager.getToDoItem(todoId, isLoggedIn, function(errors, todo){
 
             if(errors.length > 0){
                 if(errors.includes("databaseError")){

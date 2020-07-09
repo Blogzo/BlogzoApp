@@ -35,15 +35,15 @@ module.exports = function({toDoRepository, accountRepository}){
             }
         },
 
-        getToDoId: function(todoId, isLoggedIn, callback){
+        getToDoItem: function(todoId, isLoggedIn, callback){
             
-            const errors = this.getValidationErrors(0, isLoggedIn)
+            const errors = this.getErrors(0, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])
                 return
             }else{
-                toDoRepository.getToDoId(todoId, function(errors, todo){
+                toDoRepository.getToDoItem(todoId, function(errors, todo){
                    
                     callback(errors, todo)
                 })
