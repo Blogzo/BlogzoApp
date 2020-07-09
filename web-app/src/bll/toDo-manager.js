@@ -3,7 +3,7 @@ module.exports = function({toDoRepository, accountRepository}){
 
     return {
 
-        getValidationErrors: function(name, isLoggedIn){
+        getErrors: function(name, isLoggedIn){
 
             const errors = []
 
@@ -22,7 +22,7 @@ module.exports = function({toDoRepository, accountRepository}){
 
         getAllToDosForAccount: function(accountId, isLoggedIn, callback){
             
-            const errors = this.getValidationErrors(0, isLoggedIn)
+            const errors = this.getErrors(0, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors)
@@ -52,7 +52,7 @@ module.exports = function({toDoRepository, accountRepository}){
 
         createTodo: function(userId, newTodo, accountUsername, isLoggedIn, callback){
             
-            const errors = this.getValidationErrors(newTodo, isLoggedIn)
+            const errors = this.getErrors(newTodo, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])
@@ -74,7 +74,7 @@ module.exports = function({toDoRepository, accountRepository}){
 
         deleteTodo: function(todoId, isLoggedIn, callback){
 
-            const errors = this.getValidationErrors(0, isLoggedIn)
+            const errors = this.getErrors(0, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])
@@ -89,7 +89,7 @@ module.exports = function({toDoRepository, accountRepository}){
 
         updateTodo: function(todoId, userId, updateTodo, accountUsername, isLoggedIn, callback){
             
-            const errors = this.getValidationErrors(updateTodo, isLoggedIn)
+            const errors = this.getErrors(updateTodo, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])

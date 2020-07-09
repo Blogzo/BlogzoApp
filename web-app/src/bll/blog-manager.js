@@ -3,7 +3,7 @@ module.exports = function({blogRepository, accountRepository}){
 
     return {
 
-        getValidationErrors: function(title, content, isLoggedIn){
+        getErrors: function(title, content, isLoggedIn){
             
             const errors = []
 
@@ -38,7 +38,7 @@ module.exports = function({blogRepository, accountRepository}){
 
         getBlogpostById: function(blogId, isLoggedIn, callback){
             
-            const errors = this.getValidationErrors(0, 0, isLoggedIn)
+            const errors = this.getErrors(0, 0, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors)
@@ -53,7 +53,7 @@ module.exports = function({blogRepository, accountRepository}){
 
         createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, username, callback){
             
-            const errors = this.getValidationErrors(title, content, isLoggedIn)
+            const errors = this.getErrors(title, content, isLoggedIn)
             if(errors.length > 0){
                 callback(errors)
                 return

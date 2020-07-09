@@ -5,7 +5,7 @@ module.exports = function({accountRepository}){
 
     return {
 
-        getValidationErrors: function(username, email, password1, password2){
+        getErrors: function(username, email, password1, password2){
             
             const errors = []
             var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -49,7 +49,7 @@ module.exports = function({accountRepository}){
 
         createAccount: function(username, email, userPassword, userPassword2, callback){
 
-            const errors = this.getValidationErrors(username, email, userPassword, userPassword2)
+            const errors = this.getErrors(username, email, userPassword, userPassword2)
            
             if(errors.length > 0){
                 callback(errors)
