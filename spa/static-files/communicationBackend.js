@@ -47,12 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault()
         
         const todo = document.querySelector("#create-todo-page .todo").value
-        const userId = localStorage.accountId
-        const accountUsername = localStorage.accountUsername
         const newToDo = {
-            todo,
-            userId,
-            accountUsername   
+            todo
         }
 
         fetch(
@@ -122,13 +118,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const todo = document.querySelector("#update-todo-page .newTodo").value
         const url = location.pathname
         const todoId = url.split("/")[2]
-        const accountUsername = localStorage.accountUsername
-        const accountId = localStorage.accountId
         
         const newToDo = {
-            todo,
-            accountId,
-            accountUsername
+            todo
         }    
     
         fetch(
@@ -201,9 +193,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const error = document.querySelector("#login-page p")
                 error.innerText = body.errors
             }else{
+                console.log("body:", body);
                 login(body.access_token)
-                localStorage.accountId = body.id_token.accountId
-                localStorage.accountUsername = body.id_token.accountUsername
                 const url = "/"
                 changeToPage(url)
             }
@@ -290,7 +281,7 @@ function fetchBlogpost(blogId) {
 function fetchAllToDoItems() {
     
     fetch(
-        "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId, {
+        "http://localhost:8080/restAPI/toDoItems/", {
             headers: {
                 "Authorization": "Bearer " + localStorage.accessToken
             }

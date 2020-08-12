@@ -18,21 +18,24 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 if(error){
                     response.status(401).end()
                 }else{
+                    request.userID = decoded.sub
+                    request.accountUsername = decoded.name
+                    request.isLoggedIn = true
                     next()
                 }
             }) 
         }catch(error){
             response.status(401).end()
+            request.isLoggedIn = false
             return
         }
     }
 
-    router.get("/toDoItems/:accountId", authorization, function(request, response){
+    router.get("/toDoItems", authorization, function(request, response){
         
-        const isLoggedIn = true
-        const accountId = request.params.accountId
+        const accountId = request.userID
         
-        toDoManager.getAllToDosForAccount(accountId, isLoggedIn, function(errors, toDos){
+        toDoManager.getAllToDosForAccount(accountId, request.isLoggedIn, function(errors, toDos){
             
             if(errors.length > 0){
                 if(errors.includes("databaseErrors")){
@@ -51,11 +54,14 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         
         const todo = request.body.todo
         const todoId = request.params.todoId
-        const userId = request.body.accountId
-        const accountUsername = request.body.accountUsername
-        const isLoggedIn = true
+        const userId = request.userID
+        const accountUsername = request.accountUsername
+        console.log("userIdAPI:", userId);
+        console.log("usernameAPI:", accountUsername);
         
-        toDoManager.updateTodo(todoId, userId, todo, accountUsername, isLoggedIn, function(errors, newTodo){
+
+        
+        toDoManager.updateTodo(todoId, userId, todo, accountUsername, request.isLoggedIn, function(errors, newTodo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -79,9 +85,8 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.get("/toDoItems/:userId/:todoId", authorization, function(request, response){
         
         const todoId = request.params.todoId  
-        const isLoggedIn = true
         
-        toDoManager.getToDoItem(todoId, isLoggedIn, function(errors, todo){
+        toDoManager.getToDoItem(todoId, request.isLoggedIn, function(errors, todo){
 
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -99,8 +104,10 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.post("/toDoItems", authorization, function(request, response){
 
         const todo = request.body.todo
-        const userId = request.body.userId
-        const accountUsername = request.body.accountUsername
+        const userId = request.userID
+        const accountUsername = request.accountUsername
+        console.log("userIdAPI:", userId);
+        console.log("usernameAPI:", accountUsername);
         
         toDoManager.createTodo(userId, todo, accountUsername, function(errors, newTodo){
             
@@ -123,9 +130,10 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.delete("/toDoItems/:todoId", authorization, function(request, response){
         
         const todoId = request.params.todoId
-        const isLoggedIn = true
+        const userId = request.userID
+        const username = request.accountUsername
         
-        toDoManager.deleteTodo(todoId, isLoggedIn, function(errors, deletedToDo){
+        toDoManager.deleteTodo(todoId, userId, username, request.isLoggedIn, function(errors, deletedToDo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -207,7 +215,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
             else if(!account){
                 response.status(404).end()
             }else {
-                const payload = {accountId: account.accountId, "accountUsername": username, "accountPassword": userPassword}
+                const payload = { "sub": account.accountId, "name": account.accountUsername}
                 jwt.sign(payload, serverSecret, function(error, result){
                     
                     if(error){
@@ -215,7 +223,8 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     }else{
                         response.status(200).json({
                             access_token: result,
-                            id_token: payload
+                            username: account.accountUsername,
+                            accounId: account.accountId
                         })
                     }
                 })
@@ -240,9 +249,9 @@ module.exports = function({accountManager, blogManager, toDoManager}){
     router.get("/blogposts/:blogId", authorization, function(request, response){
         
         const blogId = request.params.blogId  
-        const isLoggedIn = true
         
-        blogManager.getBlogpostById(blogId, isLoggedIn, function(errors, blogpost){
+        
+        blogManager.getBlogpostById(blogId, request.isLoggedIn, function(errors, blogpost){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){

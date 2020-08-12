@@ -39,12 +39,12 @@ module.exports = function({}){
             const query = "SELECT accountId FROM accounts WHERE accountUsername = ?"
             const value = [username]
 
-            db.query(query, value, function(errors, accountId){
+            db.query(query, value, function(errors, account){
                    
                 if(errors){
-                    callback(["databaseError", null])
+                    callback(["databaseError"], null)
                 }else{
-                    callback([], accountId[0].accountId)
+                    callback([], account[0].accountId)
                 }
             })
         }

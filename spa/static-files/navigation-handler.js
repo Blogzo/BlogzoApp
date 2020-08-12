@@ -77,8 +77,8 @@ function changeToPage(url){
     }
 }
 
-function login(access_token){
-    localStorage.accessToken = access_token
+function login(accessToken){
+    localStorage.accessToken = accessToken
     document.body.classList.remove("isLoggedOut")
     document.body.classList.add("isLoggedIn")
 }
