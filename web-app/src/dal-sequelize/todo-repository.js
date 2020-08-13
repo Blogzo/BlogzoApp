@@ -18,8 +18,7 @@ module.exports = function({}){
             
             toDos.toDo.create({accountId: UserId, todo : toDo})
             .then(newTodo => callback([], newTodo))
-            .catch(errors => callback(errors, null))
-            console.log("dalError", errors);s
+            .catch(errors => callback(["databaseError"], null))
         },
 
         getToDoItem: function(todoId, callback){

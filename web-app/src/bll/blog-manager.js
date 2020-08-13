@@ -52,14 +52,14 @@ module.exports = function({blogRepository, accountRepository}){
         },
 
         createBlogpost: function(title, content, posted, imageFile, userId, isLoggedIn, username, callback){
-            
             const errors = this.getErrors(title, content, isLoggedIn)
             if(errors.length > 0){
                 callback(errors)
                 return
             }else{
                 accountRepository.getAccountId(username, function(errors, accountId){
-                    
+                    console.log("accountid:", accountId);
+                    console.log("blogId:", userId);
                     if(accountId != userId){
                         throw "unauthorized!"
                     }else{

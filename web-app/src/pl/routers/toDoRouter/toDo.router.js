@@ -44,7 +44,7 @@ module.exports = function({toDoManager}){
         const accountUsername = request.session.accountUsername
         
         toDoManager.createTodo(userId, todo, accountUsername, isLoggedIn, function(errors, newTodo){
-            
+            console.log("errorsPL:", errors);
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")

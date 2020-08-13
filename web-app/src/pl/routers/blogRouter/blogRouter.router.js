@@ -73,7 +73,7 @@ module.exports = function({blogManager}){
         const userId = request.session.userId
         const file = request.file.originalname
         const isLoggedIn = request.session.isLoggedIn
-        const username = request.session.username
+        const username = request.session.accountUsername
         
         if(!file){
             const error = new Error("please upload a file")
