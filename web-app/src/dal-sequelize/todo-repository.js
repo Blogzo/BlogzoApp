@@ -24,7 +24,7 @@ module.exports = function({}){
         getToDoItem: function(todoId, callback){
             
             toDos.toDo.findByPk(todoId)
-            .then(todo => callback([], todo))
+            .then(todo => callback([], todo.dataValues))
             .catch(errors => callback(["databaseError"], null))
         },
 

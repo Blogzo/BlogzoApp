@@ -55,13 +55,11 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const todo = request.body.todo
         const todoId = request.params.todoId
         const userId = request.userID
-        const accountUsername = request.accountUsername
         console.log("userIdAPI:", userId);
-        console.log("usernameAPI:", accountUsername);
         
 
         
-        toDoManager.updateTodo(todoId, userId, todo, accountUsername, request.isLoggedIn, function(errors, newTodo){
+        toDoManager.updateTodo(todoId, userId, todo, request.isLoggedIn, function(errors, newTodo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -82,17 +80,19 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         })
     })
 
-    router.get("/toDoItems/:userId/:todoId", authorization, function(request, response){
+    router.get("/toDoItems/:todoId", authorization, function(request, response){
         
         const todoId = request.params.todoId  
+        const userId = request.userID
         
-        toDoManager.getToDoItem(todoId, request.isLoggedIn, function(errors, todo){
+        toDoManager.getToDoItem(todoId, userId, request.isLoggedIn, function(errors, todo){
 
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).end()
                 }
-                else if(errors.includes("Need to be logged in!")){
+                else if(errors.includes("Need to be logged in!") || errors.includes("Unauthorized")){
+                    console.log("vi är är", errors);
                     response.status(401).end()
                 }
             }else{
@@ -107,7 +107,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const userId = request.userID
         const accountUsername = request.accountUsername
         console.log("userIdAPI:", userId);
-        console.log("usernameAPI:", accountUsername);
         
         toDoManager.createTodo(userId, todo, accountUsername, function(errors, newTodo){
             
@@ -118,6 +117,7 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 else if(errors.includes("Need to be logged in!")){
                     response.status(401).end()
                 }else{
+                    console.log("errorAPI", errors);
                     response.status(400).json(errors)
                 }
             }else{
@@ -131,9 +131,8 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         
         const todoId = request.params.todoId
         const userId = request.userID
-        const username = request.accountUsername
         
-        toDoManager.deleteTodo(todoId, userId, username, request.isLoggedIn, function(errors, deletedToDo){
+        toDoManager.deleteTodo(todoId, userId, request.isLoggedIn, function(errors, deletedToDo){
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){

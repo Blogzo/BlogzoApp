@@ -1,3 +1,4 @@
+const todoRepository = require("../dal-sequelize/todo-repository")
 
 module.exports = function({toDoRepository, accountRepository}){
 
@@ -35,8 +36,8 @@ module.exports = function({toDoRepository, accountRepository}){
             }
         },
 
-        getToDoItem: function(todoId, isLoggedIn, callback){
-            
+        getToDoItem: function(todoId, userId, isLoggedIn, callback){
+            console.log("userIdBLL", userId);
             const errors = this.getErrors(0, isLoggedIn)
             
             if(errors.length > 0){
@@ -44,10 +45,17 @@ module.exports = function({toDoRepository, accountRepository}){
                 return
             }else{
                 toDoRepository.getToDoItem(todoId, function(errors, todo){
-                   
-                    callback(errors, todo)
+                    console.log("todoitemBLL", todo);
+                    console.log("accountId", todo.accountId);
+                    if(userId != todo.accountId){
+                        const error = ["Unauthorized"]
+                        callback(error)
+                        console.log(error,"errorTodo");
+                    }else{
+                        callback(errors, todo)
+                    }
                 })
-            }   
+            }  
         },
 
         createTodo: function(userId, newTodo, accountUsername, isLoggedIn, callback){
@@ -61,7 +69,6 @@ module.exports = function({toDoRepository, accountRepository}){
                 accountRepository.getAccountId(accountUsername, function(errors, accountId){
                     console.log("accountIdSOmwhfdkjsa", accountId);
                     if(accountId != userId){
-                        console.log("IAMHERE!!");
                         const error = ["Unauthorized"]
                         callback(error)
                         console.log(error,"errorTodo");
@@ -77,7 +84,7 @@ module.exports = function({toDoRepository, accountRepository}){
             }
         },
 
-        deleteTodo: function(todoId, userId, accountUsername, isLoggedIn, callback){
+        deleteTodo: function(todoId, userId, isLoggedIn, callback){
 
             const errors = this.getErrors(0, isLoggedIn)
             
@@ -85,36 +92,40 @@ module.exports = function({toDoRepository, accountRepository}){
                 callback(errors, [])
                 return
             }else{  
-                accountRepository.getAccountId(accountUsername, function(errors, accountId){
-            
-                    if(accountId != userId){
+                toDoRepository.getToDoItem(todoId, function(errors, todo){
+                    console.log("todoitemBLL", todo);
+                    console.log("accountId", todo.accountId);
+                    if(userId != todo.accountId){
                         const error = ["Unauthorized"]
                         callback(error)
+                        console.log(error,"errorTodo");
                     }else{
                         toDoRepository.deleteTodo(todoId, function(errors, todo){
-                    
+
                             callback(errors, todo)
                         })
                     }
                 })
-            }
+            }  
         },
 
-        updateTodo: function(todoId, userId, updateTodo, accountUsername, isLoggedIn, callback){
+        updateTodo: function(todoId, userId, updateTodo, isLoggedIn, callback){
             
             const errors = this.getErrors(updateTodo, isLoggedIn)
             
             if(errors.length > 0){
                 callback(errors, [])
             }else{
-                accountRepository.getAccountId(accountUsername, function(errors, accountId){
-            
-                    if(accountId != userId){
+                toDoRepository.getToDoItem(todoId, function(errors, todo){
+                    console.log("todoitemBLL", todo);
+                    console.log("accountId", todo.accountId);
+                    if(userId != todo.accountId){
                         const error = ["Unauthorized"]
                         callback(error)
+                        console.log(error,"errorTodo");
                     }else{
                         toDoRepository.updateTodo(todoId, updateTodo, function(errors, todo){
-                    
+
                             callback(errors, todo)
                         })
                     }

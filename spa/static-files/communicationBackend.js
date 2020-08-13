@@ -30,15 +30,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }else if(statuscode == 400){
                 window.location.replace("/error-page")
             }else{
-                const url = "/error-page"
-                changeToPage(url)
+                window.location.replace("/error-page")
             }
         }).then(function(model) {
             const url = "/login"
             changeToPage(url)
         }).catch(function(errors) {
-            const url = "/error-page"
-            changeToPage(url)
+            window.location.replace("/error-page")
         })
     })
 
@@ -67,15 +65,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const url = "/toDoItems"
                 changeToPage(url)
             }else if(statusCode == 401){
-                const url = "/unauthorized-page"
-                changeToPage(url)
+                window.location.replace("/unauthorized-page")
             }else{
-                const url = "/error-page"
-                changeToPage(url)
+                window.location.replace("/error-page")
             }
         }).catch(function (error) {
-            const url = "/error-page"
-            changeToPage(url)
+            window.location.replace("/error-page")
         })
     })
 
@@ -100,15 +95,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const url = "/toDoItems"
                 changeToPage(url)
             }else if(statuscode == 401){
-                const url = "/unauthorized-page"
-                changeToPage(url)
+                window.location.replace("/unauthorized-page")
             }else{
-                const url = "/error-page"
-                changeToPage(url)
+                window.location.replace("/error-page")
             }
         }).catch(function (error) {
-            const url = "/error-page"
-            changeToPage(url)
+            window.location.replace("/error-page")
         })
     })
 
@@ -138,15 +130,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const url = "/toDoItems"
                 changeToPage(url)
             }else if(statuscode == 401){
-                const url = "/unauthorized-page"
-                changeToPage(url)
+                window.location.replace("/unauthorized-page")
             }else {
-                const url = "/error-page"
-                changeToPage(url)
+                window.location.replace("/error-page")
             }
         }).catch(function (error) {
-            const url = "/error-page"
-            changeToPage(url)
+            window.location.replace("/error-page")
         })
     })
 
@@ -184,8 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const error = document.querySelector("#login-page p")
                 error.innerText = "Can not find that account!"
             }else{
-                const url = "/error-page"
-                changeToPage(url)
+                window.location.replace("/error-page")
             }
         }).then(function(body){
             
@@ -200,8 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }).catch(function(error){
             
-            const url = "/error-page"
-            changeToPage(url)
+            window.location.replace("/error-page")
         })
     })
     
@@ -223,8 +210,7 @@ function fetchAllBlogposts() {
         if(statuscode == 200){
             return response.json()
         }else{
-            const url = "/error-page"
-            changeToPage(url)
+            window.location.replace("/error-page")
         }
     }).then(function (blogposts) {
         const ul = document.querySelector("#blogposts-page ul")
@@ -238,8 +224,7 @@ function fetchAllBlogposts() {
             ul.append(li)
         }
     }).catch(function (error) {
-        const url = "/error-page"
-        changeToPage(url)
+        window.location.replace("/error-page")
     })
 }
 
@@ -257,8 +242,7 @@ function fetchBlogpost(blogId) {
         if (statuscode == 200) {
             return response.json()
         }else if(statuscode == 401){
-            const url = "/unauthorized-page"
-            changeToPage(url)
+            window.location.replace("/unauthorized-page")
         }
     }).then(function (blogpost) {
         const title = document.querySelector("#blogpost-page .title")
@@ -272,8 +256,7 @@ function fetchBlogpost(blogId) {
         image.innerText = blogpost.blogpost.imageFile
 
     }).catch(function (error) {
-        const url = "/error-page"
-        changeToPage(url)
+        window.location.replace("/error-page")
     })
 }
 
@@ -291,11 +274,10 @@ function fetchAllToDoItems() {
         if (statuscode == 200){
             return response.json()
         }else if(statuscode == 401){
-            const url = "/unauthorized-page"
-            changeToPage(url)
+            window.location.replace("/unauthorized-page")
+
         }else{
-            const url = "/error-page"
-            changeToPage(url)
+            window.location.replace("/error-page")
         }
     }).then(function(toDoItems){
         
@@ -310,36 +292,36 @@ function fetchAllToDoItems() {
             ul.append(li)
         }
     }).catch(function (error) {
-        const url = "/error-page"
-        changeToPage(url)
+        window.location.replace("/error-page")
     })
 }
 
 function fetchToDo(todoId) {
 
     fetch(
-        "http://localhost:8080/restAPI/toDoItems/" + localStorage.accountId + "/" + todoId, {
+        "http://localhost:8080/restAPI/toDoItems/" + todoId, {
             headers: {
                 "Authorization": "Bearer " + localStorage.accessToken
             }
         }
     ).then(function (response) {
         const statuscode = response.status
+        console.log("statuscode:", statuscode);
         if (statuscode == 200) {
             return response.json()
         }else if(statuscode == 401){
-            const url = "/unauthorized-page"
-            changeToPage(url)
+            console.log("vi r här också");
+            window.location.replace("/unauthorized-page")
         }else {
-            const url = "/error-page"
-            changeToPage(url)
+            console.log("tyvärr hä :/");
+            window.location.replace("/error-page")
         }
     }).then(function (todo) {
         const toDo = document.querySelector("#toDoItem-page .toDo")
         toDo.innerText = todo.todo
     }).catch(function (error) {
-        const url = "/error-page"
-        changeToPage(url)
+        console.log("errorSPA", error);
+        window.location.replace("/error-page")
     })
 }
 
