@@ -30,9 +30,7 @@ module.exports = function({blogRepository, accountRepository}){
         getAllBlogposts: function(callback){
 
             blogRepository.getBlogposts(function(errors, blogposts){
-                  
-                callback(errors, blogposts)
-                  
+                callback(errors, blogposts)  
             })
         },
 
@@ -45,7 +43,6 @@ module.exports = function({blogRepository, accountRepository}){
                 return
             }else{
                 blogRepository.getBlogpostById(blogId, function(errors, blogpost){
-                    
                     callback(errors, blogpost)
                 })
             }   
@@ -58,8 +55,6 @@ module.exports = function({blogRepository, accountRepository}){
                 return
             }else{
                 accountRepository.getAccountId(username, function(errors, accountId){
-                    console.log("accountid:", accountId);
-                    console.log("blogId:", userId);
                     if(accountId != userId){
                         throw "unauthorized!"
                     }else{

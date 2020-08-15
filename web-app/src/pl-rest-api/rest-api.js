@@ -55,9 +55,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const todo = request.body.todo
         const todoId = request.params.todoId
         const userId = request.userID
-        console.log("userIdAPI:", userId);
-        
-
         
         toDoManager.updateTodo(todoId, userId, todo, request.isLoggedIn, function(errors, newTodo){
             
@@ -92,7 +89,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                     response.status(500).end()
                 }
                 else if(errors.includes("Need to be logged in!") || errors.includes("Unauthorized")){
-                    console.log("vi är är", errors);
                     response.status(401).end()
                 }
             }else{
@@ -106,7 +102,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
         const todo = request.body.todo
         const userId = request.userID
         const accountUsername = request.accountUsername
-        console.log("userIdAPI:", userId);
         
         toDoManager.createTodo(userId, todo, accountUsername, function(errors, newTodo){
             
@@ -117,7 +112,6 @@ module.exports = function({accountManager, blogManager, toDoManager}){
                 else if(errors.includes("Need to be logged in!")){
                     response.status(401).end()
                 }else{
-                    console.log("errorAPI", errors);
                     response.status(400).json(errors)
                 }
             }else{

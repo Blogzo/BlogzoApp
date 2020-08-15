@@ -181,7 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const error = document.querySelector("#login-page p")
                 error.innerText = body.errors
             }else{
-                console.log("body:", body);
                 login(body.access_token)
                 const url = "/"
                 changeToPage(url)
@@ -306,21 +305,17 @@ function fetchToDo(todoId) {
         }
     ).then(function (response) {
         const statuscode = response.status
-        console.log("statuscode:", statuscode);
         if (statuscode == 200) {
             return response.json()
         }else if(statuscode == 401){
-            console.log("vi r här också");
             window.location.replace("/unauthorized-page")
         }else {
-            console.log("tyvärr hä :/");
             window.location.replace("/error-page")
         }
     }).then(function (todo) {
         const toDo = document.querySelector("#toDoItem-page .toDo")
         toDo.innerText = todo.todo
     }).catch(function (error) {
-        console.log("errorSPA", error);
         window.location.replace("/error-page")
     })
 }

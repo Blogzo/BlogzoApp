@@ -9,7 +9,6 @@ module.exports = function({toDoManager}){
         const isLoggedIn = request.session.isLoggedIn
         const userId = request.session.userId
         toDoManager.getAllToDosForAccount(userId, isLoggedIn, function(errors, toDos){
-            console.log("todosPL", toDos);
             
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
@@ -35,16 +34,14 @@ module.exports = function({toDoManager}){
     router.post("/", function(request, response){
     
         const todo = request.body.todo
-        console.log("todoPL", todo);
         
         const userId = request.session.userId
         const isLoggedIn = request.session.isLoggedIn
-        console.log("isLoggedIn", isLoggedIn);
         
         const accountUsername = request.session.accountUsername
         
         toDoManager.createTodo(userId, todo, accountUsername, isLoggedIn, function(errors, newTodo){
-            console.log("errorsPL:", errors);
+            
             if(errors.length > 0){
                 if(errors.includes("databaseError")){
                     response.status(500).render("errors.hbs")

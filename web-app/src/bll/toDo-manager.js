@@ -30,14 +30,13 @@ module.exports = function({toDoRepository, accountRepository}){
                 return
             }else{
                 toDoRepository.getAllToDosForAccount(accountId, function(errors, toDos){
-                   
                     callback(errors, toDos)
                 })
             }
         },
 
         getToDoItem: function(todoId, userId, isLoggedIn, callback){
-            console.log("userIdBLL", userId);
+
             const errors = this.getErrors(0, isLoggedIn)
             
             if(errors.length > 0){
@@ -45,12 +44,9 @@ module.exports = function({toDoRepository, accountRepository}){
                 return
             }else{
                 toDoRepository.getToDoItem(todoId, function(errors, todo){
-                    console.log("todoitemBLL", todo);
-                    console.log("accountId", todo.accountId);
                     if(userId != todo.accountId){
                         const error = ["Unauthorized"]
                         callback(error)
-                        console.log(error,"errorTodo");
                     }else{
                         callback(errors, todo)
                     }
@@ -61,21 +57,17 @@ module.exports = function({toDoRepository, accountRepository}){
         createTodo: function(userId, newTodo, accountUsername, isLoggedIn, callback){
             
             const errors = this.getErrors(newTodo, isLoggedIn)
-            console.log("createTodoUserIds", userId);
+
             if(errors.length > 0){
                 callback(errors, [])
                 return
             }else{                
                 accountRepository.getAccountId(accountUsername, function(errors, accountId){
-                    console.log("accountIdSOmwhfdkjsa", accountId);
                     if(accountId != userId){
                         const error = ["Unauthorized"]
                         callback(error)
-                        console.log(error,"errorTodo");
                     }else{
-                        console.log("NOIMHERE!");
                         toDoRepository.createTodo(accountId, newTodo, function(errors, todo){
-                            console.log("bllerror", errors);
                             callback(errors, todo)
                             
                         })
@@ -93,15 +85,11 @@ module.exports = function({toDoRepository, accountRepository}){
                 return
             }else{  
                 toDoRepository.getToDoItem(todoId, function(errors, todo){
-                    console.log("todoitemBLL", todo);
-                    console.log("accountId", todo.accountId);
                     if(userId != todo.accountId){
                         const error = ["Unauthorized"]
                         callback(error)
-                        console.log(error,"errorTodo");
                     }else{
                         toDoRepository.deleteTodo(todoId, function(errors, todo){
-
                             callback(errors, todo)
                         })
                     }
@@ -117,15 +105,11 @@ module.exports = function({toDoRepository, accountRepository}){
                 callback(errors, [])
             }else{
                 toDoRepository.getToDoItem(todoId, function(errors, todo){
-                    console.log("todoitemBLL", todo);
-                    console.log("accountId", todo.accountId);
                     if(userId != todo.accountId){
                         const error = ["Unauthorized"]
                         callback(error)
-                        console.log(error,"errorTodo");
                     }else{
                         toDoRepository.updateTodo(todoId, updateTodo, function(errors, todo){
-
                             callback(errors, todo)
                         })
                     }
